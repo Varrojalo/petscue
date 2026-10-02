@@ -1,0 +1,387 @@
+<title>Rumbos visuales Petscue II</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Schibsted+Grotesk:wght@500;700;800;900&family=Hanken+Grotesk:wght@500;700;800&family=Red+Hat+Display:wght@500;700;900&display=swap">
+<style>
+:root{
+  --bg:#F5F8F4; --surface:#FFFFFF; --surface-2:#EAF1EA; --line:#D6E0D8;
+  --ink:#22303F; --ink-2:#4D5B6B; --ink-3:#6E7D8C;
+  --green:#2F7D5A; --green-deep:#1F5C41; --green-soft:#DCEFE3; --on-green:#FFFFFF;
+  --yellow:#FFE49A; --yellow-strong:#F2C94C; --on-yellow:#22303F;
+  --shadow:0 1px 2px rgb(34 48 63/.06),0 18px 40px -22px rgb(34 48 63/.35);
+  --body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49;
+    --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3;
+    --green:#6CC49A; --green-deep:#8FD6B2; --green-soft:#1D3A2E; --on-green:#0F1A15;
+    --yellow:#4F4219; --yellow-strong:#F5D77A; --on-yellow:#F7EBC4;
+    --shadow:0 1px 2px rgb(0 0 0/.3),0 18px 40px -22px rgb(0 0 0/.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49;
+  --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3;
+  --green:#6CC49A; --green-deep:#8FD6B2; --green-soft:#1D3A2E; --on-green:#0F1A15;
+  --yellow:#4F4219; --yellow-strong:#F5D77A; --on-yellow:#F7EBC4;
+  --shadow:0 1px 2px rgb(0 0 0/.3),0 18px 40px -22px rgb(0 0 0/.8);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;padding-inline:16px}
+h1,h2,h3,h4,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--yellow-strong);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+.wrap{max-width:1180px;margin-inline:auto;padding-block:40px 64px;display:flex;flex-direction:column;gap:56px}
+.eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+
+.intro{display:grid;gap:20px}
+@media (min-width:900px){.intro{grid-template-columns:1.4fr auto;align-items:end}}
+.intro h1{font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.intro p{color:var(--ink-2);max-width:62ch;margin-top:12px}
+.theme{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:4px;align-self:end}
+.theme button{border:0;background:none;padding:8px 16px;border-radius:999px;font-weight:600;color:var(--ink-2);min-height:44px}
+.theme button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.15)}
+
+.dir{display:grid;gap:28px;padding-top:40px;border-top:1px solid var(--line)}
+@media (min-width:980px){.dir{grid-template-columns:1fr auto;align-items:start}}
+.dir-copy{display:flex;flex-direction:column;gap:16px;max-width:60ch}
+.tag{display:inline-flex;align-self:flex-start;font-weight:700;font-size:.85rem;padding:6px 12px;border-radius:999px;background:var(--green-soft);color:var(--green-deep)}
+.tag.star{background:var(--yellow-strong);color:#22303F}
+.dir-copy h2{font-size:clamp(1.8rem,4vw,2.4rem);line-height:1.05;letter-spacing:-.02em;text-wrap:balance}
+.lead{font-size:1.08rem;color:var(--ink-2)}
+.facts{display:grid;gap:10px}
+@media (min-width:560px){.facts{grid-template-columns:1fr 1fr}}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.fact b{display:block;font-size:.78rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
+.fact p{font-size:.95rem}
+.spec{font-size:1.9rem!important;line-height:1.1;letter-spacing:-.01em}
+.took{display:grid;gap:8px;font-size:.95rem}
+.took div{display:flex;gap:10px;align-items:baseline}
+.took i{font-style:normal;font-weight:700;font-size:.72rem;padding:3px 8px;border-radius:999px;flex:none}
+.took .fa{background:var(--yellow);color:var(--on-yellow)}
+.took .fb{background:var(--green-soft);color:var(--green-deep)}
+.pc{display:grid;gap:10px}
+@media (min-width:560px){.pc{grid-template-columns:1fr 1fr}}
+.pc div{padding:14px 16px;border-radius:16px;font-size:.95rem}
+.pc .pro{background:var(--green-soft)}
+.pc .con{background:var(--surface-2)}
+.pc h3{font-size:.9rem;margin-bottom:6px}
+.pc ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.hint{font-size:.85rem;color:var(--ink-3)}
+
+.screens{display:flex;gap:18px;flex-wrap:wrap;justify-content:center}
+.screen{width:min(360px,100%);border-radius:34px;border:9px solid #1B252F;overflow:hidden;background:var(--bg);box-shadow:var(--shadow)}
+.screen-in{height:700px;overflow-y:auto;scrollbar-width:none;display:flex;flex-direction:column}
+.slabel{text-align:center;font-size:.82rem;color:var(--ink-3);margin-top:8px}
+
+/* Placeholder photos: tonal blocks, clearly marked */
+.ph{position:relative;overflow:hidden;display:block;background:
+  radial-gradient(circle at 36% 44%,var(--f1) 0 15%,transparent 33%),
+  radial-gradient(ellipse at 38% 66%,var(--f2) 0 19%,transparent 40%),
+  radial-gradient(circle at 80% 16%,rgb(255 246 214/.9) 0 6%,transparent 24%),
+  linear-gradient(165deg,var(--a,#A7C79B),var(--b,#55855D) 58%,var(--c,#2F4B39))}
+.ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 32% 42%,transparent 38%,rgb(0 0 0/.2))}
+.ph .cap{position:absolute;z-index:1;left:10px;top:10px;display:inline-flex;align-items:center;gap:5px;font:700 .64rem/1 var(--body);letter-spacing:.04em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:rgb(255 255 255/.85);color:#22303F}
+.ph .cap svg{width:12px;height:12px}
+.p1{--f1:#E7AE72;--f2:#C98A4E}
+.p2{--f1:#9A6A48;--f2:#6E4930;--a:#A9B98E;--b:#5E6F4B;--c:#35402C}
+.p3{--f1:#A7ABB3;--f2:#7C7F86;--a:#E9D9B8;--b:#B79B72;--c:#6D5A42}
+.p4{--f1:#E9BD84;--f2:#D9A066;--a:#BFD8E6;--b:#7EA6BD;--c:#48667A}
+.p5{--f1:#3A3A40;--f2:#26262B;--a:#F1DFC0;--b:#C9A77A;--c:#8A6B47}
+
+/* ============ MIX A+B ============ */
+.M{--disp:"Schibsted Grotesk",var(--body)}
+.M .top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px}
+.M .org{display:flex;align-items:center;gap:10px;font:800 1rem/1.1 var(--disp)}
+.M .logo{width:36px;height:36px;border-radius:12px;background:var(--green);color:var(--on-green);display:grid;place-items:center;font:900 1rem var(--disp)}
+.M .menu{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:8px 12px;font:700 .82rem var(--body)}
+.M .feature{margin:0 14px;position:relative;height:420px;border-radius:30px;overflow:hidden;flex:none}
+.M .feature .ph{position:absolute;inset:0;transition:transform 7s ease-out}
+.M .feature:hover .ph{transform:scale(1.08)}
+.M .shade{position:absolute;inset:auto 0 0 0;height:65%;background:linear-gradient(transparent,rgb(15 22 30/.85));z-index:1}
+.M .fcopy{position:absolute;left:18px;right:18px;bottom:18px;z-index:2;color:#fff;display:flex;flex-direction:column;gap:8px}
+.M .fcopy small{font:700 .72rem var(--body);letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+.M .fcopy h3{font:900 3.6rem/.9 var(--disp);letter-spacing:-.045em}
+.M .fcopy h3 .u{position:relative;display:inline-block}
+.M .fcopy h3 .u svg{position:absolute;left:-3%;bottom:-.16em;width:106%;height:.32em;overflow:visible}
+.M .u path{stroke:var(--yellow-strong);stroke-width:7;fill:none;stroke-linecap:round;stroke-dasharray:260;stroke-dashoffset:0;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1)}
+.M .fcopy p{font-size:.95rem;opacity:.95}
+.M .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;border:0;border-radius:18px;background:var(--green);color:var(--on-green);font:800 1rem var(--disp);width:100%;transition:transform .2s cubic-bezier(.3,1.5,.5,1),box-shadow .2s}
+.M .btn:hover{transform:translateY(-2px);box-shadow:0 12px 22px -12px var(--green)}
+.M .btn .ar{transition:transform .25s}
+.M .btn:hover .ar{transform:translateX(4px)}
+.M .btn.o{background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+.M .btn.y{background:var(--yellow-strong);color:#22303F}
+.M .sec{padding:22px 18px 0;display:flex;flex-direction:column;gap:14px}
+.M .sec h4{font:800 1.35rem/1.1 var(--disp);letter-spacing:-.02em}
+.M .fan{position:relative;height:230px;margin-top:4px}
+.M .card{position:absolute;top:0;width:54%;background:var(--surface);padding:7px 7px 10px;border-radius:20px;box-shadow:var(--shadow);transition:transform .55s cubic-bezier(.3,1.4,.4,1);border:0;text-align:left}
+.M .card .ph{aspect-ratio:1;border-radius:14px}
+.M .card .ph .cap{display:none}
+.M .card b{display:block;font:800 .98rem var(--disp);padding:7px 4px 0}
+.M .card small{display:block;font-size:.74rem;color:var(--ink-3);padding:0 4px}
+.M .c1{left:0;transform:rotate(-7deg) translate(6px,14px)}
+.M .c2{left:23%;z-index:2;transform:rotate(1deg)}
+.M .c3{right:0;transform:rotate(8deg) translate(-6px,20px)}
+.M .fan:hover .c1,.M .fan:focus-within .c1{transform:rotate(-11deg) translate(-12px,6px)}
+.M .fan:hover .c3,.M .fan:focus-within .c3{transform:rotate(12deg) translate(12px,12px)}
+.M .fan:hover .c2,.M .fan:focus-within .c2{transform:translateY(-10px)}
+.M .ways{display:grid;gap:10px;padding:22px 18px 26px}
+.M .way{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--surface);border:1px solid var(--line);text-align:left;transition:border-color .2s,transform .2s}
+.M .way:hover{border-color:var(--green);transform:translateX(3px)}
+.M .way i{width:44px;height:44px;border-radius:14px;background:var(--green-soft);color:var(--green-deep);display:grid;place-items:center;flex:none}
+.M .way.y i{background:var(--yellow);color:var(--on-yellow)}
+.M .way i svg{width:22px;height:22px}
+.M .way b{display:block;font:800 1rem var(--disp)}
+.M .way small{color:var(--ink-2);font-size:.82rem}
+/* detail screen */
+.M .dphoto{position:relative;height:360px;flex:none}
+.M .dphoto .ph{position:absolute;inset:0}
+.M .back{position:absolute;z-index:2;top:14px;left:14px;width:42px;height:42px;border-radius:14px;border:0;background:rgb(255 255 255/.9);color:#22303F;display:grid;place-items:center}
+.M .dsheet{margin-top:-34px;position:relative;z-index:2;background:var(--bg);border-radius:30px 30px 0 0;padding:22px 18px 26px;display:flex;flex-direction:column;gap:14px}
+.M .dsheet h3{font:900 2.8rem/.9 var(--disp);letter-spacing:-.04em}
+.M .pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:700 .76rem var(--body);padding:6px 10px;border-radius:999px;background:var(--yellow);color:var(--on-yellow)}
+.M .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.M .quote{font:500 1.12rem/1.35 var(--disp);border-left:4px solid var(--yellow-strong);padding-left:12px}
+.M .kv{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.M .kv div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 12px}
+.M .kv small{display:block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.M .kv b{font-size:.98rem}
+.M .money{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--surface-2);font-size:.9rem}
+.M .money b{font:800 1.05rem var(--disp);font-variant-numeric:tabular-nums}
+
+/* ============ D · Diario ============ */
+.D{--disp:"Hanken Grotesk",var(--body)}
+.D .top{display:flex;align-items:center;gap:10px;padding:14px 18px;font:800 1rem var(--disp)}
+.D .top i{width:30px;height:30px;border-radius:50%;background:var(--green);display:block}
+.D .hero{padding:4px 18px 18px;display:flex;flex-direction:column;gap:12px}
+.D .hero .ph{height:210px;border-radius:24px}
+.D h3{font:800 2.1rem/1.02 var(--disp);letter-spacing:-.03em}
+.D h3 em{font-style:normal;color:var(--green)}
+.D .tl{list-style:none;margin:0;padding:0 18px 8px 18px;position:relative}
+.D .tl::before{content:"";position:absolute;left:31px;top:8px;bottom:26px;width:3px;border-radius:3px;background:var(--line)}
+.D .tl::after{content:"";position:absolute;left:31px;top:8px;width:3px;border-radius:3px;background:var(--green);height:var(--prog,100%);max-height:calc(100% - 34px);transition:height 1.2s cubic-bezier(.3,.7,.2,1)}
+.D .tl li{position:relative;padding:0 0 18px 42px;display:flex;flex-direction:column;gap:6px}
+.D .tl li::before{content:"";position:absolute;left:6px;top:4px;width:17px;height:17px;border-radius:50%;background:var(--surface);border:3px solid var(--green);z-index:1}
+.D .tl li.now::before{background:var(--yellow-strong);border-color:var(--yellow-strong);box-shadow:0 0 0 6px var(--yellow)}
+.D .tl time{font:700 .74rem var(--body);letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3)}
+.D .tl b{font:800 1.05rem var(--disp)}
+.D .tl p{font-size:.9rem;color:var(--ink-2)}
+.D .tl .ph{height:110px;border-radius:16px}
+.D .tl .ph .cap{display:none}
+.D .tl li.now{background:none}
+.D .tl li.now b{background:var(--yellow);color:var(--on-yellow);align-self:flex-start;padding:2px 8px;border-radius:8px}
+.D .cta{padding:4px 18px 24px}
+.D .btn{width:100%;min-height:54px;border:0;border-radius:999px;background:var(--green);color:var(--on-green);font:800 1rem var(--disp)}
+
+/* ============ E · Carnet ============ */
+.E{--disp:"Red Hat Display",var(--body)}
+.E .top{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;font:900 1rem var(--disp)}
+.E .top span{font:600 .8rem var(--body);color:var(--ink-3)}
+.E .head{padding:0 18px 14px}
+.E h3{font:900 2.1rem/1 var(--disp);letter-spacing:-.03em}
+.E .head p{color:var(--ink-2);font-size:.92rem;margin-top:6px}
+.E .flip{margin:0 16px;height:470px;perspective:1200px;border:0;background:none;padding:0;display:block;width:calc(100% - 32px);text-align:left}
+.E .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.3,1.2,.4,1)}
+.E .flip[aria-pressed="true"] .inner{transform:rotateY(180deg)}
+.E .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:26px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column}
+.E .bk{transform:rotateY(180deg);padding:22px;gap:14px}
+.E .band{background:var(--green);color:var(--on-green);padding:10px 16px;display:flex;justify-content:space-between;font:700 .72rem var(--body);letter-spacing:.1em;text-transform:uppercase}
+.E .face .ph{height:230px;margin:14px 14px 0;border-radius:18px}
+.E .idrow{padding:14px 16px 0;display:flex;justify-content:space-between;align-items:end;gap:10px}
+.E .idrow .h4{font:900 2.2rem/1 var(--disp);letter-spacing:-.03em}
+.E .idrow small{font-size:.8rem;color:var(--ink-3)}
+.E .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:12px 16px}
+.E .grid div{border-top:2px solid var(--line);padding-top:6px}
+.E .grid small{display:block;font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.E .grid b{font:700 .9rem var(--disp)}
+.E .stamps{display:flex;gap:8px;padding:0 16px 12px;margin-top:auto}
+.E .stamp{width:62px;height:62px;border-radius:50%;border:2.5px dashed var(--green);color:var(--green-deep);display:grid;place-items:center;text-align:center;font:900 .6rem/1.1 var(--disp);letter-spacing:.04em;text-transform:uppercase;transform:rotate(-8deg)}
+.E .stamp:nth-child(2){transform:rotate(6deg);border-color:var(--yellow-strong);color:var(--ink)}
+.E .stamp:nth-child(3){transform:rotate(-3deg)}
+.E .turn{font:600 .8rem var(--body);color:var(--ink-3);text-align:center;padding:0 0 12px}
+.E .bk .h4{font:900 1.6rem var(--disp)}
+.E .bk .p{color:var(--ink-2);font-size:.95rem}
+.E .bk .btn{margin-top:auto;min-height:52px;border-radius:14px;border:0;background:var(--green);color:var(--on-green);font:800 1rem var(--disp);display:grid;place-items:center}
+.E .bk .btn.o{background:var(--yellow);color:var(--on-yellow)}
+.E .tip{padding:14px 18px 24px;font-size:.85rem;color:var(--ink-3);text-align:center}
+
+.note{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:24px;display:grid;gap:10px}
+.note h2{font-size:1.4rem}
+.note p{color:var(--ink-2);max-width:72ch}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <div>
+      <p class="eyebrow">Petscue · Segunda ronda</p>
+      <h1>La mezcla de A y B, y dos direcciones nuevas</h1>
+      <p>Sigue la misma base: verde, amarillo claro, azul oscuro para textos, Atkinson Hyperlegible Next para lectura y modo oscuro. Las fotos son marcadores de posición, porque cada asociación pondrá las suyas. Pasa el cursor o toca las pantallas para ver el movimiento.</p>
+    </div>
+    <div class="theme" role="group" aria-label="Tema"><button data-t="light" aria-pressed="false">Claro</button><button data-t="auto" aria-pressed="true">Sistema</button><button data-t="dark" aria-pressed="false">Oscuro</button></div>
+  </header>
+
+  <!-- MIX -->
+  <section class="dir">
+    <div class="dir-copy">
+      <span class="tag star">A + B · Tu elección base</span>
+      <h2>Retrato de familia</h2>
+      <p class="lead">La foto grande y el nombre en letras enormes de Retratos, suavizados con la calidez de Álbum: esquinas muy redondeadas, tarjetas en abanico para los demás animales y un único trazo amarillo a mano que subraya al protagonista.</p>
+      <div class="took">
+        <div><i class="fb">de B</i><span>Foto protagonista, nombre gigante en Schibsted Grotesk, cita de su historia, acercamiento lento de la foto.</span></div>
+        <div><i class="fa">de A</i><span>Bordes redondeados, abanico de tarjetas, subrayado a mano, botones con rebote suave.</span></div>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>Titulares</b><p class="spec" style="font-family:'Schibsted Grotesk',sans-serif;font-weight:900;letter-spacing:-.03em">Schibsted</p><p>Solo en nombres y títulos; el resto en Atkinson.</p></div>
+        <div class="fact"><b>Ya incluye</b><p>Estado “En casa de acogida”, monto de apadrinamiento y aporte de adopción configurables por la asociación (solo informativos).</p></div>
+      </div>
+      <p class="hint">A la derecha: portada y ficha de un animal.</p>
+    </div>
+    <div class="screens">
+      <div>
+        <div class="screen M" aria-label="Portada, mezcla A+B"><div class="screen-in">
+          <div class="top"><span class="org"><span class="logo">P</span>Fundación Patitas</span><button class="menu">Menú</button></div>
+          <div class="feature">
+            <span class="ph p2"><span class="cap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Foto</span></span>
+            <div class="shade"></div>
+            <div class="fcopy"><small>Busca familia · 10 años</small><h3><span class="u">Bruno<svg viewBox="0 0 220 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 60 4, 150 4, 216 11"/></svg></span></h3><p>Pasea sin tirar de la correa y saluda a todos en el refugio.</p></div>
+          </div>
+          <div class="sec"><button class="btn">Conocer a Bruno <span class="ar">→</span></button></div>
+          <div class="sec"><h4>También buscan casa</h4>
+            <div class="fan" tabindex="0" aria-label="Otros animales">
+              <button class="card c1"><span class="ph p1"><span class="cap">Foto</span></span><b>Canela</b><small>3 años</small></button>
+              <button class="card c2"><span class="ph p4"><span class="cap">Foto</span></span><b>Pipa</b><small>4 meses</small></button>
+              <button class="card c3"><span class="ph p3"><span class="cap">Foto</span></span><b>Mishi</b><small>1 año</small></button>
+            </div>
+          </div>
+          <div class="ways">
+            <button class="way"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/></svg></i><span><b>Hazte socio</b><small>Desde $5.000 al mes</small></span></button>
+            <button class="way y"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg></i><span><b>Sé casa de acogida</b><small>Cuida a uno mientras encuentra hogar</small></span></button>
+          </div>
+        </div></div>
+        <p class="slabel">Portada</p>
+      </div>
+      <div>
+        <div class="screen M" aria-label="Ficha, mezcla A+B"><div class="screen-in">
+          <div class="dphoto"><span class="ph p1"><span class="cap" style="left:auto;right:10px">Foto</span></span><button class="back" aria-label="Volver">←</button></div>
+          <div class="dsheet">
+            <span class="pill">En casa de acogida · disponible</span>
+            <h3>Canela</h3>
+            <p class="quote">“La primera en saludar a cada voluntario que llega al refugio.”</p>
+            <div class="kv"><div><small>Edad</small><b>3 años</b></div><div><small>Tamaño</small><b>Mediano</b></div><div><small>Vacunas</small><b>Al día</b></div><div><small>Esterilizada</small><b>Sí</b></div></div>
+            <div class="money"><span>Aporte de adopción</span><b>$30.000</b></div>
+            <button class="btn">Quiero adoptarla <span class="ar">→</span></button>
+            <button class="btn y">Apadrinar · $8.000 al mes</button>
+          </div>
+        </div></div>
+        <p class="slabel">Ficha del animal</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="dir">
+    <div class="dir-copy">
+      <span class="tag">D · Diario del refugio</span>
+      <h2>Cada animal tiene una historia que avanza</h2>
+      <p class="lead">La ficha se cuenta como una línea de tiempo: cuándo llegó, sus primeras vacunas, lo que aprendió y dónde está hoy. Emociona mostrando progreso en vez de carencia, y da confianza porque se ve el trabajo de la asociación.</p>
+      <div class="facts">
+        <div class="fact"><b>Titulares</b><p class="spec" style="font-family:'Hanken Grotesk',sans-serif;font-weight:800;letter-spacing:-.03em">Hanken</p><p>Grotesca limpia y cálida, más suave que Schibsted.</p></div>
+        <div class="fact"><b>Movimiento</b><p>La línea verde se dibuja hasta el presente, que late en amarillo.</p></div>
+      </div>
+      <div class="pc">
+        <div class="pro"><h3>Funciona bien para</h3><ul><li>Motivar sin culpa: todo es avance</li><li>Da contenido para compartir en redes</li><li>Se combina bien con la mezcla A+B</li></ul></div>
+        <div class="con"><h3>A cuidar</h3><ul><li>Obliga a la asociación a registrar hitos</li><li>Con pocos hitos la ficha queda corta</li></ul></div>
+      </div>
+    </div>
+    <div class="screens"><div>
+      <div class="screen D" aria-label="Ejemplo de la dirección D"><div class="screen-in">
+        <div class="top"><i></i>Fundación Patitas</div>
+        <div class="hero"><span class="ph p1"><span class="cap">Foto</span></span><h3>Así va la historia de <em>Canela</em></h3></div>
+        <ol class="tl" id="tl">
+          <li><time>12 may 2026</time><b>Llegó al refugio</b><p>La encontraron en una obra con una pata herida.</p></li>
+          <li><time>20 may</time><b>Primera visita al veterinario</b><p>Vacunas, chip y desparasitación.</p></li>
+          <li><time>Julio</time><b>Aprendió a pasear con correa</b><span class="ph p1"><span class="cap">Foto</span></span></li>
+          <li class="now"><time>Hoy</time><b>Lista para su familia</b><p>Está en casa de acogida con Rosa.</p></li>
+        </ol>
+        <div class="cta"><button class="btn">Quiero conocerla</button></div>
+      </div></div>
+      <p class="slabel">Ficha como línea de tiempo</p>
+    </div></div>
+  </section>
+
+  <!-- E -->
+  <section class="dir">
+    <div class="dir-copy">
+      <span class="tag">E · Carnet</span>
+      <h2>Cada animal con su carnet</h2>
+      <p class="lead">La ficha es un carnet con la foto, los datos clave y timbres de “vacunado”, “chip” y “esterilizado”. Al tocarlo se da vuelta y muestra su historia. Resulta familiar para cualquier persona en Chile y muestra que la asociación trabaja con seriedad.</p>
+      <div class="facts">
+        <div class="fact"><b>Titulares</b><p class="spec" style="font-family:'Red Hat Display',sans-serif;font-weight:900;letter-spacing:-.03em">Red Hat Display</p><p>Geométrica con carácter, muy clara en cifras y datos.</p></div>
+        <div class="fact"><b>Movimiento</b><p>El carnet gira en 3D al tocarlo, y los timbres son la única ilustración.</p></div>
+      </div>
+      <div class="pc">
+        <div class="pro"><h3>Funciona bien para</h3><ul><li>Datos de salud claros de un vistazo</li><li>Concepto propio y fácil de recordar</li><li>Se puede usar solo en la ficha, sobre la mezcla A+B</li></ul></div>
+        <div class="con"><h3>A cuidar</h3><ul><li>Girar una tarjeta no es obvio: necesita indicación</li><li>La foto es más chica que en A+B</li></ul></div>
+      </div>
+    </div>
+    <div class="screens"><div>
+      <div class="screen E" aria-label="Ejemplo de la dirección E"><div class="screen-in">
+        <div class="top">Fundación Patitas <span>Menú</span></div>
+        <div class="head"><h3>Carnet de Pipa</h3><p>Toca el carnet para leer su historia.</p></div>
+        <button class="flip" id="flip" aria-pressed="false" aria-label="Dar vuelta el carnet de Pipa">
+          <span class="inner">
+            <span class="face">
+              <span class="band"><span>Fundación Patitas</span><span>N.º 0247</span></span>
+              <span class="ph p4"><span class="cap">Foto</span></span>
+              <span class="idrow"><span class="h4">Pipa</span><small>Hembra · Mestiza</small></span>
+              <span class="grid"><span><small>Edad</small><b>4 meses</b></span><span><small>Tamaño</small><b>Mediano</b></span><span><small>Ingreso</small><b>Sept 2026</b></span></span>
+              <span class="stamps"><span class="stamp">Chip<br>✓</span><span class="stamp">1.ª<br>vacuna</span><span class="stamp">Lista<br>para<br>casa</span></span>
+              <span class="turn">Tocar para dar vuelta ↻</span>
+            </span>
+            <span class="face bk">
+              <span class="h4">Su historia</span>
+              <span class="p">La dejaron en una caja en la puerta del refugio junto a sus hermanos. Aprende rápido, le encanta jugar con pelotas y ya duerme toda la noche.</span>
+              <span class="p"><b>Ideal para:</b> familia con tiempo para educarla y un patio pequeño.</span>
+              <span class="btn">Quiero adoptarla</span>
+              <span class="btn o">Apadrinar · $6.000 al mes</span>
+            </span>
+          </span>
+        </button>
+        <p class="tip">Timbres generados a partir de los datos de salud de la ficha.</p>
+      </div></div>
+      <p class="slabel">Ficha como carnet</p>
+    </div></div>
+  </section>
+
+  <section class="note">
+    <p class="eyebrow">Cómo se combinan</p>
+    <h2>D y E no reemplazan a la mezcla A+B: pueden ser su ficha de animal</h2>
+    <p>La portada y el recorrido general pueden ir con la mezcla A+B, y la ficha de cada animal tomar la línea de tiempo (D) o el carnet (E). Si prefieres ver más estilos de portada, dime qué te gustaría explorar: más sobrio, más colorido, más editorial…</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  const btns=document.querySelectorAll('.theme button');
+  btns.forEach(b=>b.addEventListener('click',()=>{
+    const t=b.dataset.t;
+    if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t);
+    btns.forEach(x=>x.setAttribute('aria-pressed',x===b));
+  }));
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.M .feature').forEach(f=>f.addEventListener('mouseenter',()=>{
+    if(reduce)return;const p=f.querySelector('.u path');p.style.transition='none';p.style.strokeDashoffset='260';p.getBoundingClientRect();p.style.transition='';p.style.strokeDashoffset='0';
+  }));
+  const tl=document.getElementById('tl');
+  tl.closest('.screen').addEventListener('mouseenter',()=>{
+    if(reduce)return;tl.style.transition='none';tl.style.setProperty('--prog','0%');tl.getBoundingClientRect();tl.style.transition='';requestAnimationFrame(()=>tl.style.setProperty('--prog','100%'));
+  });
+  const flip=document.getElementById('flip');
+  flip.addEventListener('click',()=>flip.setAttribute('aria-pressed',flip.getAttribute('aria-pressed')!=='true'));
+})();
+</script>

@@ -1,0 +1,411 @@
+<title>Modelo de datos Petscue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Schibsted+Grotesk:wght@700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap">
+<style>
+/* Layout: reading column (max 1180px). Interactive ER canvas (pan/zoom) first, then per-table detail generated from the same data, then rules. */
+:root{
+  --bg:#F5F8F4; --surface:#FFFFFF; --surface-2:#EAF1EA; --line:#D6E0D8; --grid:#DCE5DD;
+  --ink:#22303F; --ink-2:#4D5B6B; --ink-3:#6B7A8A;
+  --green:#2F7D5A; --edge:#7C8B99; --edge-on:#2F7D5A;
+  --g-conf:#E4E9EE; --g-per:#DCEFE3; --g-sol:#E2ECF5; --g-ani:#FCF0C8; --g-seg:#FBE4E1;
+  --pk-bg:#FCF0C8; --fk-bg:#E2ECF5; --fk-ink:#2F5F82; --uk-bg:#ECE7F6; --uk-ink:#5B4A8B;
+  --new-bg:#DCEFE3; --new-ink:#1F5C41;
+  --disp:"Schibsted Grotesk","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+  --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49; --grid:#1E2A35;
+  --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3; --green:#6CC49A; --edge:#5F7282; --edge-on:#6CC49A;
+  --g-conf:#26323D; --g-per:#1D3A2E; --g-sol:#15283A; --g-ani:#3A3217; --g-seg:#3A1917;
+  --pk-bg:#3A3217; --fk-bg:#15283A; --fk-ink:#8CC0E6; --uk-bg:#2A2440; --uk-ink:#BCAAF0; --new-bg:#1D3A2E; --new-ink:#8FD6B2}}
+:root[data-theme="dark"]{color-scheme:dark;
+  --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49; --grid:#1E2A35;
+  --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3; --green:#6CC49A; --edge:#5F7282; --edge-on:#6CC49A;
+  --g-conf:#26323D; --g-per:#1D3A2E; --g-sol:#15283A; --g-ani:#3A3217; --g-seg:#3A1917;
+  --pk-bg:#3A3217; --fk-bg:#15283A; --fk-ink:#8CC0E6; --uk-bg:#2A2440; --uk-ink:#BCAAF0; --new-bg:#1D3A2E; --new-ink:#8FD6B2}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;padding-inline:16px}
+h1,h2,h3,p{margin:0}
+h1,h2,h3{font-family:var(--disp);letter-spacing:-.02em;line-height:1.1;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+.wrap{max-width:1180px;margin-inline:auto;padding-block:36px 72px;display:flex;flex-direction:column;gap:44px}
+.eyebrow{font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+header{display:flex;flex-direction:column;gap:12px}
+header h1{font-size:clamp(2.2rem,6vw,3.2rem);font-weight:900}
+header p{max-width:70ch;color:var(--ink-2);font-size:1.06rem}
+section{display:flex;flex-direction:column;gap:14px;min-width:0}
+section>h2{font-size:1.7rem;font-weight:900}
+section>p{max-width:72ch;color:var(--ink-2)}
+code{font-family:var(--mono);font-size:.86em}
+
+/* ---------- Diagram viewer ---------- */
+.viewer{position:relative;height:min(78vh,820px);min-height:460px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background-color:var(--surface);background-image:radial-gradient(var(--grid) 1.2px,transparent 1.2px);background-size:22px 22px;touch-action:none;cursor:grab;user-select:none}
+.viewer.dragging{cursor:grabbing}
+.canvas{position:absolute;left:0;top:0;transform-origin:0 0}
+.canvas svg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.tools{position:absolute;z-index:5;top:12px;right:12px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tools button{min-width:44px;height:44px;padding:0 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-weight:700;box-shadow:0 2px 8px rgb(0 0 0/.08)}
+.tools .zoomv{display:grid;place-items:center;min-width:64px;height:44px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-family:var(--mono);font-size:.85rem;color:var(--ink-2)}
+.info{position:absolute;z-index:5;left:12px;bottom:12px;right:12px;max-width:640px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line);box-shadow:0 4px 16px rgb(0 0 0/.12);font-size:.92rem}
+.info b{font-family:var(--mono)}
+.hint{position:absolute;z-index:5;left:12px;top:12px;padding:8px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.85rem;color:var(--ink-2);max-width:calc(100% - 260px)}
+@media (max-width:640px){.hint{display:none}}
+
+.card{position:absolute;width:290px;background:var(--surface);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 2px 6px rgb(0 0 0/.06);cursor:pointer;transition:opacity .2s,border-color .2s}
+.card-h{height:38px;padding:0 12px;font-family:var(--mono);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-h .n{font-family:var(--body);font-size:11px;font-weight:700;opacity:.75}
+.g-conf .card-h{background:var(--g-conf)} .g-per .card-h{background:var(--g-per)} .g-sol .card-h{background:var(--g-sol)} .g-ani .card-h{background:var(--g-ani)} .g-seg .card-h{background:var(--g-seg)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:0 12px;font-size:12.5px;border-top:1px solid var(--line);height:27px;overflow:hidden}
+.row.ts .f,.row.ts .t{color:var(--ink-3);font-weight:400}
+.row .f{font-family:var(--mono);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .t{font-family:var(--mono);color:var(--ink-3);font-size:11.5px;white-space:nowrap}
+.row.null .f::after{content:"?";color:var(--ink-3);margin-left:2px}
+.k{display:inline-block;font-family:var(--body);font-size:10px;font-weight:700;padding:0 5px;border-radius:4px;margin-right:5px;line-height:16px}
+.pk{background:var(--pk-bg);color:var(--ink)} .fk{background:var(--fk-bg);color:var(--fk-ink)} .uk{background:var(--uk-bg);color:var(--uk-ink)}
+.card.sel{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in oklab,var(--green) 30%,transparent)}
+.card.dim{opacity:.28}
+path.e{fill:none;stroke:var(--edge);stroke-width:1.6;transition:opacity .2s,stroke .2s}
+path.e.user{stroke-dasharray:5 5}
+path.e.on{stroke:var(--edge-on);stroke-width:2.6}
+path.e.dim{opacity:.12}
+text.c{font-family:var(--mono);font-size:12px;font-weight:700;fill:var(--ink-2)}
+text.c.dim{opacity:.15}
+text.c.on{fill:var(--edge-on)}
+.gtitle{position:absolute;font-family:var(--disp);font-weight:900;font-size:22px;letter-spacing:-.02em;color:var(--ink-2)}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.9rem;color:var(--ink-2);align-items:center}
+.legend .sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid var(--line)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.toggle input{width:20px;height:20px;accent-color:var(--green)}
+
+/* ---------- Changes ---------- */
+.changes{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.chg{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.chg b{font-family:var(--disp);font-size:1.05rem}
+.chg p{font-size:.93rem;color:var(--ink-2)}
+.chg .from{font-family:var(--mono);font-size:.82rem;color:var(--ink-3)}
+
+/* ---------- Detail tables ---------- */
+.group{display:flex;flex-direction:column;gap:12px}
+.group-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.group-head h2{font-size:1.5rem;font-weight:900}
+.pill{font-size:.8rem;font-weight:700;padding:4px 10px;border-radius:999px}
+.entity{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;scroll-margin-top:16px}
+.entity-head{padding:12px 16px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;border-bottom:1px solid var(--line)}
+.entity-head h3{font-family:var(--mono);font-size:1rem;font-weight:700;letter-spacing:0}
+.entity-head p{flex-basis:100%;font-size:.92rem;color:var(--ink-2)}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:600px;font-size:.9rem}
+th,td{text-align:left;padding:8px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:700;background:var(--surface-2)}
+td:first-child{font-family:var(--mono);font-size:.85rem;white-space:nowrap}
+td:nth-child(2){font-family:var(--mono);font-size:.8rem;color:var(--ink-2);white-space:nowrap}
+.newtag{font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--new-bg);color:var(--new-ink)}
+.rules{display:flex;flex-direction:column;gap:8px}
+.rule{display:grid;gap:4px 18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+@media (min-width:760px){.rule{grid-template-columns:1.4fr 1fr}}
+.rule p{font-size:.95rem}
+.rule .how{font-size:.86rem;color:var(--ink-2)}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:6px;margin-right:6px}
+.t-db{background:var(--g-per);color:var(--new-ink)} .t-app{background:var(--g-sol);color:var(--fk-ink)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Petscue · Django + PostgreSQL · versión 4</p>
+    <h1>Modelo de datos</h1>
+    <p>Veintitrés tablas en cinco grupos. Cada fundación instala su propia copia, así que ninguna tabla lleva un campo “organización”. Nombres en inglés, documentación en español, y todas las tablas terminan con <code>created_at</code> y <code>updated_at</code> (en gris en el diagrama).</p>
+  </header>
+
+  <section>
+    <h2>Diagrama</h2>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--g-conf)"></span>Configuración</span>
+      <span><span class="sw" style="background:var(--g-per)"></span>Personas y acceso</span>
+      <span><span class="sw" style="background:var(--g-sol)"></span>Solicitudes y adopciones</span>
+      <span><span class="sw" style="background:var(--g-ani)"></span>Animales</span>
+      <span><span class="sw" style="background:var(--g-seg)"></span>Control, respaldos e importación</span>
+      <label class="toggle"><input type="checkbox" id="show-user"> Mostrar las referencias a <code>user</code> (quién registró cada cosa)</label>
+    </div>
+    <div class="viewer" id="viewer" tabindex="0" aria-label="Diagrama entidad-relación. Arrastra para moverte, usa la rueda o los botones para acercar.">
+      <div class="hint">Arrastra para moverte · rueda o pellizco para acercar · toca una tabla para ver sus relaciones</div>
+      <div class="tools"><button id="zout" aria-label="Alejar">−</button><span class="zoomv" id="zval">100%</span><button id="zin" aria-label="Acercar">+</button><button id="zfit">Ver todo</button><button id="z100">100%</button></div>
+      <div class="canvas" id="canvas"><svg id="edges"></svg></div>
+      <div class="info" id="info" hidden></div>
+    </div>
+    <div class="legend">
+      <span><span class="k pk">PK</span>clave primaria</span><span><span class="k fk">FK</span>referencia a otra tabla</span><span><span class="k uk">UK</span>valor único</span>
+      <span><code>campo?</code> puede quedar vacío</span>
+      <span><code>1</code> · <code>N</code> · <code>0..1</code> cuántas filas hay en cada extremo de la relación</span>
+    </div>
+  </section>
+
+  <section>
+    <h2>Qué cambió respecto a la versión anterior</h2>
+    <div class="changes" id="changes"></div>
+  </section>
+
+  <section id="detail">
+    <h2>Detalle de cada tabla</h2>
+    <p>Generado desde los mismos datos que el diagrama. Las tablas marcadas con <span class="newtag">Cambió</span> se modificaron en esta versión.</p>
+  </section>
+
+  <section>
+    <h2>Reglas de negocio y dónde se aseguran</h2>
+    <p><span class="tag t-db">Base de datos</span>las garantiza PostgreSQL aunque el código tenga un error. <span class="tag t-app">Aplicación</span>requieren cruzar tablas y se validan en Django.</p>
+    <div class="rules" id="rules"></div>
+  </section>
+</div>
+
+<script>
+const GROUPS={conf:['Configuración','var(--g-conf)'],per:['Personas y acceso','var(--g-per)'],sol:['Adopciones','var(--g-sol)'],ani:['Animales','var(--g-ani)'],seg:['Control, respaldos e importación','var(--g-seg)']};
+const ORDER=['conf','per','sol','ani','seg'];
+// [field, type, flags, note]   flags: pk uk null fk:<table>
+const T=[
+ {n:'organization_settings',g:'conf',d:'Datos e identidad de la fundación. Siempre una sola fila (id = 1); solo la administración la edita.',f:[
+  ['id','int','pk','Siempre 1'],['name','varchar','','Nombre de la fundación'],['street_address','varchar','','Calle y número'],['locality_id','int','fk:locality null','Comuna de la dirección'],
+  ['phone','varchar','','Contacto público; también arma el enlace de WhatsApp'],['email','varchar','','Contacto público'],['logo','varchar (ruta)','null','Ruta relativa del archivo en el servidor. Vacío = se muestra la inicial del nombre'],
+  ['brand_color','char(7)','','Color principal en hexadecimal'],['accent_color','char(7)','','Color de acento'],['title_font','varchar (ruta)','null','Ruta relativa de la tipografía propia, solo para títulos'],
+  ['adoption_fee','int','','Aporte de adopción en CLP; 0 = sin costo'],['featured_animal_id','bigint','fk:animal null','Protagonista de la portada'],
+  ['backup_retention_days','smallint','','Días que se guardan los respaldos (1–365, por defecto 30)'],
+  ['street_reports_enabled','bool','','Activa los avisos de animales en la calle'],['updated_by','bigint','fk:user null','Quién hizo el último cambio']]},
+ {n:'social_link',g:'conf',d:'Redes sociales de la fundación, una fila por red.',f:[
+  ['id','int','pk',''],['network','enum','','instagram, facebook, tiktok, youtube, x u other'],['handle','varchar','','Nombre de usuario o dirección'],['position','smallint','','Orden en la web']]},
+ {n:'membership_tier',g:'conf',d:'Cuotas de socio sugeridas que se muestran en el formulario.',f:[
+  ['id','int','pk',''],['monthly_amount','int','','CLP'],['position','smallint','','Orden en el formulario']]},
+ {n:'region',g:'conf',d:'Regiones. Viene cargada con las de Chile al instalar.',f:[
+  ['id','int','pk',''],['code','varchar','uk','Código oficial'],['name','varchar','','']]},
+ {n:'locality',g:'conf',d:'Comunas de Chile (346), cargadas al instalar. Nombre neutro para poder sumar otros países.',f:[
+  ['id','int','pk',''],['region_id','int','fk:region',''],['code','varchar','uk','Código oficial'],['name','varchar','','']]},
+
+ {n:'person',g:'per',d:'Cualquier persona con la que trata la fundación. Los formularios buscan primero por RUT para no duplicarla.',f:[
+  ['id','bigint','pk',''],['document_number','varchar(20)','uk','RUT normalizado (12345678-5), validado con módulo 11'],['first_names','varchar','','Nombres'],
+  ['paternal_surname','varchar','','Primer apellido'],['maternal_surname','varchar','null','Segundo apellido'],['phone','varchar','',''],
+  ['email','varchar','uk null','Único cuando tiene valor. Con este correo se inicia sesión; obligatorio si tiene cuenta o es casa de acogida'],['locality_id','int','fk:locality null','Comuna'],
+  ['data_consent_at','timestamp','null','Aceptación del tratamiento de datos (Ley 21.719)']]},
+ {n:'user',g:'per',isNew:1,d:'Cuenta para entrar al panel. Inicia sesión con el correo de su persona. Revocar el acceso la desactiva; la persona y su historial se conservan.',f:[
+  ['id','bigint','pk',''],['person_id','bigint','fk:person uk','Una persona tiene como máximo una cuenta'],
+  ['password','varchar','','Hash gestionado por Django'],['role','enum','','admin o worker'],['is_active','bool','','false = acceso revocado (Django lo necesita como campo)'],
+  ['deactivated_at','timestamp','null','Cuándo se revocó el acceso'],['deactivated_by','bigint','fk:user null','Quién lo revocó'],['last_login','timestamp','null','']]},
+ {n:'team_member',g:'per',isNew:1,d:'Equipo: aporta su tiempo. Nace como postulación (pending) y pasa a approved o rejected. Activo = aprobado y sin left_at.',f:[
+  ['id','bigint','pk',''],['person_id','bigint','fk:person uk',''],['kind','enum','','volunteer o staff'],['status','enum','','pending, approved o rejected'],
+  ['is_foster_home','bool','','Casa de acogida'],['joined_at','date','null','Se completa al aprobar'],['left_at','date','null','Con fecha = ya no es parte del equipo'],
+  ['reviewed_by','bigint','fk:user null',''],['reviewed_at','timestamp','null','']]},
+ {n:'availability_option',g:'per',d:'Opciones de disponibilidad que ofrece la fundación (días de semana, fines de semana, ferias, traslados). Editables.',f:[
+  ['id','int','pk',''],['label','varchar','uk',''],['position','smallint','','']]},
+ {n:'team_member_availability',g:'per',d:'Qué disponibilidad tiene cada persona del equipo, desde su postulación.',f:[
+  ['team_member_id','bigint','pk fk:team_member',''],['availability_option_id','int','pk fk:availability_option','']]},
+ {n:'membership',g:'per',isNew:1,d:'Socio: aporta recursos. Nace como postulación (pending). Una persona puede tener varias (cuota a la fundación y padrinazgos). Activa = aprobada y sin ended_at.',f:[
+  ['id','bigint','pk',''],['person_id','bigint','fk:person',''],['kind','enum','','donation (a la fundación) o sponsorship (padrinazgo)'],
+  ['monthly_amount','int','','CLP acordado, solo informativo'],['animal_id','bigint','fk:animal null','Obligatorio si es padrinazgo'],['status','enum','','pending, approved o rejected'],
+  ['started_at','date','null','Se completa al aprobar'],['ended_at','date','null','Con fecha = ya no aporta'],['reviewed_by','bigint','fk:user null',''],['reviewed_at','timestamp','null','']]},
+
+ {n:'adoption',g:'sol',isNew:1,d:'Todo el ciclo de una adopción en una fila: solicitud, entrevista, contrato y posible devolución. Solo visible en el panel.',f:[
+  ['id','bigint','pk',''],['animal_id','bigint','fk:animal',''],['person_id','bigint','fk:person','Quien adopta'],
+  ['source','enum','','web (formulario) o import (Excel)'],['status','enum','','new → interview → signed → returned, o rejected'],
+  ['housing','enum','null','apartment, house o house_with_yard. Obligatorio si source = web'],['has_other_pets','bool','null','Obligatorio si source = web'],['message','text','null',''],
+  ['foster_notified_at','timestamp','null','Cuándo se envió el correo a la casa de acogida'],
+  ['contract_signed_at','date','null','Obligatorio desde signed'],['fee_charged','int','null','CLP cobrado. Obligatorio desde signed'],['discount','int','null','CLP, por ejemplo por ser casa de acogida'],
+  ['returned_at','date','null','Obligatorio si status = returned'],['return_reason','text','null',''],
+  ['reviewed_by','bigint','fk:user null','Último miembro del equipo que la movió'],['reviewed_at','timestamp','null','']]},
+
+ {n:'species',g:'ani',d:'Especies que rescata la fundación. La administración las crea; no están fijas en el código.',f:[
+  ['id','int','pk',''],['name','varchar','uk','Singular: “Perro”, “Conejo”'],['plural_name','varchar','','Plural para los filtros: “Perros”, “Conejos”'],
+  ['is_active','bool','','Oculta la especie sin perder su historial'],['position','smallint','','Orden en los filtros']]},
+ {n:'animal',g:'ani',isNew:1,d:'Ficha de cada animal. El estado no se guarda: se calcula en este orden: fallecido o trasladado (tiene animal_exit), adoptado (tiene una adopción en signed), en acogida (tiene foster_home_id), en tratamiento (in_treatment), disponible.',f:[
+  ['id','bigint','pk',''],['slug','varchar','uk','Para la dirección: /animales/canela. Se guarda para que los enlaces no cambien'],['name','varchar','',''],['species_id','int','fk:species',''],
+  ['sex','enum','','female, male o unknown'],['size','enum','','small, medium o large'],['birth_date_approx','date','','La edad y la etapa se calculan'],
+  ['in_treatment','bool','','En tratamiento veterinario'],['foster_home_id','bigint','fk:team_member null','Con valor = está en casa de acogida'],
+  ['quote','varchar','','Frase destacada'],['story','text','',''],['vaccinated','bool','',''],['sterilized','bool','',''],['microchip_number','varchar','null','Vacío = sin chip'],
+  ['intake_date','date','','Llegada a la fundación'],['sponsorship_amount','int','','Padrinazgo mensual en CLP']]},
+ {n:'animal_exit',g:'ani',isNew:1,d:'Salida del animal que no es una adopción. La fila solo existe si el animal salió; como máximo una por animal.',f:[
+  ['id','bigint','pk',''],['animal_id','bigint','fk:animal uk',''],['kind','enum','','deceased (falleció) o transferred (trasladado a otra organización)'],
+  ['exit_date','date','',''],['notes','text','null','Por ejemplo, a qué organización se trasladó'],['recorded_by','bigint','fk:user','']]},
+ {n:'trait',g:'ani',d:'Rasgos reutilizables: “Sociable”, “Ideal para departamento”.',f:[
+  ['id','int','pk',''],['label','varchar','uk','']]},
+ {n:'animal_trait',g:'ani',d:'Qué rasgos tiene cada animal.',f:[
+  ['animal_id','bigint','pk fk:animal',''],['trait_id','int','pk fk:trait','']]},
+ {n:'animal_photo',g:'ani',isNew:1,d:'Fotos de cada ficha. La foto principal es la de menor posición.',f:[
+  ['id','bigint','pk',''],['animal_id','bigint','fk:animal',''],['image','varchar (ruta)','','Ruta relativa del archivo en el servidor; la app genera versiones livianas'],['position','smallint','','Orden en la galería. Único junto con animal_id; 0 = principal']]},
+ {n:'animal_daily_views',g:'ani',d:'Visitas por animal y día, sin guardar datos de quien visita.',f:[
+  ['id','bigint','pk',''],['animal_id','bigint','fk:animal',''],['day','date','','Único junto con animal_id'],['views','int','','']]},
+
+ {n:'restriction',g:'seg',d:'Lista de restricciones de la fundación. No se borra: se levanta y queda el historial.',f:[
+  ['id','bigint','pk',''],['person_id','bigint','fk:person',''],['species_id','int','fk:species null','Vacío = aplica a todas las especies'],
+  ['reason','enum','','abuse, abandonment, repeated_returns, false_information u other'],['notes','text','','Visible para todo el equipo'],
+  ['created_by','bigint','fk:user','Siempre alguien con rol admin'],['lifted_at','timestamp','null','Con fecha = restricción levantada'],['lifted_by','bigint','fk:user null','']]},
+ {n:'street_report',g:'seg',d:'Aviso de animal en la calle (función en evaluación). Se puede quitar sin afectar al resto.',f:[
+  ['id','bigint','pk','Se muestra como número de aviso: id 31 → AV-0031'],['photo','varchar (ruta)','null','Ruta relativa del archivo en el servidor'],['address','varchar','','Descripción libre del lugar'],['notes','text','null',''],
+  ['contact_phone','varchar','null','Se puede avisar de forma anónima'],['status','enum','','new o handled'],['handled_by','bigint','fk:user null','']]},
+ {n:'import_batch',g:'seg',d:'Cada importación desde Excel. Solo se registra cuando la planilla completa pasó la validación: o entra todo, o no entra nada.',f:[
+  ['id','bigint','pk',''],['kind','enum','','animals, adoptions, people o restrictions'],['file_name','varchar','',''],
+  ['row_count','int','','Filas importadas (todas las de la planilla)'],['created_by','bigint','fk:user','Siempre alguien con rol admin']]},
+ {n:'backup_run',g:'seg',d:'Cada respaldo automático o manual, incluidas las descargas en Excel.',f:[
+  ['id','bigint','pk',''],['kind','enum','','auto o manual'],['format','enum','','database (restaurable) o excel (solo lectura)'],['status','enum','','ok o failed'],
+  ['started_at','timestamp','',''],['finished_at','timestamp','null',''],['file_name','varchar','',''],['size_bytes','bigint','null',''],['requested_by','bigint','fk:user null','Vacío en los automáticos']]}
+];
+const CHANGES=[
+ ['Un solo correo por persona','user.email y person.email','Se quita user.email. Se inicia sesión con person.email, que es único cuando tiene valor.'],
+ ['La adopción es una sola tabla','adoption_request + adoption (animal y persona repetidos)','adoption guarda todo el ciclo con su estado. Los datos del contrato son obligatorios desde signed, y source distingue las del formulario de las importadas.'],
+ ['Las postulaciones son el registro con estado','membership_request, volunteer_request y su disponibilidad','membership y team_member nacen en pending y pasan a approved o rejected. Se eliminan 3 tablas y nada se copia al aprobar.'],
+ ['El estado del animal se calcula','animal.status (available, foster, treatment, adopted)','Adoptado = tiene una adopción en signed. En acogida = tiene foster_home_id. Queda in_treatment, que ahora puede convivir con la acogida.'],
+ ['El destacado es de la fundación','animal.featured + índice único parcial','organization_settings.featured_animal_id.'],
+ ['La foto principal sale del orden','animal_photo.is_cover','La de menor position. (animal_id, position) es único.'],
+ ['Salida del animal','—','Nueva tabla animal_exit para fallecimientos y traslados, sin contaminar las estadísticas de adopción.'],
+ ['Número de aviso calculado','street_report.code','Se quita la columna: el número AV-0031 se arma desde el id al mostrarlo.'],
+ ['Imágenes como rutas','Tipo “image” (parecía guardar la imagen en la base de datos)','varchar con la ruta relativa del archivo, guardado en el servidor de la fundación. Es lo que hace ImageField de Django.']
+];
+const RULES=[
+ ['Un RUT corresponde a una sola persona, y un correo también.','db','Único en person.document_number, y único parcial en person.email cuando tiene valor.'],
+ ['La casa de acogida es alguien del equipo aprobado y marcado como tal.','app','animal.foster_home_id apunta a team_member; solo se ofrecen los aprobados, sin left_at y con is_foster_home.'],
+ ['Un padrinazgo siempre apunta a un animal; una cuota a la fundación nunca.','db','CHECK entre membership.kind y animal_id.'],
+ ['Un animal tiene como máximo una adopción vigente.','db','Índice único parcial en adoption.animal_id donde status = signed.'],
+ ['Una adopción firmada o devuelta tiene sus datos de contrato; una devuelta tiene su fecha de devolución.','db','CHECK por status sobre contract_signed_at, fee_charged y returned_at.'],
+ ['Una solicitud que llegó por la web tiene los datos de vivienda.','db','CHECK: source = web exige housing y has_other_pets.'],
+ ['Una persona tiene como máximo una restricción vigente por especie (o una general).','db','Índice único parcial (person_id, species_id) donde lifted_at es nulo, con NULLS NOT DISTINCT.'],
+ ['Una restricción bloquea la adopción si no tiene especie o si coincide con la del animal.','app','Se compara restriction.species_id con animal.species_id al citar a entrevista.'],
+ ['Si el animal está en acogida y quien pide adoptarlo no es su casa de acogida, hay que avisarle por correo antes de firmar.','app','Pasar a signed exige foster_notified_at.'],
+ ['La casa de acogida que pide adoptar a su animal tiene prioridad.','app','Se calcula: la persona de la adopción es la de animal.foster_home.'],
+ ['Firmar el contrato saca al animal de la acogida y del destacado.','app','Una transacción: adoption pasa a signed, animal.foster_home_id se vacía y, si era el destacado, se quita de organization_settings.'],
+ ['Un animal tiene como máximo una salida registrada.','db','Único en animal_exit.animal_id.'],
+ ['Registrar una salida saca al animal de la web, del destacado y de la acogida. Un animal con salida no recibe adopciones ni puede destacarse.','app','Una transacción al registrar la salida; validación antes de crear una adopción o destacar. Su enlace público muestra “Esta ficha ya no está disponible”.'],
+ ['Una especie con animales o restricciones no se borra: se desactiva.','db','Referencias con ON DELETE PROTECT, más species.is_active.'],
+ ['Animales, personas y adopciones con historial no se pueden borrar.','db','Referencias con ON DELETE PROTECT.'],
+ ['Solo la administración gestiona restricciones, accesos, configuración, respaldos e importaciones, y siempre queda al menos un admin activo.','app','Permisos por user.role.'],
+ ['Una importación es todo o nada: si la planilla no corresponde a la plantilla o tiene una sola fila con errores, no se guarda nada. Nunca entra una persona sin RUT válido.','app','Validación completa en el backend antes de tocar la base de datos; si todo es válido, se guarda en una sola transacción.'],
+ ['Una importación nunca duplica personas: si el RUT ya existe, se reutiliza la persona.','app','Búsqueda por document_number antes de crear.'],
+ ['Al borrar una foto se borra su archivo, y una tarea periódica limpia los archivos huérfanos.','app','Señal de Django al eliminar más tarea programada.'],
+ ['created_at y updated_at se llenan solos en todas las tablas.','app','Modelo base de Django con auto_now_add y auto_now.']
+];
+
+/* ---------- Convention: every table ends with created_at and updated_at ---------- */
+T.forEach(t=>{t.f=t.f.filter(([f])=>!['created_at','updated_at','date_joined'].includes(f));
+  t.f.push(['created_at','timestamp','ts','Cuándo se creó la fila (automático)'],['updated_at','timestamp','ts','Última modificación (automático)'])});
+
+/* ---------- Parse ---------- */
+const byName={};T.forEach(t=>byName[t.n]=t);
+const fl=s=>{const o={pk:false,uk:false,nul:false,fk:null,ts:false};s.split(' ').filter(Boolean).forEach(x=>{if(x==='pk')o.pk=true;else if(x==='uk')o.uk=true;else if(x==='null')o.nul=true;else if(x==='ts')o.ts=true;else if(x.startsWith('fk:'))o.fk=x.slice(3)});return o};
+const EDGES=[];
+T.forEach(t=>t.f.forEach(([f,,s])=>{const o=fl(s);if(o.fk)EDGES.push({from:t.n,field:f,to:o.fk,nul:o.nul,uniq:o.uk||(o.pk&&false),user:o.fk==='user'})}));
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function badges(o){return (o.pk?'<span class="k pk">PK</span>':'')+(o.fk?'<span class="k fk">FK</span>':'')+(o.uk?'<span class="k uk">UK</span>':'')}
+
+/* ---------- Build canvas ---------- */
+const canvas=document.getElementById('canvas'),svg=document.getElementById('edges');
+const COLW=290,GAPX=150,GAPY=34,PADX=40,TOP=80;
+const cards={};
+ORDER.forEach((g,ci)=>{
+  const x=PADX+ci*(COLW+GAPX);
+  const title=document.createElement('div');title.className='gtitle';title.style.left=x+'px';title.style.top='28px';title.textContent=GROUPS[g][0];canvas.appendChild(title);
+  T.filter(t=>t.g===g).forEach(t=>{
+    const el=document.createElement('div');el.className=`card g-${g}`;el.dataset.t=t.n;el.style.left=x+'px';el.tabIndex=0;
+    el.innerHTML=`<div class="card-h"><span>${t.n}</span><span class="n">${t.f.length} campos</span></div>`+t.f.map(([f,ty,s])=>{const o=fl(s);return `<div class="row ${o.nul?'null':''} ${o.ts?'ts':''}" data-f="${f}"><span class="f">${badges(o)}${f}</span><span class="t">${o.fk?'→ '+o.fk:ty}</span></div>`}).join('');
+    canvas.appendChild(el);cards[t.n]={el,col:ci,x};
+  });
+});
+let W=0,H=0;
+// Heights are computed from the data, never measured, so the layout is the same whether or not the page is visible yet.
+const HEAD=38,ROW=27,BORDER=1.5;
+function layout(){
+  const colY=ORDER.map(()=>TOP);
+  T.forEach(t=>{const c=cards[t.n];c.y=colY[c.col];c.h=HEAD+t.f.length*ROW+BORDER*2;c.el.style.top=c.y+'px';c.el.style.height=c.h+'px';colY[c.col]+=c.h+GAPY});
+  W=PADX*2+ORDER.length*COLW+(ORDER.length-1)*GAPX;H=Math.max(...colY)+20;
+  canvas.style.width=W+'px';canvas.style.height=H+'px';svg.setAttribute('width',W);svg.setAttribute('height',H);
+  drawEdges();
+}
+let showUser=false,selected=null;
+function drawEdges(){
+  let out='';
+  EDGES.forEach((e,i)=>{
+    if(e.user&&!showUser)return;
+    const s=cards[e.from],t=cards[e.to];
+    const idx=byName[e.from].f.findIndex(([f])=>f===e.field);
+    const sy=s.y+BORDER+HEAD+idx*ROW+ROW/2;
+    const ty=t.y+BORDER+HEAD/2;
+    let sx,tx,c1,c2,sDir,tDir;
+    if(e.from===e.to){sx=s.x+COLW;tx=s.x+COLW;const ty2=s.y+BORDER+HEAD/2;out+=path(i,e,`M${sx} ${sy} C${sx+70} ${sy},${sx+70} ${ty2},${tx} ${ty2}`);out+=labels(i,e,sx,sy,1,tx,ty2,1);return}
+    if(t.col>s.col){sx=s.x+COLW;tx=t.x;sDir=1;tDir=-1}
+    else if(t.col<s.col){sx=s.x;tx=t.x+COLW;sDir=-1;tDir=1}
+    else{sx=s.x+COLW;tx=t.x+COLW;sDir=1;tDir=1}
+    const dx=t.col===s.col?60+Math.abs(ty-sy)*0.12:Math.max(60,Math.abs(tx-sx)/2);
+    c1=sx+sDir*dx;c2=tx+tDir*dx;
+    out+=path(i,e,`M${sx} ${sy} C${c1} ${sy},${c2} ${ty},${tx} ${ty}`);
+    out+=labels(i,e,sx,sy,sDir,tx,ty,tDir);
+  });
+  svg.innerHTML=out;applySel();
+}
+const path=(i,e,d)=>`<path class="e ${e.user?'user':''}" data-i="${i}" d="${d}"/>`;
+function labels(i,e,sx,sy,sDir,tx,ty,tDir){
+  const sl=e.uniq?'0..1':'N',tl=e.nul?'0..1':'1';
+  const ax=(x,dir,l)=>dir>0?x+8:x-8-l.length*7.2;
+  return `<text class="c" data-i="${i}" x="${ax(sx,sDir,sl)}" y="${sy-5}">${sl}</text><text class="c" data-i="${i}" x="${ax(tx,tDir,tl)}" y="${ty-5}">${tl}</text>`;
+}
+EDGES.forEach(e=>{if(e.field==='person_id'&&['user','team_member'].includes(e.from))e.uniq=true;if(e.field==='request_id')e.uniq=true});
+
+/* ---------- Selection ---------- */
+const info=document.getElementById('info');
+function applySel(){
+  const on=new Set();
+  document.querySelectorAll('path.e,text.c').forEach(p=>{
+    const e=EDGES[+p.dataset.i];const hit=selected&&(e.from===selected||e.to===selected);
+    p.classList.toggle('on',!!hit);p.classList.toggle('dim',!!selected&&!hit);
+    if(hit){on.add(e.from);on.add(e.to)}
+  });
+  Object.entries(cards).forEach(([n,c])=>{c.el.classList.toggle('sel',n===selected);c.el.classList.toggle('dim',!!selected&&!on.has(n)&&n!==selected)});
+  if(!selected){info.hidden=true;return}
+  const out=EDGES.filter(e=>e.from===selected&&(showUser||!e.user)).map(e=>`<code>${e.field}</code> → <b>${e.to}</b>`);
+  const inc=EDGES.filter(e=>e.to===selected&&e.from!==selected&&(showUser||!e.user)).map(e=>`<b>${e.from}</b>.<code>${e.field}</code>`);
+  info.hidden=false;
+  info.innerHTML=`<b>${selected}</b> · ${esc(byName[selected].d)}<br>${out.length?`Apunta a: ${out.join(' · ')}`:'No apunta a otras tablas.'}${inc.length?`<br>La usan: ${inc.join(' · ')}`:''}`;
+}
+function select(n){selected=selected===n?null:n;applySel()}
+
+/* ---------- Pan & zoom ---------- */
+const viewer=document.getElementById('viewer'),zval=document.getElementById('zval');
+let view={x:0,y:0,k:1};
+function apply(){canvas.style.transform=`translate(${view.x}px,${view.y}px) scale(${view.k})`;zval.textContent=Math.round(view.k*100)+'%'}
+function zoomAt(k,px,py){k=Math.min(2.5,Math.max(.2,k));view.x=px-(px-view.x)*(k/view.k);view.y=py-(py-view.y)*(k/view.k);view.k=k;apply()}
+function fit(){const r=viewer.getBoundingClientRect();if(!r.width||!r.height||!W)return;const k=Math.min(r.width/W,(r.height-60)/H)*.96;view.k=Math.max(.2,Math.min(1,k));view.x=Math.max(0,(r.width-W*view.k)/2);view.y=56;apply()}viewer.addEventListener('wheel',e=>{e.preventDefault();const r=viewer.getBoundingClientRect();zoomAt(view.k*Math.exp(-e.deltaY*.0015),e.clientX-r.left,e.clientY-r.top)},{passive:false});
+const ptrs=new Map();let drag=null,pinch=null,moved=false;
+viewer.addEventListener('pointerdown',e=>{if(e.target.closest('.tools,.info'))return;viewer.setPointerCapture(e.pointerId);ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;
+  if(ptrs.size===1)drag={x:e.clientX,y:e.clientY,vx:view.x,vy:view.y,target:e.target};
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),k:view.k};drag=null}});
+viewer.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pinch&&ptrs.size===2){const [a,b]=[...ptrs.values()];const r=viewer.getBoundingClientRect();zoomAt(pinch.k*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d,(a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top);moved=true;return}
+  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4){moved=true;viewer.classList.add('dragging')}view.x=drag.vx+dx;view.y=drag.vy+dy;apply()}});
+function end(e){if(!ptrs.has(e.pointerId))return;ptrs.delete(e.pointerId);viewer.classList.remove('dragging');
+  if(drag&&!moved&&e.type==='pointerup'){const c=drag.target.closest&&drag.target.closest('.card');if(c)select(c.dataset.t);else{selected=null;applySel()}}
+  if(ptrs.size<2)pinch=null;if(ptrs.size===0)drag=null}
+viewer.addEventListener('pointerup',end);viewer.addEventListener('pointercancel',end);
+viewer.addEventListener('keydown',e=>{const r=viewer.getBoundingClientRect();
+  if(e.key==='+'||e.key==='=')zoomAt(view.k*1.2,r.width/2,r.height/2);
+  else if(e.key==='-')zoomAt(view.k/1.2,r.width/2,r.height/2);
+  else if(e.key.startsWith('Arrow')){const s=60;view.x+=e.key==='ArrowLeft'?s:e.key==='ArrowRight'?-s:0;view.y+=e.key==='ArrowUp'?s:e.key==='ArrowDown'?-s:0;apply();e.preventDefault()}
+  else if(e.key==='Enter'&&document.activeElement.classList.contains('card'))select(document.activeElement.dataset.t)});
+document.getElementById('zin').onclick=()=>{const r=viewer.getBoundingClientRect();zoomAt(view.k*1.25,r.width/2,r.height/2)};
+document.getElementById('zout').onclick=()=>{const r=viewer.getBoundingClientRect();zoomAt(view.k/1.25,r.width/2,r.height/2)};
+document.getElementById('zfit').onclick=fit;
+document.getElementById('z100').onclick=()=>{const r=viewer.getBoundingClientRect();zoomAt(1,r.width/2,r.height/2)};
+document.getElementById('show-user').addEventListener('change',e=>{showUser=e.target.checked;drawEdges()});
+
+/* ---------- Text sections ---------- */
+document.getElementById('changes').innerHTML=CHANGES.map(([t,from,to])=>`<div class="chg"><b>${t}</b><span class="from">Antes: ${esc(from)}</span><p>${esc(to)}</p></div>`).join('');
+const detail=document.getElementById('detail');
+ORDER.forEach(g=>{
+  const box=document.createElement('div');box.className='group';
+  box.innerHTML=`<div class="group-head"><span class="pill" style="background:${GROUPS[g][1]}">${GROUPS[g][0]}</span></div>`+T.filter(t=>t.g===g).map(t=>`
+    <div class="entity" id="t-${t.n}"><div class="entity-head"><h3>${t.n}</h3>${t.isNew?'<span class="newtag">Cambió</span>':''}<p>${esc(t.d)}</p></div>
+    <div class="tbl"><table><thead><tr><th>Campo</th><th>Tipo</th><th>Notas</th></tr></thead><tbody>${t.f.map(([f,ty,s,n])=>{const o=fl(s);return `<tr><td>${badges(o)}${f}${o.nul?'?':''}</td><td>${o.fk?`→ ${o.fk}`:ty}${o.fk?` (${ty})`:''}</td><td>${esc(n||'')}</td></tr>`}).join('')}</tbody></table></div></div>`).join('');
+  detail.appendChild(box);
+});
+document.getElementById('rules').innerHTML=RULES.map(([r,w,h])=>`<div class="rule"><p>${esc(r)}</p><p class="how"><span class="tag ${w==='db'?'t-db':'t-app'}">${w==='db'?'Base de datos':'Aplicación'}</span>${esc(h)}</p></div>`).join('');
+
+/* ---------- Start ---------- */
+// Start at a readable zoom on the left columns; "Ver todo" shows the whole diagram.
+function start(){layout();view={x:0,y:10,k:.85};apply()}
+start();
+</script>

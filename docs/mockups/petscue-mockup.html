@@ -1,0 +1,1427 @@
+<title>Petscue Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;600;700&family=Schibsted+Grotesk:wght@500;700;800;900&display=swap">
+<style>
+:root{
+  --bg:#F5F8F4; --surface:#FFFFFF; --surface-2:#EAF1EA; --line:#D6E0D8;
+  --ink:#22303F; --ink-2:#4D5B6B; --ink-3:#6B7A8A;
+  --brand:#2F7D5A; --accent:#F2C94C; --on-brand:#FFFFFF; --on-accent:#22303F;
+  --brand-soft:color-mix(in oklab,var(--brand) 14%,var(--surface));
+  --brand-text:color-mix(in oklab,var(--brand) 88%,var(--ink));
+  --accent-soft:color-mix(in oklab,var(--accent) 32%,var(--surface));
+  --ok:#1C7A43; --ok-soft:#E1F2E7; --warn:#8A5300; --warn-soft:#FCEFD7; --bad:#B0281F; --bad-soft:#FBE4E1; --info:#2F5F82; --info-soft:#E2ECF5;
+  --shadow:0 1px 2px rgb(34 48 63/.06),0 18px 36px -22px rgb(34 48 63/.4);
+  --disp:"Schibsted Grotesk","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible Next","Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --sticky-top:env(safe-area-inset-top,0px);
+  --mk-bg:#141B22; --mk-2:#243039; --mk-ink:#ECF0F2; --mk-mute:#98A6B2;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49;
+    --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3;
+    --brand-soft:color-mix(in oklab,var(--brand) 24%,var(--surface));
+    --brand-text:color-mix(in oklab,var(--brand) 45%,#FFFFFF);
+    --accent-soft:color-mix(in oklab,var(--accent) 20%,var(--surface));
+    --ok:#6CD497; --ok-soft:#15301F; --warn:#F2B75E; --warn-soft:#33260F; --bad:#FF8F85; --bad-soft:#3A1917; --info:#8CC0E6; --info-soft:#15283A;
+    --shadow:0 1px 2px rgb(0 0 0/.3),0 18px 36px -22px rgb(0 0 0/.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#111A22; --surface:#18232E; --surface-2:#20303C; --line:#2C3C49;
+  --ink:#E4EBF0; --ink-2:#AAB8C4; --ink-3:#8594A3;
+  --brand-soft:color-mix(in oklab,var(--brand) 24%,var(--surface));
+  --brand-text:color-mix(in oklab,var(--brand) 45%,#FFFFFF);
+  --accent-soft:color-mix(in oklab,var(--accent) 20%,var(--surface));
+  --ok:#6CD497; --ok-soft:#15301F; --warn:#F2B75E; --warn-soft:#33260F; --bad:#FF8F85; --bad-soft:#3A1917; --info:#8CC0E6; --info-soft:#15283A;
+  --shadow:0 1px 2px rgb(0 0 0/.3),0 18px 36px -22px rgb(0 0 0/.8);
+}
+html{font-size:17px}
+html.big{font-size:19.5px}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:1rem;line-height:1.55}
+*{box-sizing:border-box}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+h1,h2,h3,h4,p{margin:0}
+h1,h2,h3,h4,.display{font-family:var(--disp);text-wrap:balance;line-height:1.05;letter-spacing:-.02em}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{width:1.2em;height:1.2em;flex:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- Mockup bar ---------- */
+.mk{background:var(--mk-bg);color:var(--mk-ink);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:10px 16px;font-size:14px}
+.mk-id{display:flex;align-items:baseline;gap:10px}
+.mk-id b{font-family:var(--disp);font-size:1.05rem}
+.mk-id span{font-size:.8rem;color:var(--mk-mute)}
+.mk-ctrls{display:flex;flex-wrap:wrap;gap:8px}
+.seg{display:inline-flex;background:var(--mk-2);border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--mk-mute);padding:6px 12px;border-radius:999px;font-weight:600;font-size:.8rem}
+.seg button[aria-pressed="true"]{background:var(--mk-ink);color:var(--mk-bg)}
+@media (max-width:640px){.seg-device{display:none}}
+
+/* ---------- Stage ---------- */
+.stage.phone{padding:24px 16px;background:var(--surface-2)}
+.device{position:relative}
+.stage.phone .device{width:min(390px,100%);height:min(820px,calc(100vh - 110px));min-height:560px;margin-inline:auto;border:10px solid #141B22;border-radius:46px;overflow:hidden;transform:translateZ(0);box-shadow:0 30px 60px -30px rgb(0 0 0/.5);background:var(--bg)}
+.app{container:app / inline-size;display:flex;flex-direction:column;min-height:calc(100vh - 56px);background:var(--bg)}
+.stage.phone .app{height:100%;min-height:0;overflow-y:auto;scrollbar-width:none;--sticky-top:0px}
+
+/* ---------- Top bar ---------- */
+.top{position:sticky;top:var(--sticky-top);z-index:30;display:flex;align-items:center;gap:10px;padding:10px 16px;background:color-mix(in oklab,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.brandmark{display:flex;align-items:center;gap:10px;min-width:0;border:0;background:none;padding:0;text-align:left}
+.logo{width:42px;height:42px;border-radius:14px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;flex:none;font:900 1.15rem var(--disp);overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:contain;background:#fff}
+.org{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.org b{font-family:var(--disp);font-size:1.02rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.org small{font-size:.74rem;color:var(--ink-3)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:6px}
+.nav{display:none;gap:2px}
+.nav button{border:0;background:none;padding:10px 14px;border-radius:12px;font-weight:700;color:var(--ink-2)}
+.nav button[aria-current="page"]{background:var(--brand-soft);color:var(--brand-text)}
+.icon-btn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font:800 .95rem var(--disp);color:var(--ink-2);flex:none}
+.icon-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.avatar{width:40px;height:40px;border-radius:999px;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font-weight:800;font-size:.8rem;flex:none}
+.roletag{display:none;font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+@container app (min-width:560px){.roletag{display:inline-block}}
+
+/* ---------- Tabs ---------- */
+.tabs{position:sticky;bottom:0;z-index:30;margin-top:auto;display:grid;grid-template-columns:repeat(var(--n),1fr);background:var(--surface);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
+.tabs button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:60px;justify-content:center;font-size:.74rem;font-weight:700;color:var(--ink-3);position:relative}
+.tabs .pill{display:grid;place-items:center;width:54px;height:32px;border-radius:999px;transition:background .2s}
+.tabs button[aria-current="page"]{color:var(--brand-text)}
+.tabs button[aria-current="page"] .pill{background:var(--brand-soft)}
+.count{position:absolute;top:4px;left:calc(50% + 10px);min-width:19px;height:19px;padding:0 5px;border-radius:999px;background:var(--bad);color:#fff;font-size:.68rem;font-weight:700;display:grid;place-items:center}
+.side .count{position:static;margin-left:auto}
+
+/* ---------- Layout ---------- */
+.main{width:100%;max-width:1160px;margin-inline:auto;padding:18px 16px 40px;display:flex;flex-direction:column;gap:36px;flex:1;min-width:0}
+.admin-body{display:flex;flex:1;width:100%}
+.admin-body .main{gap:24px}
+.side{display:none}
+@container app (min-width:800px){
+  .nav{display:flex}
+  .tabs{display:none}
+  .side{display:flex;flex-direction:column;gap:2px;width:240px;flex:none;padding:18px 12px;border-right:1px solid var(--line);position:sticky;top:calc(var(--sticky-top) + 64px);align-self:flex-start}
+  .side button{border:0;background:none;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;font-weight:700;color:var(--ink-2);text-align:left}
+  .side button[aria-current="page"]{background:var(--brand-soft);color:var(--brand-text)}
+  .side hr{border:0;border-top:1px solid var(--line);margin:8px 6px}
+  .main{padding:28px 32px 56px}
+  .only-mobile{display:none!important}
+}
+.eyebrow{font-size:.76rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3)}
+.muted{color:var(--ink-2)}
+.small{font-size:.86rem}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.page-head h1{font-size:clamp(2rem,7cqi,2.9rem);font-weight:900}
+.page-head p{margin-top:8px;max-width:58ch}
+.sec-title{font-size:1.6rem;font-weight:800}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:14px;min-width:0}
+.back{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:8px 0;font-weight:700;color:var(--brand-text);align-self:flex-start}
+
+/* ---------- Buttons & fields ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 24px;border-radius:18px;border:0;font:800 1rem/1.2 var(--disp);letter-spacing:-.005em;text-align:center;transition:transform .2s cubic-bezier(.3,1.5,.5,1),box-shadow .2s,background .2s}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn .ar{transition:transform .25s}
+.btn:hover .ar{transform:translateX(4px)}
+.btn-primary{background:var(--brand);color:var(--on-brand)}
+.btn-primary:hover:not(:disabled){box-shadow:0 12px 22px -12px var(--brand)}
+.btn-accent{background:var(--accent);color:var(--on-accent)}
+.btn-ghost{background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+.btn-light{background:#fff;color:#22303F}
+.btn-block{width:100%}
+.btn-sm{min-height:44px;padding:0 16px;font-size:.92rem;border-radius:14px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.link{border:0;background:none;color:var(--brand-text);font-weight:700;padding:8px 0;display:inline-flex;align-items:center;gap:6px;text-decoration:underline;text-underline-offset:4px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-weight:700;font-size:.95rem}
+.field small,.help{color:var(--ink-3);font-size:.84rem}
+.input{width:100%;min-height:54px;padding:12px 14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);font-size:1rem}
+textarea.input{min-height:96px;resize:vertical}
+.input:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft)}
+.form{display:flex;flex-direction:column;gap:18px}
+.row2{display:grid;gap:16px}
+@container app (min-width:640px){.row2{grid-template-columns:1fr 1fr}}
+.err{color:var(--bad);font-weight:700}
+.err:empty{display:none}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{position:relative;min-height:46px;padding:0 18px;border-radius:999px;border:2px solid var(--line);background:var(--surface);font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.chip[aria-pressed="true"],.chip:has(input:checked){background:var(--brand);border-color:var(--brand);color:var(--on-brand)}
+.chip:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.check{display:flex;gap:10px;align-items:flex-start}
+.check input{width:24px;height:24px;accent-color:var(--brand);flex:none;margin-top:1px}
+
+/* ---------- Photos (placeholders until each org uploads its own) ---------- */
+.ph{position:relative;overflow:hidden;display:block;background:
+  radial-gradient(circle at 36% 44%,var(--f1) 0 15%,transparent 33%),
+  radial-gradient(ellipse at 38% 66%,var(--f2) 0 19%,transparent 40%),
+  radial-gradient(circle at 80% 16%,rgb(255 246 214/.9) 0 6%,transparent 24%),
+  linear-gradient(165deg,var(--a),var(--b) 58%,var(--c))}
+.ph::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 32% 42%,transparent 38%,rgb(0 0 0/.2))}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
+.ph .cap{position:absolute;z-index:2;right:10px;top:10px;display:inline-flex;align-items:center;gap:5px;font:700 .62rem/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:rgb(255 255 255/.85);color:#22303F}
+.ph .cap .ic{width:12px;height:12px}
+.ph.has-img .cap,.ph.has-img::after{display:none}
+
+/* ---------- Public home ---------- */
+.home-hero{display:grid;gap:22px}
+@container app (min-width:800px){.home-hero{grid-template-columns:1.05fr 1fr;align-items:center;gap:40px}}
+.feature{position:relative;display:block;width:100%;height:clamp(420px,120cqi,560px);border-radius:32px;overflow:hidden;border:0;padding:0;text-align:left;color:#fff;box-shadow:var(--shadow)}
+@container app (min-width:800px){.feature{height:560px}}
+.feature .ph{position:absolute;inset:0;transition:transform 7s ease-out}
+.feature:hover .ph{transform:scale(1.07)}
+.shade{position:absolute;inset:auto 0 0 0;height:66%;z-index:2;background:linear-gradient(transparent,rgb(12 18 26/.86))}
+.fcopy{position:absolute;left:20px;right:20px;bottom:20px;z-index:3;display:flex;flex-direction:column;gap:10px}
+.fcopy small{font:700 .74rem var(--body);letter-spacing:.1em;text-transform:uppercase;opacity:.92}
+.fcopy .name{font:900 clamp(3.4rem,18cqi,5.2rem)/.88 var(--disp);letter-spacing:-.045em}
+.u{position:relative;display:inline-block}
+.u svg{position:absolute;left:-3%;bottom:-.14em;width:106%;height:.3em;overflow:visible;pointer-events:none}
+.u path{stroke:var(--accent);stroke-width:7;fill:none;stroke-linecap:round;stroke-dasharray:260;stroke-dashoffset:0;transition:stroke-dashoffset 1s cubic-bezier(.3,.7,.2,1)}
+.fcopy p{font-size:1rem;max-width:36ch;opacity:.95}
+.fcopy .go{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:4px;padding:10px 16px;border-radius:14px;background:#fff;color:#22303F;font:800 .95rem var(--disp)}
+.hero-side{display:flex;flex-direction:column;gap:16px}
+.hero-side h1{font-size:clamp(2.2rem,8cqi,3.4rem);font-weight:900}
+.hero-side .lede{font-size:1.1rem;color:var(--ink-2);max-width:44ch}
+.stats{display:flex;gap:22px;flex-wrap:wrap;padding-top:6px}
+.stats div{display:flex;flex-direction:column}
+.stats b{font:900 1.9rem/1 var(--disp);color:var(--brand-text);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.stats span{font-size:.84rem;color:var(--ink-2)}
+.fan-wrap{display:grid;gap:18px}
+@container app (min-width:800px){.fan-wrap{grid-template-columns:1fr 1.2fr;align-items:center}}
+.fan{position:relative;height:clamp(250px,72cqi,330px);max-width:460px;width:100%;justify-self:center}
+.fcard{position:absolute;top:0;width:54%;background:var(--surface);padding:8px 8px 12px;border-radius:22px;box-shadow:var(--shadow);transition:transform .55s cubic-bezier(.3,1.4,.4,1);border:0;text-align:left;color:var(--ink)}
+.fcard .ph{aspect-ratio:1;border-radius:16px}
+.fcard .ph .cap{display:none}
+.fcard b{display:block;font:800 1.08rem var(--disp);padding:8px 4px 0}
+.fcard small{display:block;font-size:.8rem;color:var(--ink-3);padding:0 4px}
+.fcard.c0{left:0;transform:rotate(-7deg) translate(6px,16px)}
+.fcard.c1{left:23%;z-index:2;transform:rotate(1deg)}
+.fcard.c2{right:0;transform:rotate(8deg) translate(-6px,22px)}
+.fan:hover .c0,.fan:focus-within .c0{transform:rotate(-11deg) translate(-12px,8px)}
+.fan:hover .c2,.fan:focus-within .c2{transform:rotate(12deg) translate(12px,14px)}
+.fan:hover .c1,.fan:focus-within .c1{transform:translateY(-10px)}
+.ways{display:grid;gap:12px}
+@container app (min-width:700px){.ways{grid-template-columns:1fr 1fr}}
+.way{display:flex;align-items:center;gap:14px;padding:16px;border-radius:22px;background:var(--surface);border:1px solid var(--line);text-align:left;transition:border-color .2s,transform .2s;color:var(--ink)}
+.way:hover{border-color:var(--brand);transform:translateX(3px)}
+.way .bub{width:52px;height:52px;border-radius:16px;background:var(--brand-soft);color:var(--brand-text);display:grid;place-items:center;flex:none}
+.way.y .bub{background:var(--accent-soft);color:var(--ink)}
+.way .bub .ic{width:26px;height:26px}
+.way b{display:block;font:800 1.12rem var(--disp)}
+.way small{display:block;color:var(--ink-2);font-size:.9rem}
+.way .arr{margin-left:auto;color:var(--ink-3)}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+@container app (min-width:760px){.steps{grid-template-columns:repeat(4,1fr)}}
+.steps li{counter-increment:s;display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:22px;background:var(--surface);border:1px solid var(--line)}
+.steps li::before{content:counter(s);width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--brand);color:var(--on-brand);font:900 1rem var(--disp)}
+.steps b{font:800 1.1rem var(--disp)}
+.steps p{color:var(--ink-2);font-size:.94rem}
+.fee{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:16px 18px;border-radius:20px;background:var(--accent-soft)}
+.fee b{font:900 1.4rem var(--disp);font-variant-numeric:tabular-nums}
+.fee p{max-width:60ch;font-size:.95rem}
+.foot{border-top:1px solid var(--line);padding:26px 16px 30px;display:grid;gap:14px;max-width:1160px;width:100%;margin-inline:auto;color:var(--ink-2)}
+.foot b.n{font:800 1.2rem var(--disp);color:var(--ink)}
+.foot .cols{display:grid;gap:12px}
+@container app (min-width:700px){.foot .cols{grid-template-columns:repeat(3,1fr)}}
+.foot .sel{user-select:all;color:var(--ink)}
+.foot .made{font-size:.8rem;color:var(--ink-3)}
+
+/* ---------- Animal cards ---------- */
+.grid{display:grid;gap:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+@container app (min-width:640px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container app (min-width:1000px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.pet{display:flex;flex-direction:column;gap:10px;padding:0;border:0;background:none;text-align:left;color:var(--ink)}
+.pet .ph{aspect-ratio:4/5;border-radius:24px;transition:transform .35s cubic-bezier(.3,1.4,.4,1),box-shadow .35s}
+.pet:hover .ph{transform:translateY(-4px) rotate(-1deg);box-shadow:var(--shadow)}
+.pet .ph .cap{right:auto;left:10px;top:auto;bottom:10px}
+.pet-name{font:900 1.45rem/1 var(--disp);letter-spacing:-.03em;padding-inline:4px}
+.pet-meta{font-size:.9rem;color:var(--ink-2);padding-inline:4px;margin-top:-6px}
+.tagpill{position:absolute;z-index:3;left:10px;top:10px;display:inline-flex;align-items:center;gap:6px;font:700 .72rem var(--body);padding:5px 10px;border-radius:999px}
+.tagpill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.t-acogida{background:var(--accent);color:var(--on-accent)}
+.t-tratamiento{background:var(--info-soft);color:var(--info)}
+.t-disponible{background:var(--ok-soft);color:var(--ok)}
+.t-adoptado,.t-fallecido,.t-trasladado{background:var(--surface-2);color:var(--ink-2)}
+.filters{display:flex;flex-direction:column;gap:12px}
+.filters .selects{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@container app (min-width:800px){.filters{flex-direction:row;align-items:center;justify-content:space-between}.filters .selects{width:440px}}
+.empty{padding:40px 20px;text-align:center;border:2px dashed var(--line);border-radius:22px;color:var(--ink-2)}
+
+/* ---------- Animal page ---------- */
+.ficha{display:grid;gap:0}
+@container app (min-width:860px){.ficha{grid-template-columns:1fr 1fr;gap:40px;align-items:start}}
+.ficha-photo{position:relative;height:clamp(360px,105cqi,440px);border-radius:32px;overflow:hidden}
+.ficha-photo .ph{position:absolute;inset:0}
+@container app (min-width:860px){.ficha-photo{height:620px;position:sticky;top:calc(var(--sticky-top) + 84px)}}
+.ficha-photo .backbtn{position:absolute;z-index:3;top:14px;left:14px;display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:14px;border:0;background:rgb(255 255 255/.92);color:#22303F;font-weight:700}
+.ficha-body{position:relative;z-index:2;margin-top:-36px;background:var(--bg);border-radius:30px 30px 0 0;padding:24px 4px 0;display:flex;flex-direction:column;gap:18px}
+@container app (min-width:860px){.ficha-body{margin-top:0;padding-top:4px}}
+.ficha-body h1{font-size:clamp(3rem,15cqi,4.6rem);font-weight:900;letter-spacing:-.045em;line-height:.9}
+.status-pill{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;font:700 .8rem var(--body);padding:6px 12px;border-radius:999px}
+.status-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.quote{font:600 1.25rem/1.35 var(--disp);letter-spacing:-.01em;border-left:5px solid var(--accent);padding-left:14px}
+.traits{display:flex;flex-wrap:wrap;gap:8px}
+.trait{font-size:.88rem;font-weight:700;padding:7px 12px;border-radius:999px;background:var(--brand-soft);color:var(--brand-text)}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@container app (min-width:1100px){.kv{grid-template-columns:repeat(3,1fr)}}
+.kv div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px}
+.kv small{display:block;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.kv b{font-size:1.02rem}
+.money{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:var(--surface-2)}
+.money b{font:900 1.2rem var(--disp);font-variant-numeric:tabular-nums}
+.callout{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:18px;background:var(--info-soft);color:var(--info)}
+.callout.warm{background:var(--accent-soft);color:var(--ink)}
+.callout.bad{background:var(--bad-soft);color:var(--bad)}
+.callout .ic{margin-top:2px}
+.actions-col{display:flex;flex-direction:column;gap:10px}
+
+/* ---------- Forms pages ---------- */
+.narrow{max-width:680px;width:100%;margin-inline:auto;display:flex;flex-direction:column;gap:24px}
+.who{display:flex;align-items:center;gap:14px}
+.who .ph{width:72px;height:72px;border-radius:20px;flex:none}
+.who .ph .cap{display:none}
+.opts{display:grid;gap:10px}
+@container app (min-width:640px){.opts{grid-template-columns:1fr 1fr}}
+.opt{position:relative;display:flex;gap:12px;align-items:flex-start;padding:16px;border:2px solid var(--line);border-radius:20px;background:var(--surface);cursor:pointer}
+.opt input{position:absolute;opacity:0}
+.opt:has(input:checked){border-color:var(--brand);background:var(--brand-soft);box-shadow:inset 0 0 0 1px var(--brand)}
+.opt:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.opt .bub{width:44px;height:44px;border-radius:14px;background:var(--surface-2);display:grid;place-items:center;flex:none;color:var(--brand-text)}
+.opt b{display:block;font:800 1.08rem var(--disp)}
+.opt small{display:block;color:var(--ink-2);font-size:.88rem}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tier{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:14px 6px;border:2px solid var(--line);border-radius:18px;background:var(--surface);cursor:pointer;text-align:center}
+.tier input{position:absolute;opacity:0}
+.tier:has(input:checked){border-color:var(--brand);background:var(--brand-soft)}
+.tier:has(input:focus-visible){outline:3px solid var(--accent);outline-offset:2px}
+.tier b{font:900 1.2rem var(--disp);font-variant-numeric:tabular-nums}
+.tier small{font-size:.78rem;color:var(--ink-2)}
+.note{font-size:.9rem;color:var(--ink-2);padding:14px 16px;border-radius:16px;background:var(--surface-2)}
+.upload{display:flex;align-items:center;gap:14px;padding:16px;border:2px dashed var(--line);border-radius:18px;cursor:pointer;background:var(--surface)}
+.upload .bub{width:50px;height:50px;border-radius:16px;background:var(--brand-soft);color:var(--brand-text);display:grid;place-items:center;flex:none}
+.upload b{display:block}
+.upload small{color:var(--ink-3)}
+.preview{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.preview img{width:100px;height:100px;border-radius:16px;object-fit:cover}
+.done{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:30px 8px}
+.done .big{width:84px;height:84px;border-radius:28px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center;animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+.done .big .ic{width:42px;height:42px}
+.done h1{font-size:2.2rem;font-weight:900}
+.done p{max-width:44ch;color:var(--ink-2)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+
+/* ---------- Admin ---------- */
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@container app (min-width:1000px){.kpis{grid-template-columns:repeat(4,1fr)}}
+.kpi{display:flex;flex-direction:column;gap:4px;text-align:left;padding:18px;border-radius:22px;background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+.kpi .v{font:900 2.4rem/1 var(--disp);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.kpi .l{font-weight:700;font-size:.95rem}
+.kpi small{font-size:.82rem;color:var(--ink-3)}
+.kpi.alert{background:var(--bad-soft);border-color:color-mix(in oklab,var(--bad) 40%,var(--line))}
+.kpi.alert .v,.kpi.alert small{color:var(--bad)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.panel-head{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px}
+.panel-head h2{font-size:1.35rem;font-weight:800}
+.panel-head p{font-size:.88rem;color:var(--ink-3);margin-top:4px}
+.dash{display:grid;gap:18px}
+@container app (min-width:1120px){.dash{grid-template-columns:1.35fr 1fr;align-items:start}}
+.mini-seg{display:inline-flex;background:var(--surface-2);border-radius:999px;padding:4px}
+.mini-seg button{border:0;background:none;padding:8px 14px;border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink-2);min-height:40px}
+.mini-seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.15)}
+.bars{display:flex;flex-direction:column;gap:12px}
+.bar-row{display:grid;grid-template-columns:38px 72px 1fr 70px;gap:10px;align-items:center}
+.bar-tracks{display:flex;flex-direction:column;gap:5px;min-width:0}
+.bar-track.t{height:7px}
+.bar-fill.time{background:var(--ink-3);opacity:.55}
+.bar-val small{display:block;font-size:.72rem;color:var(--ink-3);font-weight:600;white-space:nowrap}
+.social{display:flex;flex-wrap:wrap;gap:8px}
+.social a{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;text-decoration:none}
+.social a:hover{border-color:var(--brand)}
+.person-bub{width:52px;height:52px;border-radius:16px;background:var(--brand-soft);color:var(--brand-text);display:grid;place-items:center;font:800 1rem var(--disp)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tg{font-size:.76rem;font-weight:700;padding:4px 9px;border-radius:8px;background:var(--surface-2);color:var(--ink-2)}
+.tg.soc{background:var(--accent-soft);color:var(--ink)}
+.tg.vol{background:var(--brand-soft);color:var(--brand-text)}
+.tg.aco{background:var(--accent);color:var(--on-accent)}
+.tg.staff{background:var(--info-soft);color:var(--info)}
+.relation{display:grid;gap:10px}
+@container app (min-width:700px){.relation{grid-template-columns:1fr 1fr}}
+.relation div{padding:14px 16px;border-radius:18px;background:var(--surface);border:1px solid var(--line);font-size:.92rem}
+.relation b{display:block;font:800 1.05rem var(--disp);margin-bottom:4px}
+.bar-row .ph{width:38px;height:38px;border-radius:12px}
+.bar-row .ph .cap{display:none}
+.bar-name{font-weight:700;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar-track{height:14px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar-fill{display:block;height:100%;border-radius:99px;background:var(--brand);transform-origin:left;animation:grow .7s cubic-bezier(.3,.8,.2,1)}
+@keyframes grow{from{transform:scaleX(0)}}
+.bar-row.low .bar-fill{background:var(--accent)}
+.bar-val{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;font-size:.92rem}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.82rem;color:var(--ink-2)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:12px;height:12px;border-radius:4px;display:inline-block}
+.insight{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:18px;background:var(--accent-soft)}
+.list{display:flex;flex-direction:column}
+.arow{display:grid;grid-template-columns:60px 1fr;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.arow:last-child{border-bottom:0}
+.arow .ph{width:60px;height:60px;border-radius:18px}
+.arow .ph .cap{display:none}
+.arow-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.arow-main strong{font:800 1.15rem var(--disp)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.84rem;color:var(--ink-3);align-items:center}
+.meta span{display:inline-flex;align-items:center;gap:4px}
+.arow-side{grid-column:1 / -1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+@container app (min-width:760px){.arow{grid-template-columns:60px 1fr auto}.arow-side{grid-column:auto}}
+.flag{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;font-weight:700;padding:6px 10px;border-radius:10px;align-self:flex-start}
+.flag.ok{background:var(--ok-soft);color:var(--ok)}
+.flag.bad{background:var(--bad-soft);color:var(--bad)}
+.flag.warn{background:var(--warn-soft);color:var(--warn)}
+.flag.info{background:var(--info-soft);color:var(--info)}
+.flag.star{background:var(--accent);color:var(--on-accent)}
+.req{display:grid;grid-template-columns:60px 1fr;gap:14px;padding:18px;border-radius:22px;background:var(--surface);border:1px solid var(--line)}
+.req .ph{width:60px;height:60px;border-radius:18px}
+.req .ph .cap{display:none}
+.req .bub{width:60px;height:60px;border-radius:18px;background:var(--brand-soft);color:var(--brand-text);display:grid;place-items:center}
+.req-main{display:flex;flex-direction:column;gap:8px;min-width:0}
+.req-actions{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.rut{font-variant-numeric:tabular-nums;font-weight:700;letter-spacing:.02em}
+.search{display:flex;gap:8px;flex-wrap:wrap}
+.search .input{flex:1 1 220px;font:800 1.5rem var(--disp);letter-spacing:.04em;min-height:62px}
+.search .btn{min-height:62px}
+.verdict{display:grid;grid-template-columns:auto 1fr;gap:4px 16px;padding:22px;border-radius:24px;align-items:center}
+.verdict .vi{grid-row:span 2;width:62px;height:62px;border-radius:20px;display:grid;place-items:center;background:var(--surface)}
+.verdict .vi .ic{width:32px;height:32px}
+.verdict h2{font-size:1.7rem;font-weight:900}
+.verdict p{color:var(--ink)}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}
+.verdict.bad{background:var(--bad-soft);color:var(--bad)}
+.verdict.warn{background:var(--warn-soft);color:var(--warn)}
+.verdict .detail{grid-column:1 / -1;margin-top:12px;padding-top:12px;border-top:1px solid color-mix(in oklab,currentColor 25%,transparent);display:grid;gap:6px;color:var(--ink)}
+.split{display:grid;gap:18px}
+@container app (min-width:1080px){.split{grid-template-columns:1.1fr 1fr;align-items:start}}
+.bl-row{display:grid;grid-template-columns:1fr auto;gap:6px 12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:center}
+.bl-row:last-child{border-bottom:0}
+.bl-row .note-i{grid-column:1 / -1;font-size:.88rem;color:var(--ink-3)}
+.bl-row .confirm{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700}
+.lock{display:flex;gap:12px;align-items:flex-start;padding:16px;border-radius:18px;background:var(--surface-2);color:var(--ink-2)}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preset{display:flex;align-items:center;gap:10px;padding:12px;border:2px solid var(--line);border-radius:16px;background:var(--surface);font-weight:700;text-align:left}
+.preset[aria-pressed="true"]{border-color:var(--ink)}
+.sw{display:flex}
+.sw i{width:26px;height:26px;border-radius:50%;border:2px solid var(--surface);display:block}
+.sw i+i{margin-left:-8px}
+.color-row{display:grid;grid-template-columns:66px 1fr;gap:12px;align-items:start}
+.color-row input[type=color]{width:66px;height:54px;border:2px solid var(--line);border-radius:14px;padding:4px;background:var(--surface)}
+.cr{display:block;font-size:.86rem;font-weight:700;margin-top:6px}
+.cr.good{color:var(--ok)} .cr.mid{color:var(--warn)} .cr.poor{color:var(--bad)}
+.pv{border-radius:24px;overflow:hidden;border:1px solid var(--line);background:var(--bg)}
+.pv-hero{position:relative;height:220px}
+.pv-hero .ph{position:absolute;inset:0}
+.pv-hero .fcopy{left:16px;right:16px;bottom:16px;color:#fff}
+.pv-hero .fcopy .name{font-size:3rem}
+.pv-bot{padding:14px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.logo-edit{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo-edit .logo{width:64px;height:64px;border-radius:20px;font-size:1.6rem}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:80;background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:16px;font-weight:700;box-shadow:var(--shadow);max-width:calc(100% - 32px);text-align:center;animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
+.rph{aspect-ratio:4/3;border-radius:16px}
+.ptable-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+.ptable{border-collapse:collapse;width:100%;min-width:640px;font-size:.88rem}
+.ptable th,.ptable td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.ptable th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:var(--surface-2)}
+.ptable tr:last-child td{border-bottom:0}
+.ptable tr.bad td{background:var(--bad-soft)}
+.ptable .st{white-space:nowrap;font-weight:700}
+.ptable tr.ok .st{color:var(--ok)} .ptable tr.bad .st{color:var(--bad)}
+.ptable .msg{display:block;font-weight:600;color:var(--bad);margin-top:2px;white-space:normal}
+.cols{display:flex;flex-wrap:wrap;gap:6px}
+.cols span{font-size:.82rem;font-weight:700;padding:4px 10px;border-radius:8px;background:var(--surface-2)}
+.beta{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:8px;background:var(--info-soft);color:var(--info)}
+.menu-list{display:flex;flex-direction:column;gap:10px}
+</style>
+
+<div class="mk" role="region" aria-label="Controles del mockup">
+  <div class="mk-id"><b>Petscue</b><span>Mockup · dirección A+B · datos de ejemplo</span></div>
+  <div class="mk-ctrls">
+    <div class="seg" role="group" aria-label="Vista"><button data-mk="view" data-v="public">Web pública</button><button data-mk="view" data-v="admin">Panel interno</button></div>
+    <div class="seg" role="group" aria-label="Rol en el panel"><button data-mk="role" data-v="admin">Administración</button><button data-mk="role" data-v="trabajador">Trabajador</button></div>
+    <div class="seg" role="group" aria-label="Tema"><button data-mk="theme" data-v="light">Claro</button><button data-mk="theme" data-v="auto">Sistema</button><button data-mk="theme" data-v="dark">Oscuro</button></div>
+    <div class="seg seg-device" role="group" aria-label="Dispositivo"><button data-mk="device" data-v="auto">Adaptable</button><button data-mk="device" data-v="phone">Móvil</button></div>
+  </div>
+</div>
+<div class="stage" id="stage">
+  <div class="device">
+    <div class="app" id="app"></div>
+    <div class="toast" id="toast" role="status" hidden></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const TODAY=new Date('2026-09-28T12:00:00');
+const days=d=>Math.round((TODAY-new Date(d+'T12:00:00'))/864e5);
+const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const fmtDate=d=>{const x=new Date(d+'T12:00:00');return `${x.getDate()} de ${MONTHS[x.getMonth()]} de ${x.getFullYear()}`};
+const clp=n=>'$'+Math.round(n).toLocaleString('es-CL');
+
+/* ---------- Icons ---------- */
+const ICONS={
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+  paw:'<circle cx="6.5" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="17.5" cy="10" r="2"/><path d="M8 17.5c0-3 2-5.5 4-5.5s4 2.5 4 5.5c0 2-1.8 2.5-4 2.5s-4-.5-4-2.5z"/>',
+  heart:'<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7a4.3 4.3 0 0 1 7.5 2.8C19.5 15.4 12 20 12 20z"/>',
+  pin:'<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  chart:'<path d="M4 20V11"/><path d="M10 20V5"/><path d="M16 20v-7"/><path d="M21 20H3"/>',
+  inbox:'<path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1.5 2.5h5L16 13h5"/>',
+  id:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2"/><path d="M5.8 16c.6-1.4 1.8-2 3.2-2s2.6.6 3.2 2"/><path d="M15 10h3.5M15 13.5h3.5"/>',
+  palette:'<path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-1-.9-1.4-.9-2.3 0-.9.7-1.6 1.6-1.6H17a4 4 0 0 0 4-4C21 6.8 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="15" cy="7.5" r="1"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  camera:'<path d="M4 8h3.2l1.8-3h6l1.8 3H20v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.5-3.5 3.2-5.5 6.5-5.5s6 2 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.8c2 .7 3.2 2.4 3.5 5.2"/>',
+  star:'<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>',
+  shield:'<path d="M12 3l8 3v6c0 4.6-3.4 8.1-8 9-4.6-.9-8-4.4-8-9V6z"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  share:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/>',
+  house:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M9.5 15.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5"/>',
+  hand:'<path d="M7 11V6.5a1.5 1.5 0 0 1 3 0V11"/><path d="M10 10V5a1.5 1.5 0 0 1 3 0v5"/><path d="M13 10V6a1.5 1.5 0 0 1 3 0v6"/><path d="M16 11.5a1.5 1.5 0 0 1 3 0V15a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L4.5 14.6a1.5 1.5 0 0 1 2.4-1.8L7 13"/>',
+  undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  more:'<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  alert:'<path d="M12 3.5l9.5 16.5h-19z"/><path d="M12 10v4.5"/><path d="M12 17.5v.01"/>',
+  type:'<path d="M4 7V5h16v2"/><path d="M12 5v14"/><path d="M9 19h6"/>',
+  download:'<path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M5 20h14"/>',
+  upload:'<path d="M12 16V5"/><path d="M7 10l5-5 5 5"/><path d="M5 20h14"/>',
+  sheet:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 3v18"/>'
+};
+const ic=n=>`<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
+const underline=()=>`<svg viewBox="0 0 220 20" preserveAspectRatio="none" aria-hidden="true"><path d="M4 13 C 60 4, 150 4, 216 11"/></svg>`;
+
+/* ---------- Color helpers ---------- */
+function hexToRgb(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function lum(h){return hexToRgb(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)}).reduce((s,v,i)=>s+v*[.2126,.7152,.0722][i],0)}
+function contrast(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+function onColor(h){return contrast(h,'#FFFFFF')>=contrast(h,'#22303F')?'#FFFFFF':'#22303F'}
+function crInfo(c){const r=contrast(c,onColor(c));const t=r>=4.5?['good','Se lee bien']:r>=3?['mid','Solo sirve para textos grandes']:['poor','Difícil de leer, elige otro tono'];return `<span class="cr ${t[0]}">Contraste ${r.toFixed(1)}:1 · ${t[1]}</span>`}
+
+/* ---------- RUT (módulo 11) ---------- */
+function dvOf(body){let s=0,m=2;for(let i=body.length-1;i>=0;i--){s+=+body[i]*m;m=m===7?2:m+1}const r=11-(s%11);return r===11?'0':r===10?'K':String(r)}
+const fmtRut=b=>b.replace(/\B(?=(\d{3})+(?!\d))/g,'.')+'-'+dvOf(b);
+function parseRut(str){
+  const c=String(str||'').toUpperCase().replace(/[^0-9K]/g,'');
+  if(c.length<8||c.length>9)return{ok:false,msg:'Escribe el RUT completo con su dígito verificador, por ejemplo 12.345.678-5.'};
+  const body=c.slice(0,-1),dv=c.slice(-1);
+  if(!/^\d{7,8}$/.test(body))return{ok:false,msg:'El RUT solo lleva números y un dígito verificador (0–9 o K).'};
+  if(dvOf(body)!==dv)return{ok:false,msg:`El dígito verificador no coincide. Para ${body.replace(/\B(?=(\d{3})+(?!\d))/g,'.')} debería ser ${dvOf(body)}.`};
+  return{ok:true,body,fmt:fmtRut(body)};
+}
+
+/* ---------- Example data ---------- */
+const TONES=[
+  {f1:'#E7AE72',f2:'#C98A4E',a:'#A7C79B',b:'#55855D',c:'#2F4B39'},
+  {f1:'#9A6A48',f2:'#6E4930',a:'#A9B98E',b:'#5E6F4B',c:'#35402C'},
+  {f1:'#A7ABB3',f2:'#7C7F86',a:'#E9D9B8',b:'#B79B72',c:'#6D5A42'},
+  {f1:'#E9BD84',f2:'#D9A066',a:'#BFD8E6',b:'#7EA6BD',c:'#48667A'},
+  {f1:'#3A3A40',f2:'#26262B',a:'#F1DFC0',b:'#C9A77A',c:'#8A6B47'},
+  {f1:'#F2EEE6',f2:'#DAD4C8',a:'#C9D6C0',b:'#8BA489',c:'#4F6650'}
+];
+const S={
+  view:'public',role:'admin',device:'auto',theme:'auto',big:false,
+  pub:{p:'inicio'},pubHist:[],adm:{p:'resumen'},admHist:[],
+  org:{name:'Fundación Patitas',city:'Santiago',address:'Av. Irarrázaval 2450, Ñuñoa',phone:'+56 9 5555 1234',email:'hola@fundacionpatitas.cl',brand:'#2F7D5A',accent:'#F2C94C',logo:null,font:null,fontName:'',fee:30000,cuotas:[5000,10000,20000],adoptions2026:23,members:318,retention:30,
+    social:{instagram:'fundacionpatitas',facebook:'fundacionpatitas',tiktok:'fundacionpatitas',youtube:''}},
+  people:[
+    {id:1,name:'Marta González',body:'11222333',since:'2019-03-01',staff:'planta',access:'admin',socio:null,voluntario:false,acogida:false},
+    {id:2,name:'Diego Soto',body:'17222444',since:'2023-08-14',staff:'planta',access:'trabajador',socio:null,voluntario:false,acogida:false},
+    {id:3,name:'Rosa Díaz',body:'16111222',since:'2024-05-10',staff:null,access:'trabajador',socio:{mode:'aporte',amount:5000},voluntario:true,acogida:true},
+    {id:4,name:'Carolina Vega',body:'14222333',since:'2025-01-20',staff:null,access:'trabajador',socio:null,voluntario:true,acogida:true},
+    {id:5,name:'Pablo Rojas',body:'19333444',since:'2025-11-02',staff:null,access:'trabajador',socio:null,voluntario:true,acogida:false},
+    {id:6,name:'Andrea Lagos',body:'13444555',since:'2022-06-01',staff:null,access:null,socio:{mode:'aporte',amount:10000},voluntario:false,acogida:false},
+    {id:7,name:'Felipe Contreras',body:'15666777',since:'2026-02-11',staff:null,access:null,socio:{mode:'padrino',amount:7000,animalId:3},voluntario:false,acogida:false}
+  ],
+  pFilter:'todas',pConfirm:null,
+  species:[{id:'perro',name:'Perro',plural:'Perros',active:true},{id:'gato',name:'Gato',plural:'Gatos',active:true}],
+  imp:{kind:'adopciones',loaded:false,done:null},
+  imports:[{kind:'animales',file:'animales-2025.xlsx',ok:14,when:'12 de agosto de 2026',by:'Marta González'}],
+  animals:[
+    {id:1,name:'Canela',species:'perro',sex:'Hembra',age:'3 años',ageGroup:'adulto',size:'Mediano',tone:0,since:'2026-05-12',status:'acogida',visits:412,featured:false,sponsor:8000,vacc:true,ster:true,chip:true,traits:['Sociable','Le encantan los paseos','Buena con niños'],quote:'La primera en saludar a cada voluntario que llega al refugio.',story:'La encontraron en una obra en construcción con una pata herida. Ya está recuperada y hoy vive con una familia de acogida mientras encuentra su hogar definitivo.',returns:[],foster:{personId:3}},
+    {id:2,name:'Mishi',species:'gato',sex:'Macho',age:'1 año',ageGroup:'joven',size:'Pequeño',tone:2,since:'2026-07-20',status:'disponible',visits:368,featured:false,sponsor:6000,vacc:true,ster:true,chip:true,traits:['Juguetón','Convive con gatos'],quote:'Si hay una caja de cartón, Mishi ya está adentro.',story:'Llegó desde una colonia urbana de Maipú. Le gusta dormir al sol y jugar con cualquier cosa que ruede.',returns:[],foster:null},
+    {id:3,name:'Toby',species:'perro',sex:'Macho',age:'8 años',ageGroup:'senior',size:'Pequeño',tone:5,since:'2025-11-10',status:'disponible',visits:96,featured:false,sponsor:7000,vacc:true,ster:true,chip:true,traits:['Tranquilo','Ideal para departamento'],quote:'Un paseo corto, un sillón cómodo y Toby es feliz.',story:'Su familia no pudo seguir cuidándolo. Es calmado, no ladra y se lleva bien con otros perros.',returns:[],foster:null},
+    {id:4,name:'Luna',species:'gato',sex:'Hembra',age:'4 años',ageGroup:'adulto',size:'Pequeño',tone:4,since:'2026-01-15',status:'disponible',visits:287,featured:false,sponsor:6000,vacc:true,ster:true,chip:true,traits:['Cariñosa','Algo tímida al principio'],quote:'Tarda un par de días en confiar; después no se separa de ti.',story:'La rescataron de un sitio eriazo en La Florida. Es tranquila y le gustan los lugares altos.',returns:[],foster:null},
+    {id:5,name:'Rocco',species:'perro',sex:'Macho',age:'5 años',ageGroup:'adulto',size:'Grande',tone:1,since:'2025-08-22',status:'disponible',visits:141,featured:false,sponsor:9000,vacc:true,ster:true,chip:true,traits:['Protector','Mejor sin gatos'],quote:'Grande, noble y muy leal con su gente.',story:'Necesita una familia con experiencia y un patio donde moverse. Aprende rápido con premios.',returns:[{date:'2025-12-02',reason:'La familia se mudó a un departamento sin patio.'}],foster:null},
+    {id:6,name:'Nube',species:'gato',sex:'Hembra',age:'2 años',ageGroup:'joven',size:'Pequeño',tone:5,since:'2026-06-03',status:'tratamiento',visits:203,featured:false,sponsor:6000,vacc:true,ster:true,chip:true,traits:['Dulce','Revisión mensual'],quote:'Ronronea apenas la tomas en brazos.',story:'Está terminando un tratamiento de ojos. En unas semanas estará lista para ir a casa.',returns:[],foster:null},
+    {id:7,name:'Pipa',species:'perro',sex:'Hembra',age:'4 meses',ageGroup:'cachorro',size:'Mediano',tone:3,since:'2026-09-01',status:'disponible',visits:530,featured:false,sponsor:7000,vacc:true,ster:false,chip:true,traits:['Cachorra','Aprende rápido'],quote:'Ya aprendió a sentarse. Ahora está practicando esperar.',story:'La dejaron en una caja en la puerta del refugio junto a sus hermanos. Ya tiene sus primeras vacunas.',returns:[],foster:null},
+    {id:8,name:'Bruno',species:'perro',sex:'Macho',age:'10 años',ageGroup:'senior',size:'Grande',tone:1,since:'2025-08-14',status:'disponible',visits:38,featured:true,sponsor:7000,vacc:true,ster:true,chip:true,traits:['Muy tranquilo','Educado con correa'],quote:'Pasea sin tirar de la correa y saluda a todos en el refugio.',story:'Es el veterano de la fundación. Se lleva bien con perros, gatos y niños, y sueña con dormir la siesta al sol en su propia casa.',returns:[],foster:null},
+    {id:9,name:'Maui',species:'gato',sex:'Macho',age:'3 años',ageGroup:'adulto',size:'Pequeño',tone:0,since:'2026-02-10',status:'adoptado',visits:190,featured:false,sponsor:6000,vacc:true,ster:true,chip:true,traits:['Sociable'],quote:'Se hace amigo de todos.',story:'Adoptado en agosto de 2026.',returns:[{date:'2026-04-18',reason:'Alergia de un integrante de la familia.'}],foster:null}
+  ],
+  filter:{species:'todos',size:'todos',age:'todos'},
+  admFilter:'todos',
+  adoptReqs:[
+    {id:1,animalId:2,name:'Javier Molina',body:'15432876',phone:'+56 9 8765 4321',comuna:'Maipú',home:'Departamento',pets:'No',when:'Hoy, 10:12',status:'nueva'},
+    {id:4,animalId:1,name:'Pedro Fuentes',body:'18999000',phone:'+56 9 5432 1098',comuna:'La Reina',home:'Casa con patio',pets:'No',when:'Hoy, 11:05',status:'nueva',fosterNotified:false},
+    {id:2,animalId:1,name:'Rosa Díaz',body:'16111222',phone:'+56 9 7123 4455',comuna:'Ñuñoa',home:'Casa con patio',pets:'Sí',when:'Hoy, 08:40',status:'nueva'},
+    {id:3,animalId:4,name:'Elena Ruiz',body:'18765432',phone:'+56 9 6231 9087',comuna:'Providencia',home:'Departamento',pets:'No',when:'Ayer, 18:03',status:'entrevista'}
+  ],
+  memberReqs:[
+    {id:1,name:'Sofía Navarro',body:'17654321',socio:{mode:'aporte',amount:10000},voluntario:true,avail:'Fines de semana, Ferias de adopción',when:'Hoy, 09:30',status:'pendiente'},
+    {id:2,name:'Tomás Paredes',body:'12345678',socio:{mode:'padrino',amount:7000,animalId:8},voluntario:false,avail:'',when:'Ayer, 20:15',status:'pendiente'}
+  ],
+  reqTab:'adopcion',
+  restrictions:[
+    {body:'15432876',name:'Javier Molina',reason:'Devolución reiterada',species:'gato',note:'Devolvió dos gatos en 2025 sin causa justificada. Con perros no ha habido problemas.',date:'2025-12-03',by:'Marta González'},
+    {body:'9876543',name:'Ramón Ferrer',reason:'Maltrato',species:'todas',note:'Denuncia por maltrato animal en 2024.',date:'2024-06-19',by:'Marta González'}
+  ],
+  reports:[
+    {id:1,code:'AV-0031',when:'Hace 25 min',address:'Av. Grecia 1500, Ñuñoa, frente a la plaza',note:'Perro cojeando, no se deja tocar.',contact:'Lucía · +56 9 6123 4567',status:'nuevo',tone:1,photo:null},
+    {id:2,code:'AV-0030',when:'Ayer, 19:40',address:'Metro Irarrázaval, salida sur',note:'Gatita con tres crías en una caja.',contact:'Anónimo',status:'atendido',tone:2,photo:null}
+  ],
+  chartMode:'top',rutQ:'',rutRes:null,rAdd:false,rConfirm:null,
+  help:{socio:true,voluntario:false,mode:'aporte',amount:10000,animalId:null},
+  draft:null,draftPhoto:null,returnOpen:false,report:{photo:null},
+  nextReq:10,nextReport:32
+};
+const STATUS={disponible:'Disponible',acogida:'En casa de acogida',tratamiento:'En tratamiento',adoptado:'Adoptado',fallecido:'Falleció',trasladado:'Trasladado'};
+const isOut=a=>['adoptado','fallecido','trasladado'].includes(a.status);
+const PRESETS=[{name:'Bosque',brand:'#2F7D5A',accent:'#F2C94C'},{name:'Cordillera',brand:'#2D5E8C',accent:'#F4B860'},{name:'Copihue',brand:'#A23B4A',accent:'#F2C94C'},{name:'Pizarra',brand:'#34495E',accent:'#7FD1AE'}];
+const animal=id=>S.animals.find(a=>a.id===+id);
+const visible=()=>S.animals.filter(a=>!isOut(a));
+const restrictionFor=body=>S.restrictions.find(r=>r.body===body);
+const spec=id=>S.species.find(s=>s.id===id)||{id,name:id,plural:id,active:false};
+const specByName=n=>S.species.find(s=>s.name.toLowerCase()===String(n).trim().toLowerCase()||s.plural.toLowerCase()===String(n).trim().toLowerCase());
+const restrictionLabel=r=>r.species==='todas'?'Todas las especies':`Solo ${spec(r.species).plural.toLowerCase()}`;
+const person=id=>S.people.find(p=>p.id===+id);
+const fosterOf=a=>a.foster?person(a.foster.personId):null;
+const firstName=n=>n.split(' ')[0];
+function timeLabel(d){if(d<30)return `${d} ${d===1?'día':'días'}`;const m=Math.floor(d/30.4);if(m<12)return `${m} ${m===1?'mes':'meses'}`;const y=Math.floor(m/12),r=m%12;return `${y} ${y===1?'año':'años'}${r?` ${r} m`:''}`}
+function socioLabel(s){if(!s)return '';return s.mode==='padrino'?`Padrino de ${animal(s.animalId)?.name||'un animal'} · ${clp(s.amount)} al mes`:`Socio · ${clp(s.amount)} al mes`}
+function reqLabel(m){return [m.socio?socioLabel(m.socio):'',m.voluntario?`Voluntario${m.avail?` (${m.avail.toLowerCase()})`:''}`:''].filter(Boolean).join(' + ')}
+const SOCIAL=[['instagram','Instagram','https://instagram.com/'],['facebook','Facebook','https://facebook.com/'],['tiktok','TikTok','https://tiktok.com/@'],['youtube','YouTube','https://youtube.com/@']];
+function socialLinks(){const s=S.org.social;const items=SOCIAL.filter(([k])=>s[k]).map(([k,l,u])=>`<a href="${u}${encodeURIComponent(s[k])}" target="_blank" rel="noopener">${l}</a>`);const wa=S.org.phone.replace(/\D/g,'');if(wa)items.push(`<a href="https://wa.me/${wa}" target="_blank" rel="noopener">WhatsApp</a>`);return items.join('')}
+
+function photo(a,cls=''){
+  const t=TONES[a.tone%TONES.length];
+  return `<span class="ph ${cls} ${a.photo?'has-img':''}" style="--f1:${t.f1};--f2:${t.f2};--a:${t.a};--b:${t.b};--c:${t.c}" role="img" aria-label="Foto de ${esc(a.name)}">${a.photo?`<img src="${a.photo}" alt="">`:''}<span class="cap">${ic('camera')}Foto</span></span>`;
+}
+const logoMark=()=>S.org.logo?`<img src="${S.org.logo}" alt="Logo de ${esc(S.org.name)}">`:esc((S.org.name.replace(/^(Fundación|Asociación|Agrupación|ONG)\s+/i,'')[0]||'P').toUpperCase());
+
+/* ---------- Theme ---------- */
+function applyTheme(){
+  const r=document.documentElement;
+  r.style.setProperty('--brand',S.org.brand);r.style.setProperty('--accent',S.org.accent);
+  r.style.setProperty('--on-brand',onColor(S.org.brand));r.style.setProperty('--on-accent',onColor(S.org.accent));
+  if(S.org.font)r.style.setProperty('--disp',`"${S.org.font}","Schibsted Grotesk",system-ui,sans-serif`);else r.style.removeProperty('--disp');
+  if(S.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.theme);
+  r.classList.toggle('big',S.big);
+}
+
+/* ---------- Navigation ---------- */
+function go(p,params={}){
+  if(S.view==='public'){S.pubHist.push(S.pub);S.pub={p,...params}}else{S.admHist.push(S.adm);S.adm={p,...params}}
+  if(p==='ficha'&&S.view==='public'){const a=animal(params.id);if(a)a.visits++}
+  render(true);
+}
+function back(){
+  const h=S.view==='public'?S.pubHist:S.admHist;
+  const prev=h.pop()||{p:S.view==='public'?'inicio':'resumen'};
+  if(S.view==='public')S.pub=prev;else S.adm=prev;
+  render(true);
+}
+const PUB_NAV=[['inicio','Inicio','home'],['adoptar','Adoptar','paw'],['ayudar','Ayudar','heart'],['avisar','Avisar','pin']];
+const ADM_NAV=[['resumen','Resumen','chart'],['animales','Animales','paw'],['solicitudes','Solicitudes','inbox'],['rut','Verificar RUT','id'],['personas','Personas','users'],['avisos','Avisos','alert'],['apariencia','Apariencia','palette'],['importar','Importar Excel','upload'],['respaldo','Respaldo','download']];
+const newReqs=()=>S.adoptReqs.filter(r=>r.status==='nueva').length+S.memberReqs.filter(r=>r.status==='pendiente').length;
+const newReports=()=>S.reports.filter(r=>r.status==='nuevo').length;
+function badge(k){const n=k==='solicitudes'?newReqs():k==='avisos'?newReports():k==='mas'?newReports():0;return n?`<span class="count">${n}</span>`:''}
+const PARENT={ficha:'adoptar',solicitud:'adoptar',gracias:null,animal:'animales'};
+
+function topbar(){
+  const pub=S.view==='public',cur=pub?(PARENT[S.pub.p]||S.pub.p):null;
+  const big=`<button class="icon-btn" data-act="big" aria-pressed="${S.big}" aria-label="Letra más grande" title="Letra más grande">Aa</button>`;
+  const nav=pub?`<nav class="nav" aria-label="Principal">${PUB_NAV.map(([k,l])=>`<button data-go="${k}" ${k===cur?'aria-current="page"':''}>${l}</button>`).join('')}</nav>`:'';
+  const right=pub?big:`<span class="roletag">${S.role==='admin'?'Administración':'Trabajador'}</span>${big}<span class="avatar" title="${S.role==='admin'?'Marta González':'Diego Soto'}">${S.role==='admin'?'MG':'DS'}</span>`;
+  return `<header class="top"><button class="brandmark" data-go="${pub?'inicio':'resumen'}"><span class="logo">${logoMark()}</span><span class="org"><b>${esc(S.org.name)}</b><small>${pub?esc(S.org.city):'Panel interno'}</small></span></button><div class="top-right">${nav}${right}</div></header>`;
+}
+function tabbar(){
+  const pub=S.view==='public';
+  const items=pub?PUB_NAV:[...ADM_NAV.slice(0,4),['mas','Más','more']];
+  const p=pub?S.pub.p:S.adm.p;
+  const cur=pub?(PARENT[p]||p):(['personas','avisos','apariencia','importar','respaldo'].includes(p)?'mas':PARENT[p]||p);
+  return `<nav class="tabs" style="--n:${items.length}" aria-label="Secciones">${items.map(([k,l,i])=>`<button data-go="${k}" ${k===cur?'aria-current="page"':''}><span class="pill">${ic(i)}</span>${k==='rut'?'RUT':l}${pub?'':badge(k)}</button>`).join('')}</nav>`;
+}
+function sideNav(){
+  const p=S.adm.p,cur=PARENT[p]||p;
+  return `<nav class="side" aria-label="Panel">${ADM_NAV.map(([k,l,i])=>`<button data-go="${k}" ${k===cur?'aria-current="page"':''}>${ic(i)}${l}${badge(k)}</button>`).join('')}<hr><button data-act="to-public">${ic('eye')}Ver la web pública</button></nav>`;
+}
+
+/* ================= PUBLIC ================= */
+function petCard(a){
+  return `<button class="pet" data-go="ficha" data-id="${a.id}">${photo(a).replace('</span></span>',`</span>${a.status!=='disponible'?`<span class="tagpill t-${a.status}">${STATUS[a.status]}</span>`:''}</span>`)}<span class="pet-name">${esc(a.name)}</span><span class="pet-meta">${a.sex} · ${esc(a.age)} · ${a.size}</span></button>`;
+}
+const featuredAnimal=()=>visible().find(a=>a.featured&&a.status!=='tratamiento')||[...visible()].sort((a,b)=>b.visits-a.visits)[0];
+function footer(){
+  const o=S.org;
+  return `<footer class="foot"><b class="n">${esc(o.name)}</b><div class="cols">
+    <div><span class="eyebrow">Dirección</span><br><span class="sel">${esc(o.address)}, ${esc(o.city)}</span></div>
+    <div><span class="eyebrow">Teléfono y WhatsApp</span><br><span class="sel">${esc(o.phone)}</span></div>
+    <div><span class="eyebrow">Correo</span><br><span class="sel">${esc(o.email)}</span></div></div>
+    <div class="stack" style="gap:8px"><span class="eyebrow">Síguenos</span><div class="social">${socialLinks()}</div></div>
+    <p class="made">Plataforma construida con Petscue</p></footer>`;
+}
+const PUB={
+  inicio(){
+    const f=featuredAnimal(),v=visible();
+    const others=v.filter(a=>a.id!==f.id).sort((a,b)=>b.visits-a.visits).slice(0,3);
+    const minSponsor=Math.min(...v.map(a=>a.sponsor));
+    return `
+    <section class="home-hero">
+      <button class="feature" data-go="ficha" data-id="${f.id}">${photo(f)}<span class="shade"></span>
+        <span class="fcopy"><small>Busca familia · ${esc(f.age)}</small><span class="name"><span class="u">${esc(f.name)}${underline()}</span></span><p>${esc(f.quote)}</p><span class="go">Conocer a ${esc(f.name)} ${ic('arrow')}</span></span>
+      </button>
+      <div class="hero-side">
+        <p class="eyebrow">${esc(S.org.name)} · ${esc(S.org.city)}</p>
+        <h1>Tu próximo compañero ya te está esperando</h1>
+        <p class="lede">Tenemos ${v.length} perros y gatos listos para ir a casa. Conócelos, súmate como socio o recibe a uno en tu casa mientras encuentra familia.</p>
+        <div class="row"><button class="btn btn-primary" data-go="adoptar">Ver a los ${v.length} animales <span class="ar">${ic('arrow')}</span></button></div>
+        <div class="stats"><div><b>${S.org.adoptions2026}</b><span>adopciones este año</span></div><div><b>${S.org.members}</b><span>socios nos apoyan</span></div></div>
+      </div>
+    </section>
+    <section class="fan-wrap">
+      <div class="stack"><h2 class="sec-title">También buscan casa</h2><p class="muted">Toca a cualquiera para conocer su historia.</p><div><button class="link" data-go="adoptar">Ver todos ${ic('arrow')}</button></div></div>
+      <div class="fan" tabindex="0" aria-label="Otros animales">${others.map((a,i)=>`<button class="fcard c${i}" data-go="ficha" data-id="${a.id}">${photo(a)}<b>${esc(a.name)}</b><small>${esc(a.age)}</small></button>`).join('')}</div>
+    </section>
+    <section class="stack">
+      <h2 class="sec-title">Otras formas de ayudar</h2>
+      <div class="ways">
+        <button class="way y" data-act="help" data-type="socio"><span class="bub">${ic('heart')}</span><span><b>Hazte socio</b><small>Aporta a la fundación desde ${clp(S.org.cuotas[0])} al mes, o apadrina a un animal desde ${clp(minSponsor)}</small></span><span class="arr">${ic('arrow')}</span></button>
+        <button class="way" data-act="help" data-type="voluntario"><span class="bub">${ic('hand')}</span><span><b>Hazte voluntario</b><small>Aporta tu tiempo en el refugio y las ferias. Los voluntarios también pueden ser casa de acogida</small></span><span class="arr">${ic('arrow')}</span></button>
+      </div>
+    </section>
+    <section class="stack">
+      <h2 class="sec-title">Cómo es adoptar</h2>
+      <ol class="steps">
+        <li><b>Elige</b><p>Mira las fichas y encuentra a tu compañero.</p></li>
+        <li><b>Envía tu solicitud</b><p>Solo tus datos básicos. Tardas dos minutos.</p></li>
+        <li><b>Conversemos</b><p>Te llamamos y coordinamos una visita para que se conozcan.</p></li>
+        <li><b>Firma y a casa</b><p>Se va con chip, vacunas y esterilización al día.</p></li>
+      </ol>
+      ${feeBox()}
+    </section>`;
+  },
+  adoptar(){
+    const f=S.filter;
+    const list=visible().filter(a=>(f.species==='todos'||a.species===f.species)&&(f.size==='todos'||a.size===f.size)&&(f.age==='todos'||a.ageGroup===f.age));
+    const opt=(v,l,cur)=>`<option value="${v}" ${v===cur?'selected':''}>${l}</option>`;
+    return `
+    <div class="page-head"><div><h1>Buscan familia</h1><p class="muted">Toca a cualquiera para conocer su historia y pedir la adopción.</p></div></div>
+    <div class="filters">
+      <div class="chips" role="group" aria-label="Especie">${[['todos','Todos'],...S.species.filter(s=>s.active).map(s=>[s.id,s.plural])].map(([v,l])=>`<button class="chip" data-act="f-species" data-v="${v}" aria-pressed="${f.species===v}">${l}</button>`).join('')}</div>
+      <div class="selects">
+        <select class="input" id="f-size" data-change="f-size" aria-label="Tamaño">${opt('todos','Cualquier tamaño',f.size)}${['Pequeño','Mediano','Grande'].map(s=>opt(s,s,f.size)).join('')}</select>
+        <select class="input" id="f-age" data-change="f-age" aria-label="Edad">${opt('todos','Cualquier edad',f.age)}${[['cachorro','Cachorro'],['joven','Joven'],['adulto','Adulto'],['senior','Mayor']].map(([v,l])=>opt(v,l,f.age)).join('')}</select>
+      </div>
+    </div>
+    <p class="small muted" aria-live="polite">${list.length} ${list.length===1?'animal':'animales'}</p>
+    ${list.length?`<div class="grid">${list.map(petCard).join('')}</div>`:`<div class="empty"><p><b>No hay animales con esos filtros.</b></p><p>Prueba con “Cualquier tamaño” o “Cualquier edad”.</p><p><button class="link" data-act="f-reset">Quitar filtros</button></p></div>`}`;
+  },
+  ficha(){
+    const a=animal(S.pub.id);
+    const fee=S.org.fee;
+    return `
+    <article class="ficha">
+      <div class="ficha-photo">${photo(a)}<button class="backbtn" data-act="back">${ic('back')} Volver</button></div>
+      <div class="ficha-body">
+        ${a.status==='acogida'?`<span class="status-pill t-acogida">En casa de acogida · disponible</span>`:a.status==='tratamiento'?`<span class="status-pill t-tratamiento">En tratamiento</span>`:`<span class="status-pill t-disponible">Disponible</span>`}
+        <h1>${esc(a.name)}</h1>
+        <p class="quote">“${esc(a.quote)}”</p>
+        <p>${esc(a.story)}</p>
+        <div class="traits">${a.traits.map(t=>`<span class="trait">${esc(t)}</span>`).join('')}</div>
+        <div class="kv">
+          <div><small>Edad</small><b>${esc(a.age)}</b></div><div><small>Tamaño</small><b>${a.size}</b></div><div><small>Sexo</small><b>${a.sex}</b></div>
+          <div><small>Vacunas</small><b>${a.vacc?'Al día':'Pendientes'}</b></div><div><small>Esterilización</small><b>${a.ster?'Sí':a.ageGroup==='cachorro'?'Cuando tenga edad':'Pendiente'}</b></div><div><small>Microchip</small><b>${a.chip?'Sí':'Pendiente'}</b></div>
+        </div>
+        ${a.status==='acogida'?`<div class="callout warm">${ic('house')}<span>${esc(a.name)} vive temporalmente con una familia de acogida. Si quieres adoptarla, la fundación coordina para que se conozcan.</span></div>`:''}
+        ${a.status==='tratamiento'?`<div class="callout">${ic('info')}<span>Está terminando un tratamiento. Puedes dejar tu solicitud y te avisaremos cuando pueda irse a casa.</span></div>`:''}
+        <div class="money"><span>Aporte de adopción</span><b>${fee>0?clp(fee):'Sin costo'}</b></div>
+        <div class="actions-col">
+          <button class="btn btn-primary btn-block" data-go="solicitud" data-id="${a.id}">Quiero ${a.sex==='Hembra'?'adoptarla':'adoptarlo'} <span class="ar">${ic('arrow')}</span></button>
+          <button class="btn btn-accent btn-block" data-act="help" data-type="padrino" data-id="${a.id}">Apadrinar · ${clp(a.sponsor)} al mes</button>
+          <button class="btn btn-ghost btn-block" data-act="share" data-id="${a.id}">${ic('share')} Compartir su ficha</button>
+        </div>
+      </div>
+    </article>`;
+  },
+  solicitud(){
+    const a=animal(S.pub.id);
+    return `<div class="narrow">
+      <button class="back" data-act="back">${ic('back')} Volver a ${esc(a.name)}</button>
+      <div class="who">${photo(a)}<div><p class="eyebrow">Solicitud de adopción</p><h1 style="font-size:2rem;font-weight:900">Quiero adoptar a ${esc(a.name)}</h1></div></div>
+      <p class="muted">Solo necesitamos lo básico. Después te llamamos para conocerte y coordinar una visita.</p>
+      <form class="form" data-form="adopt" data-id="${a.id}" novalidate>
+        <label class="field"><span>Nombre y apellidos</span><input class="input" id="ad-name" name="name" autocomplete="name"></label>
+        <div class="row2"><label class="field"><span>RUT</span><input class="input" id="ad-rut" name="rut" placeholder="12.345.678-5" autocomplete="off" inputmode="text"></label>
+        <label class="field"><span>Teléfono</span><input class="input" id="ad-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+56 9 1234 5678"></label></div>
+        <label class="field"><span>Comuna</span><input class="input" id="ad-comuna" name="comuna" autocomplete="address-level2" placeholder="Ej.: Ñuñoa"></label>
+        <div class="field"><span>¿Dónde vives?</span><div class="chips">${['Departamento','Casa','Casa con patio'].map((v,i)=>`<label class="chip"><input type="radio" name="home" value="${v}" ${i===0?'checked':''}>${v}</label>`).join('')}</div></div>
+        <div class="field"><span>¿Tienes otros animales?</span><div class="chips">${['No','Sí'].map((v,i)=>`<label class="chip"><input type="radio" name="pets" value="${v}" ${i===0?'checked':''}>${v}</label>`).join('')}</div></div>
+        <label class="field"><span>¿Algo que quieras contarnos? <small>(opcional)</small></span><textarea class="input" id="ad-msg" name="msg" rows="3"></textarea></label>
+        ${S.org.fee>0?`<p class="note">La adopción tiene un aporte de <b>${clp(S.org.fee)}</b>, que se paga directamente a la fundación al firmar el contrato. Ayuda a cuidar al resto de los animales.</p>`:''}
+        <p class="err" id="ad-err" role="alert"></p>
+        <button class="btn btn-primary btn-block" type="submit">Enviar solicitud</button>
+      </form></div>`;
+  },
+  ayudar(){
+    const h=S.help,v=visible();
+    const sp=h.animalId?animal(h.animalId):null;
+    const AV=['Días de semana','Fines de semana','Ferias de adopción','Traslados en auto'];
+    return `<div class="narrow">
+      <div class="page-head"><div><h1>Súmate a ${esc(S.org.name)}</h1><p class="muted">Aquí solo dejas tu solicitud. El equipo te contactará para conocerte, y los aportes se coordinan directamente con la fundación.</p></div></div>
+      <form class="form" data-form="help" novalidate>
+        <fieldset class="field" style="border:0;padding:0;margin:0"><legend style="font-weight:700;margin-bottom:8px">¿Cómo quieres ayudar? Puedes elegir las dos.</legend>
+          <div class="opts">
+            <label class="opt"><input type="checkbox" name="socio" data-change="help-socio" ${h.socio?'checked':''}><span class="bub">${ic('heart')}</span><span><b>Como socio</b><small>Aportas recursos: una cuota mensual para la fundación o el padrinazgo de un animal.</small></span></label>
+            <label class="opt"><input type="checkbox" name="voluntario" data-change="help-vol" ${h.voluntario?'checked':''}><span class="bub">${ic('hand')}</span><span><b>Como voluntario</b><small>Aportas tu tiempo: refugio, paseos, ferias y traslados.</small></span></label>
+          </div>
+        </fieldset>
+        ${h.socio?`<div class="field"><span>¿Cómo quieres aportar?</span><div class="chips"><label class="chip"><input type="radio" name="mode" value="aporte" data-change="help-mode" ${h.mode==='aporte'?'checked':''}>A la fundación</label><label class="chip"><input type="radio" name="mode" value="padrino" data-change="help-mode" ${h.mode==='padrino'?'checked':''}>Apadrinando a un animal</label></div></div>
+          ${h.mode==='aporte'?`<div class="field"><span>Aporte mensual</span><div class="tiers">${S.org.cuotas.map(c=>`<label class="tier"><input type="radio" name="amount" value="${c}" ${h.amount===c?'checked':''}><b>${clp(c)}</b><small>al mes</small></label>`).join('')}</div><small>El monto es referencial. Si prefieres otro, cuéntanoslo en la conversación.</small></div>`
+          :`<label class="field"><span>¿A quién quieres apadrinar?</span><select class="input" id="h-animal" name="animalId" data-change="help-animal"><option value="">Elige un animal</option>${v.map(a=>`<option value="${a.id}" ${h.animalId===a.id?'selected':''}>${esc(a.name)} · ${clp(a.sponsor)} al mes</option>`).join('')}</select>${sp?`<small>El padrinazgo de ${esc(sp.name)} es de ${clp(sp.sponsor)} al mes y cubre su alimento.</small>`:''}</label>`}`:''}
+        ${h.voluntario?`<div class="field"><span>¿Cuándo puedes ayudar?</span><div class="chips">${AV.map(x=>`<label class="chip"><input type="checkbox" name="avail" value="${x}">${x}</label>`).join('')}</div></div>
+          <p class="note">${ic('house')} ¿Te gustaría ser casa de acogida? Las casas de acogida se eligen entre los voluntarios de la fundación: primero te sumas como voluntario y luego lo conversamos.</p>`:''}
+        <div class="row2"><label class="field"><span>Nombre y apellidos</span><input class="input" id="h-name" name="name" autocomplete="name"></label>
+        <label class="field"><span>RUT</span><input class="input" id="h-rut" name="rut" placeholder="12.345.678-5" autocomplete="off"></label></div>
+        <div class="row2"><label class="field"><span>Teléfono</span><input class="input" id="h-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+56 9 1234 5678"></label>
+        <label class="field"><span>Correo <small>(opcional)</small></span><input class="input" id="h-email" name="email" type="email" autocomplete="email"></label></div>
+        <label class="check"><input type="checkbox" id="h-ok" name="ok"><span>Acepto que ${esc(S.org.name)} guarde mis datos para gestionar mi solicitud.</span></label>
+        <p class="err" id="h-err" role="alert"></p>
+        <button class="btn btn-primary btn-block" type="submit">Enviar solicitud</button>
+      </form></div>`;
+  },
+  avisar(){
+    const r=S.report;
+    return `<div class="narrow">
+      <div class="page-head"><div><h1>Avisar de un animal en la calle</h1><p class="muted">Envíanos una foto y dónde está. El equipo recibirá el aviso en su teléfono.</p></div></div>
+      <form class="form" data-form="report" novalidate>
+        ${r.photo?`<div class="preview"><img src="${r.photo}" alt="Foto del aviso"><button type="button" class="btn btn-ghost btn-sm" data-act="report-photo-rm">Quitar foto</button></div>`:`<label class="upload" for="rp-photo"><span class="bub">${ic('camera')}</span><span><b>Añadir foto del animal</b><small>Desde la cámara o la galería</small></span></label><input type="file" accept="image/*" id="rp-photo" class="sr-only">`}
+        <label class="field"><span>¿Dónde está?</span><textarea class="input" id="rp-address" name="address" rows="2" placeholder="Ej.: Av. Grecia 1500, Ñuñoa, frente a la plaza"></textarea></label>
+        <label class="field"><span>¿Algo más que debamos saber? <small>(opcional)</small></span><textarea class="input" id="rp-note" name="note" rows="2" placeholder="Ej.: está herido, tiene collar"></textarea></label>
+        <label class="field"><span>Tu teléfono <small>(opcional)</small></span><input class="input" id="rp-phone" name="phone" type="tel" inputmode="tel" placeholder="+56 9 1234 5678"></label>
+        <p class="note">Si el animal está en la calzada o hay peligro inmediato, llama a Carabineros al <b>133</b>.</p>
+        <p class="err" id="rp-err" role="alert"></p>
+        <button class="btn btn-primary btn-block" type="submit">Enviar aviso</button>
+      </form></div>`;
+  },
+  gracias(){
+    const k=S.pub.kind;
+    const msg={
+      adopt:['¡Solicitud enviada!',`Gracias por querer adoptar a ${esc(S.pub.name||'')}. Te llamaremos en los próximos días para conocerte y coordinar una visita.`],
+      help:['¡Gracias por sumarte!','Recibimos tu solicitud. El equipo te contactará para conversar y completar el proceso. No tienes que pagar nada por ahora.'],
+      report:['Aviso recibido',`Tu número de aviso es ${esc(S.pub.code||'')}. El equipo ya lo tiene en su teléfono. Si puedes, quédate cerca sin asustar al animal.`]
+    }[k];
+    return `<div class="narrow"><div class="done"><span class="big">${ic(k==='report'?'check':'heart')}</span><h1>${msg[0]}</h1><p>${msg[1]}</p>
+      <div class="row" style="justify-content:center"><button class="btn btn-primary" data-go="inicio">Volver al inicio</button><button class="btn btn-ghost" data-go="adoptar">Ver animales</button></div>
+      <p class="small muted" style="margin-top:10px">Mientras tanto, síguenos para ver cómo les va a los animales:</p><div class="social" style="justify-content:center">${socialLinks()}</div></div></div>`;
+  }
+};
+function feeBox(){
+  const f=S.org.fee;
+  return `<div class="fee"><p>${f>0?`La adopción tiene un aporte de <b>${clp(f)}</b>. Se paga a la fundación al firmar el contrato y ayuda a cuidar al resto de los animales.`:'Adoptar no tiene costo. Nuestro trabajo se financia con el aporte de los socios.'}</p>${f>0?`<b>${clp(f)}</b>`:''}</div>`;
+}
+
+/* ================= EXCEL IMPORT ================= */
+const toISO=s=>{const m=/^(\d{2})-(\d{2})-(\d{4})$/.exec(String(s||'').trim());return m?`${m[3]}-${m[2]}-${m[1]}`:null};
+const STATUS_BY_LABEL={'disponible':'disponible','en tratamiento':'tratamiento','adoptado':'adoptado','adoptada':'adoptado'};
+function newAnimal(o){
+  const id=Math.max(...S.animals.map(a=>a.id))+1,sx=(o.sex||'Hembra').toLowerCase();
+  return {id,name:o.name,species:o.species,sex:sx==='macho'?'Macho':sx==='desconocido'?'Desconocido':'Hembra',age:'Por confirmar',ageGroup:'adulto',size:'Mediano',tone:id%TONES.length,since:o.since,status:o.status,visits:0,featured:false,sponsor:6000,vacc:false,ster:false,chip:false,traits:[],quote:'Pronto contaremos más sobre este animal.',story:'Importado desde Excel.',returns:o.returns||[],foster:null};
+}
+const badSpecies=n=>`La especie “${n}” no existe. Créala en Apariencia › Especies o corrige la fila.`;
+const IMPORTS={
+  adopciones:{label:'Adopciones anteriores',desc:'Contratos firmados antes de usar Petscue, con su devolución si la hubo. Los animales entran como adoptados y no aparecen en la web.',
+    cols:['RUT adoptante','Nombre adoptante','Animal','Especie','Fecha del contrato','Fecha de devolución','Motivo de devolución'],
+    rows:()=>[[fmtRut('10111222'),'Carmen Soto','Chispa','Perro','15-03-2024','',''],[fmtRut('13555666'),'Luis Araya','Tomasa','Gato','02-07-2024','10-09-2024','Alergia de un integrante de la familia'],['12.345.678-0','Marcela Pinto','Rayo','Perro','20-11-2024','',''],[fmtRut('16777888'),'Jorge Leiva','Kiwi','Conejo','05-01-2025','',''],[fmtRut('19222111'),'Paula Muñoz','Lola','Gato','','',''],[fmtRut('17888999'),'Andrés Vidal','Coco','Perro','30-06-2025','','']],
+    check:r=>{const c=parseRut(r[0]);if(!c.ok)return 'RUT no válido. '+c.msg;if(!r[1])return 'Falta el nombre de quien adoptó.';if(!r[2])return 'Falta el nombre del animal.';if(!specByName(r[3]))return badSpecies(r[3]);if(!toISO(r[4]))return 'Falta la fecha del contrato o no está como día-mes-año (15-03-2024).';if(r[5]&&!toISO(r[5]))return 'La fecha de devolución no está como día-mes-año.';if(r[5]&&toISO(r[5])<toISO(r[4]))return 'La devolución es anterior al contrato.';return null},
+    apply:r=>S.animals.push(newAnimal({name:r[2],species:specByName(r[3]).id,status:'adoptado',since:toISO(r[4]),returns:r[5]?[{date:toISO(r[5]),reason:r[6]||'Sin motivo registrado.'}]:[]})),
+    unit:['adopción','adopciones'],see:['animales','Ver en Animales']},
+  animales:{label:'Animales en la fundación',desc:'Los que hoy están a cargo de la fundación. Los disponibles aparecen en la web al importarlos.',
+    cols:['Nombre','Especie','Sexo','Fecha de llegada','Estado'],
+    rows:()=>[['Miel','Perro','Hembra','12-02-2026','Disponible'],['Pancho','Gato','Macho','03-05-2026','En tratamiento'],['Nieve','Conejo','Hembra','20-08-2026','Disponible'],['Tito','Perro','Macho','','Disponible'],['Greta','Perro','Hembra','01-09-2026','Perdida']],
+    check:r=>{if(!r[0])return 'Falta el nombre.';if(!specByName(r[1]))return badSpecies(r[1]);if(!['hembra','macho','desconocido'].includes(r[2].toLowerCase()))return 'El sexo debe ser Hembra, Macho o Desconocido.';if(!toISO(r[3]))return 'Falta la fecha de llegada o no está como día-mes-año.';if(!STATUS_BY_LABEL[r[4].toLowerCase()])return `El estado “${r[4]}” no existe. Usa Disponible, En tratamiento o Adoptado.`;return null},
+    apply:r=>S.animals.push(newAnimal({name:r[0],species:specByName(r[1]).id,sex:r[2],since:toISO(r[3]),status:STATUS_BY_LABEL[r[4].toLowerCase()]})),
+    unit:['animal','animales'],see:['animales','Ver en Animales']},
+  personas:{label:'Socios y equipo',desc:'Socios, voluntarios y equipo de planta. Si el RUT ya existe, se reutiliza esa persona.',
+    cols:['RUT','Nombre','Tipo','Cuota mensual'],
+    rows:()=>[[fmtRut('14333222'),'Gabriela Rojas','Socia','10000'],[fmtRut('18444555'),'Martín Castro','Voluntario',''],[fmtRut('11555444'),'Irene Salas','Socia y voluntaria','5000'],['9.876.543-0','Hugo Díaz','Socio','8000'],[fmtRut('13666777'),'Rodrigo Pérez','Socio','']],
+    check:r=>{const c=parseRut(r[0]);if(!c.ok)return 'RUT no válido. '+c.msg;if(!r[1])return 'Falta el nombre.';const t=r[2].toLowerCase(),soc=/soci/.test(t),vol=/volunt/.test(t),pla=/planta/.test(t);if(!soc&&!vol&&!pla)return 'El tipo debe ser Socio, Voluntario, Socio y voluntario o Planta.';if(soc&&!(+r[3]>0))return 'Un socio necesita una cuota mensual en pesos.';return null},
+    apply:r=>{const c=parseRut(r[0]),t=r[2].toLowerCase();S.people.push({id:Math.max(...S.people.map(p=>p.id))+1,name:r[1],body:c.body,since:'2026-09-30',staff:/planta/.test(t)?'planta':null,access:null,socio:/soci/.test(t)?{mode:'aporte',amount:+r[3]}:null,voluntario:/volunt/.test(t),acogida:false})},
+    unit:['persona','personas'],see:['personas','Ver en Personas']},
+  restricciones:{label:'Lista de restricciones',desc:'Personas que no pueden adoptar, con el motivo y la especie a la que aplica.',
+    cols:['RUT','Nombre','Motivo','Especie (o “Todas”)'],
+    rows:()=>[[fmtRut('13222111'),'Óscar Méndez','Abandono','Todas'],[fmtRut('15432876'),'Javier Molina','Devolución reiterada','Gatos'],[fmtRut('16222333'),'Rita Fuentes','Maltrato','Perros']],
+    check:r=>{const c=parseRut(r[0]);if(!c.ok)return 'RUT no válido. '+c.msg;if(restrictionFor(c.body))return 'Esta persona ya está en la lista.';if(!r[2])return 'Falta el motivo.';if(r[3].toLowerCase()!=='todas'&&!specByName(r[3]))return badSpecies(r[3]);return null},
+    apply:r=>{const c=parseRut(r[0]);S.restrictions.push({body:c.body,name:r[1],reason:r[2],species:r[3].toLowerCase()==='todas'?'todas':specByName(r[3]).id,note:'Importado desde Excel.',date:'2026-09-30',by:'Marta González'})},
+    unit:['persona','personas'],see:['rut','Ver la lista de restricciones']}
+};
+// All or nothing: the import only runs when the template matches and every row is valid.
+const WRONG_COLS=['Nombre','Teléfono','Dirección','Observaciones'];
+function importRows(def){const all=def.rows();return (S.imp.sample==='ok'?all.filter(r=>!def.check(r)):all).map(r=>({r,err:def.check(r)}))}
+function runImport(){
+  const def=IMPORTS[S.imp.kind];if(S.imp.sample==='wrong')return;
+  const rows=importRows(def);if(rows.some(x=>x.err))return;
+  rows.forEach(x=>def.apply(x.r));
+  S.imports.unshift({kind:S.imp.kind,file:S.imp.file,ok:rows.length,when:'Hoy',by:'Marta González'});
+  S.imp.done={ok:rows.length};S.imp.loaded=false;render(true);
+}
+
+/* ================= ADMIN ================= */
+const isAdmin=()=>S.role==='admin';
+function rutCheck(body,species){
+  const r=restrictionFor(body);
+  if(!r)return{level:'ok',html:`<span class="flag ok">${ic('check')} Sin restricciones</span>`};
+  const applies=r.species==='todas'||r.species===species;
+  if(applies)return{level:'bad',html:`<span class="flag bad">${ic('shield')} Restringido · ${esc(r.reason)} · ${restrictionLabel(r)}</span>`};
+  return{level:'info',html:`<span class="flag info">${ic('info')} Tiene una restricción solo para ${esc(spec(r.species).plural.toLowerCase())}: puede adoptar este animal</span>`};
+}
+const ADM={
+  resumen(){
+    const shelter=S.animals.filter(a=>!isOut(a));
+    const cmp={top:(a,b)=>b.visits-a.visits,low:(a,b)=>a.visits-b.visits,time:(a,b)=>days(b.since)-days(a.since)}[S.chartMode];
+    const sorted=[...shelter].sort(cmp);
+    const max=Math.max(1,...shelter.map(a=>a.visits));
+    const maxD=Math.max(1,...shelter.map(a=>days(a.since)));
+    const nReq=newReqs();
+    return `
+    <div class="page-head"><div><p class="eyebrow">Lunes 28 de septiembre</p><h1>Hola, ${isAdmin()?'Marta':'Diego'}</h1></div></div>
+    <div class="kpis">
+      <button class="kpi" data-go="animales"><span class="v">${shelter.length}</span><span class="l">Animales a cargo</span><small>${shelter.filter(a=>a.status==='acogida').length} en casa de acogida</small></button>
+      <button class="kpi ${nReq?'alert':''}" data-go="solicitudes"><span class="v">${nReq}</span><span class="l">Solicitudes nuevas</span><small>${nReq?'Adopción y socios por revisar':'Todo al día'}</small></button>
+      <div class="kpi"><span class="v">${S.org.adoptions2026}</span><span class="l">Adopciones en 2026</span><small>Contratos firmados</small></div>
+      <div class="kpi"><span class="v">${S.org.members}</span><span class="l">Socios activos</span><small>Incluye padrinos y acogidas</small></div>
+    </div>
+    <div class="dash">
+      <section class="panel">
+        <div class="panel-head"><div><h2>Visitas y tiempo en la fundación</h2><p>Visitas de los últimos 30 días a cada ficha, junto al tiempo que lleva cada animal con ustedes.</p></div>
+          <div class="mini-seg" role="group" aria-label="Orden"><button data-act="chart" data-v="top" aria-pressed="${S.chartMode==='top'}">Más vistos</button><button data-act="chart" data-v="low" aria-pressed="${S.chartMode==='low'}">Menos vistos</button><button data-act="chart" data-v="time" aria-pressed="${S.chartMode==='time'}">Más tiempo</button></div></div>
+        <div class="bars">${sorted.map(a=>{const d=days(a.since);return `<div class="bar-row">${photo(a)}<span class="bar-name">${esc(a.name)}</span><span class="bar-tracks"><span class="bar-track" title="${a.visits} visitas"><span class="bar-fill" style="width:${(a.visits/max*100).toFixed(1)}%"></span></span><span class="bar-track t" title="${timeLabel(d)} en la fundación"><span class="bar-fill time" style="width:${(d/maxD*100).toFixed(1)}%"></span></span></span><span class="bar-val">${a.visits}<small>${timeLabel(d)}</small></span></div>`}).join('')}</div>
+        <div class="legend"><span><i style="background:var(--brand)"></i>Visitas (máx. ${max})</span><span><i style="background:var(--ink-3);opacity:.55"></i>Tiempo en la fundación (máx. ${timeLabel(maxD)})</span></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>Últimas solicitudes</h2><p>Adopción, socios, padrinos y acogida</p></div><button class="link" data-go="solicitudes">Ver todas</button></div>
+        <div class="list">${S.adoptReqs.slice(0,3).map(r=>{const a=animal(r.animalId);return `<div class="arow">${photo(a)}<div class="arow-main"><strong>${esc(r.name)}</strong><span class="meta"><span>Quiere adoptar a ${esc(a.name)}</span><span>${r.when}</span></span></div></div>`}).join('')}</div>
+      </section>
+    </div>`;
+  },
+  animales(){
+    const f=S.admFilter;
+    const list=S.animals.filter(a=>f==='todos'||(f==='salida'?!!a.exit:a.status===f));
+    return `
+    <div class="page-head"><div><h1>Animales</h1><p class="muted">Los animales adoptados no se muestran en la web, pero se conservan por si vuelven a la fundación.</p></div><button class="btn btn-primary" data-go="animal" data-id="new">${ic('plus')} Añadir animal</button></div>
+    <div class="chips">${[['todos','Todos'],['disponible','Disponibles'],['acogida','En acogida'],['tratamiento','En tratamiento'],['adoptado','Adoptados'],['salida','Salidas']].map(([v,l])=>`<button class="chip" data-act="adm-filter" data-v="${v}" aria-pressed="${f===v}">${l}</button>`).join('')}</div>
+    <section class="panel"><div class="list">${list.length?list.map(a=>`
+      <div class="arow">${photo(a)}
+        <div class="arow-main"><strong>${esc(a.name)} ${a.featured?`<span class="flag star" style="font-size:.72rem;padding:3px 8px;vertical-align:middle">${ic('star')} Portada</span>`:''}</strong>
+          <span class="meta"><span>${esc(spec(a.species).name)} · ${esc(a.age)}</span><span>${ic('eye')} ${a.visits} visitas</span><span>${ic('clock')} ${days(a.since)} días</span></span>
+          <span class="meta"><span class="tagpill t-${a.status}" style="position:static">${STATUS[a.status]}</span>${a.returns.length?`<span class="flag warn" style="padding:3px 8px">${ic('undo')} Devuelto ${a.returns.length} ${a.returns.length===1?'vez':'veces'}</span>`:''}${fosterOf(a)?`<span>Acogida: ${esc(fosterOf(a).name)}</span>`:''}</span></div>
+        <div class="arow-side"><button class="btn btn-ghost btn-sm" data-go="animal" data-id="${a.id}">${ic('edit')} Ver y editar</button></div>
+      </div>`).join(''):'<p class="muted">No hay animales en este estado.</p>'}</div></section>`;
+  },
+  animal(){
+    const isNew=S.adm.id==='new';
+    const a=isNew?{name:'',species:'perro',sex:'Hembra',age:'',ageGroup:'adulto',size:'Mediano',status:'disponible',sponsor:6000,quote:'',story:'',featured:false,returns:[],foster:null,tone:0,visits:0,since:'2026-09-28',photo:S.draftPhoto}:animal(S.adm.id);
+    const opt=(arr,cur)=>arr.map(([v,l])=>`<option value="${v}" ${v===cur?'selected':''}>${l}</option>`).join('');
+    const fosters=S.people.filter(p=>p.acogida);
+    const shownPhoto=isNew?S.draftPhoto:(S.draftPhoto||a.photo);
+    return `
+    <button class="back" data-act="back">${ic('back')} Volver a animales</button>
+    <div class="page-head"><div><h1>${isNew?'Añadir animal':esc(a.name)}</h1>${isNew?'':`<p class="muted">${a.visits} visitas a su ficha · ${days(a.since)} días con la fundación</p>`}</div></div>
+    <div class="split">
+      <form class="form panel" data-form="animal" novalidate>
+        ${shownPhoto?`<div class="preview"><img src="${shownPhoto}" alt="Foto elegida"><label class="btn btn-ghost btn-sm" for="an-photo">Cambiar foto</label><input type="file" accept="image/*" id="an-photo" class="sr-only"></div>`:`<label class="upload" for="an-photo"><span class="bub">${ic('camera')}</span><span><b>Subir foto</b><small>Desde la galería del teléfono o el computador</small></span></label><input type="file" accept="image/*" id="an-photo" class="sr-only">`}
+        <div class="row2"><label class="field"><span>Nombre</span><input class="input" id="an-name" name="name" value="${esc(a.name)}"></label>
+        <label class="field"><span>Estado</span>${a.exit?`<input class="input" id="an-status-ro" value="${STATUS[a.status]}" disabled>`:`<select class="input" id="an-status" name="status" data-change="an-status">${opt(Object.entries(STATUS).filter(([k])=>!['fallecido','trasladado'].includes(k)),a.status)}</select>`}</label></div>
+        <div class="row2"><label class="field"><span>Especie</span><select class="input" id="an-species" name="species">${opt(S.species.filter(s=>s.active||s.id===a.species).map(s=>[s.id,s.name]),a.species)}</select></label>
+        <label class="field"><span>Sexo</span><select class="input" id="an-sex" name="sex">${opt([['Hembra','Hembra'],['Macho','Macho']],a.sex)}</select></label></div>
+        <div class="row2"><label class="field"><span>Edad</span><input class="input" id="an-age" name="age" value="${esc(a.age)}" placeholder="Ej.: 2 años"></label>
+        <label class="field"><span>Tamaño</span><select class="input" id="an-size" name="size">${opt([['Pequeño','Pequeño'],['Mediano','Mediano'],['Grande','Grande']],a.size)}</select></label></div>
+        <label class="field" id="foster-field" ${a.status==='acogida'?'':'hidden'}><span>Casa de acogida</span><select class="input" id="an-foster" name="foster">${fosters.map(f=>`<option value="${f.id}" ${a.foster&&a.foster.personId===f.id?'selected':''}>${esc(f.name)} · ${fmtRut(f.body)}</option>`).join('')}</select><small>Solo aparecen personas del equipo marcadas como casa de acogida (en Personas). Si esta persona pide adoptarlo, su solicitud aparece con prioridad.</small></label>
+        <label class="field"><span>Padrinazgo mensual</span><input class="input" id="an-sponsor" name="sponsor" type="number" min="0" step="500" inputmode="numeric" value="${a.sponsor}"><small>Se muestra en la ficha como referencia. Los pagos se coordinan fuera de la plataforma.</small></label>
+        <label class="field"><span>Frase destacada</span><input class="input" id="an-quote" name="quote" value="${esc(a.quote)}" placeholder="Una frase corta que lo describa"></label>
+        <label class="field"><span>Su historia</span><textarea class="input" id="an-story" name="story" rows="4">${esc(a.story)}</textarea></label>
+        <label class="check"><input type="checkbox" id="an-featured" name="featured" ${a.featured?'checked':''}><span>Destacar en la portada de la web</span></label>
+        <p class="err" id="an-err" role="alert"></p>
+        <button class="btn btn-primary" type="submit">${isNew?'Publicar en la web':'Guardar cambios'}</button>
+      </form>
+      ${isNew?'':`<section class="panel">
+        <div class="panel-head"><div><h2>Historial interno</h2><p>Solo lo ve el equipo. Nunca se muestra en la web.</p></div></div>
+        ${a.returns.length?`<div class="list">${a.returns.map(r=>`<div class="bl-row"><div><b>${ic('undo')} Devuelto el ${fmtDate(r.date)}</b></div><span class="note-i">${esc(r.reason)}</span></div>`).join('')}</div>`:'<p class="muted">No ha sido devuelto nunca.</p>'}
+        ${a.exit?`<div class="callout warm">${ic('info')}<span><b>${a.exit.kind==='fallecido'?'Falleció':'Trasladado a otra organización'}</b> el ${fmtDate(a.exit.date)}.${a.exit.notes?` ${esc(a.exit.notes)}`:''} Su ficha ya no aparece en la web.</span></div>`
+          :a.status!=='adoptado'?(S.exitOpen?`<form class="form" data-form="exit" data-id="${a.id}" novalidate>
+            <div class="field"><span>Motivo de la salida</span><div class="chips"><label class="chip"><input type="radio" name="kind" value="fallecido" checked>Falleció</label><label class="chip"><input type="radio" name="kind" value="trasladado">Trasladado a otra organización</label></div></div>
+            <label class="field"><span>Fecha</span><input class="input" id="ex-date" name="date" type="date" max="2026-10-01" value="2026-10-01"></label>
+            <label class="field"><span>Nota <small>(opcional)</small></span><textarea class="input" id="ex-notes" name="notes" rows="2" placeholder="Ej.: trasladado a Fundación Huellas del Sur"></textarea></label>
+            <p class="err" id="ex-err" role="alert"></p>
+            <div class="row"><button class="btn btn-primary btn-sm" type="submit">Registrar salida</button><button class="btn btn-ghost btn-sm" type="button" data-act="exit-toggle">Cancelar</button></div></form>`
+          :`<div><button class="btn btn-ghost btn-sm" data-act="exit-toggle">Registrar salida (fallecimiento o traslado)</button></div><p class="help">Saca a ${esc(a.name)} de la web, de la acogida y del destacado. No cuenta como adopción.</p>`):''}
+        ${a.status==='adoptado'?(S.returnOpen?`<form class="form" data-form="return" data-id="${a.id}" novalidate><label class="field"><span>¿Por qué lo devolvieron?</span><textarea class="input" id="ret-reason" name="reason" rows="2" placeholder="Ej.: la familia se mudó"></textarea></label><p class="err" id="ret-err" role="alert"></p><div class="row"><button class="btn btn-primary btn-sm" type="submit">Registrar devolución</button><button class="btn btn-ghost btn-sm" type="button" data-act="return-toggle">Cancelar</button></div></form>`:`<div><button class="btn btn-ghost btn-sm" data-act="return-toggle">${ic('undo')} Registrar devolución</button></div><p class="help">Al registrarla, ${esc(a.name)} vuelve a estar disponible en la web.</p>`):''}
+      </section>`}
+    </div>`;
+  },
+  solicitudes(){
+    const t=S.reqTab;
+    const ad=S.adoptReqs.map(r=>{
+      const a=animal(r.animalId),chk=rutCheck(r.body,a.species);
+      const fp=fosterOf(a),priority=fp&&fp.body===r.body;
+      const needsNotice=fp&&!priority&&!['firmada','rechazada'].includes(r.status);
+      const notice=needsNotice?(r.fosterNotified
+        ?`<span class="flag ok">${ic('check')} ${esc(firstName(fp.name))} (casa de acogida) fue avisada ${r.fosterNotified}</span>`
+        :`<div class="callout warm">${ic('house')}<span>${esc(a.name)} vive con <b>${esc(fp.name)}</b>, su casa de acogida. Avísale de esta solicitud antes de dar a ${esc(a.name)} en adopción; le llegará un correo.</span></div>`):'';
+      const blockSign=needsNotice&&!r.fosterNotified;
+      let acts='';
+      const noticeBtn=needsNotice&&!r.fosterNotified?`<button class="btn btn-accent btn-sm" data-act="req-notify" data-id="${r.id}">${ic('house')} Avisar a ${esc(firstName(fp.name))}</button>`:'';
+      if(r.status==='nueva')acts=`<button class="btn btn-primary btn-sm" data-act="req-interview" data-id="${r.id}" ${chk.level==='bad'?'disabled':''}>Citar a entrevista</button>${noticeBtn}<button class="btn btn-ghost btn-sm" data-act="req-reject" data-id="${r.id}">Rechazar</button>${chk.level==='bad'?'<span class="small muted">No se puede citar: tiene una restricción para esta especie.</span>':''}`;
+      else if(r.status==='entrevista')acts=`${noticeBtn}<button class="btn btn-primary btn-sm" data-act="req-sign" data-id="${r.id}" ${blockSign?'disabled':''}>${ic('check')} Contrato firmado</button><button class="btn btn-ghost btn-sm" data-act="req-reject" data-id="${r.id}">Rechazar</button><span class="small muted">${blockSign?`Primero avisa a la casa de acogida.`:`Al marcar el contrato, ${esc(a.name)} pasa a “Adoptado” y sale de la web.`}</span>`;
+      else acts=`<span class="flag ${r.status==='firmada'?'ok':'warn'}">${r.status==='firmada'?'Adopción completada':'Rechazada'}</span>`;
+      return `<article class="req">${photo(a)}<div class="req-main">
+        <span><b>${esc(r.name)}</b> quiere adoptar a <b>${esc(a.name)}</b></span>
+        <span class="meta"><span>${r.when}</span><span>${esc(r.comuna)}</span><span>${esc(r.home)}</span><span>Otros animales: ${esc(r.pets)}</span><span>${esc(r.phone)}</span></span>
+        <span class="small">RUT <span class="rut">${fmtRut(r.body)}</span></span>
+        ${chk.html}
+        ${priority?`<span class="flag star">${ic('house')} Es su casa de acogida · prioridad${S.org.fee>0?' · aplica el descuento de la fundación':''}</span>`:''}
+        ${r.status==='entrevista'?'<span class="flag info">Entrevista agendada</span>':''}
+        ${notice}
+      </div><div class="req-actions">${acts}</div></article>`;
+    }).join('');
+    const mem=S.memberReqs.map(m=>{const chk=rutCheck(m.body,'todas');return `<article class="req"><span class="bub">${ic(m.socio&&m.voluntario?'users':m.voluntario?'hand':m.socio.mode==='padrino'?'paw':'heart')}</span><div class="req-main">
+      <span><b>${esc(m.name)}</b></span>
+      <span class="tags">${m.socio?`<span class="tg soc">${esc(socioLabel(m.socio))}</span>`:''}${m.voluntario?`<span class="tg vol">Voluntario</span>`:''}</span>
+      <span class="meta"><span>${m.when}</span>${m.voluntario&&m.avail?`<span>Disponibilidad: ${esc(m.avail)}</span>`:''}</span>
+      <span class="small">RUT <span class="rut">${fmtRut(m.body)}</span></span>${chk.html}
+      ${m.status==='pendiente'?'<span class="help">Revisa antecedentes y agenda una entrevista antes de aprobar.</span>':''}
+    </div><div class="req-actions">${m.status==='pendiente'?`<button class="btn btn-primary btn-sm" data-act="mem-ok" data-id="${m.id}">Aprobar</button><button class="btn btn-ghost btn-sm" data-act="mem-no" data-id="${m.id}">Rechazar</button>`:`<span class="flag ${m.status==='aprobada'?'ok':'warn'}">${m.status==='aprobada'?'Aprobada':'Rechazada'}</span>`}</div></article>`}).join('');
+    const nA=S.adoptReqs.filter(r=>r.status==='nueva').length,nM=S.memberReqs.filter(r=>r.status==='pendiente').length;
+    return `
+    <div class="page-head"><div><h1>Solicitudes</h1><p class="muted">El RUT de cada solicitud se compara automáticamente con la lista de restricciones.</p></div></div>
+    <div class="mini-seg" role="group" aria-label="Tipo"><button data-act="req-tab" data-v="adopcion" aria-pressed="${t==='adopcion'}">Adopción${nA?` (${nA})`:''}</button><button data-act="req-tab" data-v="socios" aria-pressed="${t==='socios'}">Socios y voluntarios${nM?` (${nM})`:''}</button></div>
+    <section class="stack">${t==='adopcion'?(ad||'<div class="empty">No hay solicitudes de adopción.</div>'):(mem||'<div class="empty">No hay solicitudes de socios ni voluntarios.</div>')}</section>`;
+  },
+  rut(){
+    const r=S.rutRes;
+    let verdict='';
+    if(r){
+      if(r.invalid)verdict=`<div class="verdict warn"><span class="vi">${ic('info')}</span><h2>Revisa el RUT</h2><p>${esc(r.invalid)}</p></div>`;
+      else if(r.hit)verdict=`<div class="verdict bad"><span class="vi">${ic('shield')}</span><h2>${r.hit.species==='todas'?'No puede adoptar':`No puede adoptar ${esc(spec(r.hit.species).plural.toLowerCase())}`}</h2><p><span class="rut">${r.fmt}</span> · ${esc(r.hit.name)}</p>
+        <div class="detail"><span><b>Motivo:</b> ${esc(r.hit.reason)}</span><span><b>Aplica a:</b> ${restrictionLabel(r.hit)}</span><span>${esc(r.hit.note)}</span><span class="small muted">Registrado el ${fmtDate(r.hit.date)} por ${esc(r.hit.by)}</span></div></div>`;
+      else verdict=`<div class="verdict ok"><span class="vi">${ic('check')}</span><h2>Sin restricciones</h2><p><span class="rut">${r.fmt}</span> no está en la lista de la fundación.</p></div>`;
+    }
+    const rows=S.restrictions.map(b=>`<div class="bl-row"><div class="stack" style="gap:2px"><b>${esc(b.name)}</b><span class="meta"><span class="rut">${fmtRut(b.body)}</span><span>${esc(b.reason)}</span><span>${restrictionLabel(b)}</span></span></div>
+      ${isAdmin()&&S.rConfirm!==b.body?`<button class="btn btn-ghost btn-sm" data-act="r-rm" data-v="${b.body}">Quitar</button>`:'<span></span>'}
+      <span class="note-i">${esc(b.note)}</span>
+      ${S.rConfirm===b.body?`<span class="confirm">¿Quitar a ${esc(b.name)} de la lista? <button class="btn btn-primary btn-sm" data-act="r-rm-yes" data-v="${b.body}">Sí, quitar</button><button class="btn btn-ghost btn-sm" data-act="r-rm-no">No</button></span>`:''}</div>`).join('');
+    return `
+    <div class="page-head"><div><h1>Verificar RUT</h1><p class="muted">Revisa si una persona puede adoptar antes de citarla. Todo el equipo puede consultar; solo la administración puede modificar la lista.</p></div></div>
+    <div class="split">
+      <section class="stack">
+        <form class="search" data-form="rut" role="search"><label class="sr-only" for="rut-q">RUT</label><input class="input" id="rut-q" name="q" placeholder="12.345.678-5" autocomplete="off" value="${esc(S.rutQ)}" maxlength="13"><button class="btn btn-primary" type="submit">${ic('search')} Buscar</button></form>
+        <div class="chips"><span class="small muted" style="align-self:center">Ejemplos:</span>${[fmtRut('15432876'),fmtRut('18765432'),'12.345.678-9'].map(d=>`<button class="chip" data-act="rut-try" data-v="${d}">${d}</button>`).join('')}</div>
+        ${verdict}
+        <p class="small muted" style="display:flex;gap:8px;align-items:center">${ic('lock')} Solo el equipo con sesión iniciada puede consultar.</p>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>Lista de restricciones</h2><p>${S.restrictions.length} ${S.restrictions.length===1?'persona':'personas'} · propia de ${esc(S.org.name)}</p></div>${isAdmin()?`<button class="btn btn-sm ${S.rAdd?'btn-ghost':'btn-primary'}" data-act="r-toggle">${S.rAdd?'Cancelar':`${ic('plus')} Añadir persona`}</button>`:''}</div>
+        ${isAdmin()?'':`<div class="lock">${ic('lock')}<span>Puedes consultar la lista y ver los motivos. Para añadir o quitar a alguien, habla con la administración.</span></div>`}
+        ${isAdmin()&&S.rAdd?`<form class="form" data-form="restriction" novalidate>
+          <div class="row2"><label class="field"><span>RUT</span><input class="input" id="rs-rut" name="rut" placeholder="12.345.678-5"></label><label class="field"><span>Nombre</span><input class="input" id="rs-name" name="name"></label></div>
+          <div class="row2"><label class="field"><span>Motivo</span><select class="input" id="rs-reason" name="reason"><option>Maltrato</option><option>Abandono</option><option>Devolución reiterada</option><option>Datos falsos en la solicitud</option><option>Otro</option></select></label>
+          <label class="field"><span>Aplica a</span><select class="input" id="rs-species" name="species"><option value="todas">Todas las especies</option>${S.species.filter(s=>s.active).map(s=>`<option value="${s.id}">Solo ${esc(s.plural.toLowerCase())}</option>`).join('')}</select></label></div>
+          <label class="field"><span>Notas internas</span><textarea class="input" id="rs-note" name="note" rows="2" placeholder="Qué pasó y cuándo"></textarea></label>
+          <p class="err" id="rs-err" role="alert"></p><button class="btn btn-primary" type="submit">Guardar en la lista</button></form>`:''}
+        <div class="list">${rows||'<p class="muted">La lista está vacía.</p>'}</div>
+      </section>
+    </div>`;
+  },
+  avisos(){
+    return `
+    <div class="page-head"><div><h1>Avisos de la calle <span class="beta" style="vertical-align:middle">En evaluación</span></h1><p class="muted">Llegan desde la web con foto y dirección. El equipo recibe una notificación en el teléfono.</p></div></div>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(260px,1fr))">${S.reports.map(r=>`
+      <article class="panel" style="padding:14px;gap:10px">${r.photo?`<span class="ph rph has-img"><img src="${r.photo}" alt="Foto del aviso ${r.code}"></span>`:photo({name:'animal del aviso',tone:r.tone},'rph')}
+        <div class="row" style="justify-content:space-between"><b class="rut">${r.code}</b><span class="small muted">${r.when}</span></div>
+        <b>${ic('pin')} ${esc(r.address)}</b>${r.note?`<p class="muted small">${esc(r.note)}</p>`:''}<p class="small">${esc(r.contact)}</p>
+        ${r.status==='nuevo'?`<button class="btn btn-primary btn-sm" data-act="report-done" data-id="${r.id}">Marcar como atendido</button>`:`<span class="flag ok">${ic('check')} Atendido</span>`}
+      </article>`).join('')}</div>`;
+  },
+  apariencia(){
+    if(!isAdmin())return `<div class="page-head"><div><h1>Apariencia</h1></div></div><div class="lock">${ic('lock')}<span>Solo la administración puede cambiar la identidad de la web. Cambia a “Administración” en la barra superior del mockup para verlo.</span></div>`;
+    const o=S.org,f=featuredAnimal();
+    return `
+    <div class="page-head"><div><h1>Apariencia y datos</h1><p class="muted">La estructura de la web es la de Petscue. Aquí pones lo que es propio de tu fundación, y los cambios se ven al momento.</p></div></div>
+    <div class="split">
+      <form class="form" data-form="org" novalidate>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Identidad</h2>
+          <div class="logo-edit"><span class="logo">${logoMark()}</span><label class="btn btn-ghost btn-sm" for="org-logo">${ic('camera')} ${o.logo?'Cambiar logo':'Subir logo'}</label><input type="file" accept="image/*" id="org-logo" class="sr-only">${o.logo?`<button type="button" class="btn btn-ghost btn-sm" data-act="logo-rm">Quitar</button>`:''}</div>
+          <div class="row2"><label class="field"><span>Nombre</span><input class="input" id="org-name" data-org="name" value="${esc(o.name)}"></label><label class="field"><span>Ciudad</span><input class="input" id="org-city" data-org="city" value="${esc(o.city)}"></label></div>
+        </section>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Colores institucionales</h2>
+          <div class="presets">${PRESETS.map(p=>`<button type="button" class="preset" data-act="preset" data-v="${p.name}" aria-pressed="${p.brand.toLowerCase()===o.brand.toLowerCase()&&p.accent.toLowerCase()===o.accent.toLowerCase()}"><span class="sw"><i style="background:${p.brand}"></i><i style="background:${p.accent}"></i></span>${p.name}</button>`).join('')}</div>
+          <div class="field"><span>Color principal</span><small>Botones, menús y enlaces</small><div class="color-row"><input type="color" id="c-brand" data-color="brand" value="${o.brand.toLowerCase()}" aria-label="Color principal"><div><input class="input" id="c-brand-hex" data-hex="brand" value="${o.brand.toUpperCase()}" maxlength="7" aria-label="Código del color principal"><div id="cr-brand">${crInfo(o.brand)}</div></div></div></div>
+          <div class="field"><span>Color de acento</span><small>Destacados, subrayado y apadrinar</small><div class="color-row"><input type="color" id="c-accent" data-color="accent" value="${o.accent.toLowerCase()}" aria-label="Color de acento"><div><input class="input" id="c-accent-hex" data-hex="accent" value="${o.accent.toUpperCase()}" maxlength="7" aria-label="Código del color de acento"><div id="cr-accent">${crInfo(o.accent)}</div></div></div></div>
+        </section>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Tipografía de títulos</h2>
+          <p class="muted small">Los textos largos siempre usan Atkinson Hyperlegible para que se lean bien.</p>
+          <div class="row"><span class="flag ${o.font?'info':'ok'}">${ic('type')} ${o.font?`Usando: ${esc(o.fontName)}`:'Usando la de Petscue (Schibsted Grotesk)'}</span></div>
+          <div class="row"><label class="btn btn-ghost btn-sm" for="org-font">Subir tipografía (.woff2, .ttf, .otf)</label><input type="file" accept=".woff2,.woff,.ttf,.otf" id="org-font" class="sr-only">${o.font?`<button type="button" class="btn btn-ghost btn-sm" data-act="font-rm">Volver a la de Petscue</button>`:''}</div>
+        </section>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Adopción y aportes</h2>
+          <label class="field"><span>Aporte de adopción</span><input class="input" id="org-fee" name="fee" type="number" min="0" step="1000" inputmode="numeric" value="${o.fee}"><small>Pon 0 si adoptar no tiene costo. La web lo explicará sola.</small></label>
+          <div class="field"><span>Cuotas de socio sugeridas</span><div class="row2" style="grid-template-columns:repeat(3,1fr)">${o.cuotas.map((c,i)=>`<input class="input" id="org-c${i}" name="c${i}" type="number" min="0" step="1000" inputmode="numeric" value="${c}" aria-label="Cuota ${i+1}">`).join('')}</div></div>
+        </section>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Redes sociales</h2>
+          <p class="muted small">Escribe solo el nombre de usuario. Deja vacías las que no uses: no aparecerán en la web. WhatsApp usa el teléfono de contacto.</p>
+          <div class="row2">${SOCIAL.map(([k,l])=>`<label class="field"><span>${l}</span><input class="input" id="org-${k}" name="s_${k}" value="${esc(o.social[k])}" placeholder="fundacionpatitas"></label>`).join('')}</div>
+        </section>
+        <section class="panel">
+          <h2 style="font-size:1.25rem;font-weight:800">Contacto</h2>
+          <label class="field"><span>Dirección</span><input class="input" id="org-address" name="address" value="${esc(o.address)}"></label>
+          <div class="row2"><label class="field"><span>Teléfono</span><input class="input" id="org-phone" name="phone" value="${esc(o.phone)}"></label><label class="field"><span>Correo</span><input class="input" id="org-email" name="email" value="${esc(o.email)}"></label></div>
+        </section>
+        <button class="btn btn-primary" type="submit">Guardar cambios</button>
+      </form>
+      <section class="stack" style="position:sticky;top:90px"><p class="eyebrow">Vista previa</p>
+        <div class="pv"><div class="pv-hero">${photo(f)}<span class="shade"></span><span class="fcopy"><small>Busca familia</small><span class="name"><span class="u">${esc(f.name)}${underline()}</span></span></span></div>
+          <div class="pv-bot"><span class="btn btn-primary btn-sm">Quiero adoptarlo</span><span class="btn btn-accent btn-sm">Apadrinar</span><span class="tagpill t-acogida" style="position:static">En casa de acogida</span></div></div>
+        <button class="btn btn-ghost" data-act="to-public">${ic('eye')} Ver la web pública</button>
+        <section class="panel" id="especies">
+          <div class="panel-head"><div><h2>Especies que rescatan</h2><p>Aparecen en los filtros de la web, en las fichas y en la lista de restricciones.</p></div></div>
+          <div class="list">${S.species.map(s=>{const n=S.animals.filter(a=>a.species===s.id).length;return `<div class="bl-row"><div><b>${esc(s.plural)}</b><br><span class="small muted">${n} ${n===1?'animal':'animales'}${s.active?'':' · oculta en la web'}</span></div><button class="btn btn-ghost btn-sm" data-act="sp-toggle" data-v="${s.id}">${s.active?'Ocultar':'Mostrar'}</button></div>`}).join('')}</div>
+          <form class="form" data-form="species" novalidate>
+            <div class="row2"><label class="field"><span>Nueva especie</span><input class="input" id="sp-name" name="name" placeholder="Ej.: Conejo"></label><label class="field"><span>En plural</span><input class="input" id="sp-plural" name="plural" placeholder="Ej.: Conejos"></label></div>
+            <p class="err" id="sp-err" role="alert"></p>
+            <button class="btn btn-ghost btn-sm" type="submit" style="align-self:flex-start">${ic('plus')} Añadir especie</button>
+          </form>
+          <p class="help">Una especie con animales no se borra: se oculta y su historial se conserva.</p>
+        </section>
+      </section>
+    </div>`;
+  },
+  personas(){
+    if(!isAdmin())return `<div class="page-head"><div><h1>Personas</h1></div></div><div class="lock">${ic('lock')}<span>Solo la administración puede ver al equipo y gestionar los accesos al panel. Cambia a “Administración” en la barra superior del mockup para verlo.</span></div>`;
+    const f=S.pFilter;
+    const match={todas:()=>true,acceso:p=>p.access,voluntarios:p=>p.voluntario,acogida:p=>p.acogida,socios:p=>p.socio,planta:p=>p.staff==='planta'}[f];
+    const list=S.people.filter(match);
+    const cnt=k=>S.people.filter({acceso:p=>p.access,voluntarios:p=>p.voluntario,acogida:p=>p.acogida,socios:p=>p.socio,planta:p=>p.staff==='planta'}[k]).length;
+    const fostering=p=>S.animals.filter(a=>a.foster&&a.foster.personId===p.id&&a.status==='acogida');
+    const me=1;
+    const row=p=>{
+      const fa=fostering(p);
+      const tags=[p.staff==='planta'?'<span class="tg staff">Equipo de planta</span>':'',p.voluntario?'<span class="tg vol">Voluntario</span>':'',p.acogida?'<span class="tg aco">Casa de acogida</span>':'',p.socio?`<span class="tg soc">${esc(socioLabel(p.socio))}</span>`:''].join('');
+      const access=p.access?`Acceso al panel: <b>${p.access==='admin'?'Administración':'Trabajador'}</b>`:'Sin acceso al panel';
+      let acts='';
+      if(S.pConfirm===p.id)acts=`<span class="confirm" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-weight:700">¿Quitar el acceso de ${esc(firstName(p.name))}? <button class="btn btn-primary btn-sm" data-act="p-revoke-yes" data-id="${p.id}">Sí, quitar acceso</button><button class="btn btn-ghost btn-sm" data-act="p-revoke-no">No</button></span>`;
+      else{
+        if(p.access&&p.id!==me)acts+=`<button class="btn btn-ghost btn-sm" data-act="p-revoke" data-id="${p.id}">${ic('lock')} Revocar acceso</button>`;
+        if(!p.access&&(p.staff||p.voluntario))acts+=`<button class="btn btn-ghost btn-sm" data-act="p-grant" data-id="${p.id}">Dar acceso</button>`;
+        if(p.voluntario||p.staff)acts+=p.acogida?(fa.length?`<span class="small muted">Cuida a ${fa.map(a=>esc(a.name)).join(', ')}</span>`:`<button class="btn btn-ghost btn-sm" data-act="p-foster" data-id="${p.id}">Quitar de casas de acogida</button>`):`<button class="btn btn-ghost btn-sm" data-act="p-foster" data-id="${p.id}">${ic('house')} Hacer casa de acogida</button>`;
+        if(p.id===me)acts+='<span class="small muted">Eres tú</span>';
+      }
+      return `<div class="arow"><span class="person-bub">${esc(p.name.split(' ').map(w=>w[0]).slice(0,2).join(''))}</span>
+        <div class="arow-main"><strong>${esc(p.name)}</strong><span class="meta"><span class="rut">${fmtRut(p.body)}</span><span>Desde ${MONTHS[new Date(p.since+'T12:00:00').getMonth()]} ${p.since.slice(0,4)}</span></span><span class="tags">${tags}</span><span class="small muted">${access}</span></div>
+        <div class="arow-side">${acts}</div></div>`;
+    };
+    return `
+    <div class="page-head"><div><h1>Personas</h1><p class="muted">Quienes sostienen la fundación: el equipo de planta, los voluntarios y los socios. Aquí también decides quién puede entrar al panel.</p></div></div>
+    <div class="relation">
+      <div><b>${ic('heart')} Socios · aportan recursos</b>Con una cuota mensual para la fundación o apadrinando a un animal.</div>
+      <div><b>${ic('hand')} Equipo · aporta su tiempo</b>Voluntarios (sin vínculo laboral) y equipo de planta. Las casas de acogida siempre salen del equipo. Cualquiera puede además ser socio.</div>
+    </div>
+    <div class="chips">${[['todas','Todas'],['acceso',`Con acceso (${cnt('acceso')})`],['planta',`Planta (${cnt('planta')})`],['voluntarios',`Voluntarios (${cnt('voluntarios')})`],['acogida',`Casas de acogida (${cnt('acogida')})`],['socios',`Socios (${cnt('socios')})`]].map(([v,l])=>`<button class="chip" data-act="p-filter" data-v="${v}" aria-pressed="${f===v}">${l}</button>`).join('')}</div>
+    <section class="panel"><div class="list">${list.map(row).join('')||'<p class="muted">No hay personas en este grupo.</p>'}</div></section>`;
+  },
+  importar(){
+    if(!isAdmin())return `<div class="page-head"><div><h1>Importar desde Excel</h1></div></div><div class="lock">${ic('lock')}<span>Solo la administración puede importar información.</span></div>`;
+    const k=S.imp.kind,def=IMPORTS[k];
+    const hist=`<section class="panel"><div class="panel-head"><div><h2>Importaciones anteriores</h2></div></div><div class="list">${S.imports.map(h=>`<div class="bl-row"><div><b>${IMPORTS[h.kind].label}</b><br><span class="small muted">${esc(h.file)} · ${h.when} · ${esc(h.by)}</span></div><span class="small"><b>${h.ok}</b> filas importadas</span></div>`).join('')}</div></section>`;
+    if(S.imp.done){const d=S.imp.done;return `
+      <div class="narrow"><div class="done"><span class="big">${ic('check')}</span><h1>Se importaron ${d.ok} ${d.ok===1?def.unit[0]:def.unit[1]}</h1>
+        <p>Todas las filas de la planilla pasaron la revisión y quedaron guardadas.</p>
+        <div class="row" style="justify-content:center"><button class="btn btn-primary" data-go="${def.see[0]}">${def.see[1]}</button><button class="btn btn-ghost" data-act="imp-reset">Importar otra planilla</button></div></div></div>${hist}`}
+    const wrong=S.imp.loaded&&S.imp.sample==='wrong';
+    const rows=S.imp.loaded&&!wrong?importRows(def):[];
+    const nOk=rows.filter(x=>!x.err).length,nBad=rows.length-nOk;
+    const missing=def.cols.filter(c=>!WRONG_COLS.includes(c)),extra=WRONG_COLS.filter(c=>!def.cols.includes(c));
+    return `
+    <div class="page-head"><div><h1>Importar desde Excel</h1><p class="muted">Trae la información que ya tienen en planillas para trabajar en un solo lugar. Nada se guarda hasta que revises la vista previa y confirmes.</p></div></div>
+    <section class="stack"><h2 class="sec-title" style="font-size:1.3rem">1. ¿Qué quieres importar?</h2>
+      <div class="opts">${Object.entries(IMPORTS).map(([key,d])=>`<label class="opt"><input type="radio" name="imp-kind" value="${key}" data-change="imp-kind" ${key===k?'checked':''}><span class="bub">${ic(key==='adopciones'?'heart':key==='animales'?'paw':key==='personas'?'users':'shield')}</span><span><b>${d.label}</b><small>${esc(d.desc)}</small></span></label>`).join('')}</div>
+    </section>
+    <section class="panel"><h2 style="font-size:1.3rem;font-weight:800">2. Completa la plantilla</h2>
+      <p class="muted">La plantilla ya trae estas columnas, en este orden. Escribe las fechas como día-mes-año, por ejemplo 15-03-2024.</p>
+      <div class="cols">${def.cols.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+      <div><button class="btn btn-ghost btn-sm" data-act="imp-template">${ic('download')} Descargar plantilla de ${esc(def.label.toLowerCase())}</button></div>
+      ${S.imp.tplNote?`<p class="note">${ic('info')} En este mockup no se descargan archivos. En la plataforma real se descarga <b>plantilla-${k}.xlsx</b>.</p>`:''}
+    </section>
+    <section class="panel"><h2 style="font-size:1.3rem;font-weight:800">3. Sube la planilla</h2>
+      <label class="upload" for="imp-file"><span class="bub">${ic('upload')}</span><span><b>Elegir archivo</b><small>Excel (.xlsx, .xls) o .csv</small></span></label><input type="file" accept=".xlsx,.xls,.csv" id="imp-file" class="sr-only">
+      <div class="row"><span class="small muted">Probar con una planilla de ejemplo:</span><button class="btn btn-ghost btn-sm" data-act="imp-sample" data-v="ok">Correcta</button><button class="btn btn-ghost btn-sm" data-act="imp-sample" data-v="errors">Con errores</button><button class="btn btn-ghost btn-sm" data-act="imp-sample" data-v="wrong">Plantilla equivocada</button></div>
+      ${S.imp.fileNote&&S.imp.loaded?`<p class="note">${ic('info')} En este mockup cualquier archivo muestra la planilla de ejemplo con errores.</p>`:''}
+    </section>
+    ${wrong?`<section class="panel"><div class="panel-head"><div><h2 style="font-size:1.3rem">4. Revisa antes de importar</h2><p>${esc(S.imp.file)}</p></div></div>
+      <div class="callout bad">${ic('x')}<span><b>Esta planilla no corresponde a la plantilla de ${esc(def.label.toLowerCase())}.</b> No se importará nada. Descarga la plantilla del paso 2 y copia ahí tus datos.</span></div>
+      <div class="stack" style="gap:8px"><span class="small"><b>Faltan estas columnas:</b></span><div class="cols">${missing.map(c=>`<span>${esc(c)}</span>`).join('')}</div>
+      ${extra.length?`<span class="small"><b>Sobran estas columnas:</b></span><div class="cols">${extra.map(c=>`<span>${esc(c)}</span>`).join('')}</div>`:''}</div>
+      <div><button class="btn btn-ghost" data-act="imp-reset">Subir otra planilla</button></div>
+    </section>`:''}
+    ${S.imp.loaded&&!wrong?`<section class="panel"><div class="panel-head"><div><h2 style="font-size:1.3rem">4. Revisa antes de importar</h2><p>${esc(S.imp.file)}</p></div></div>
+      ${nBad?`<div class="callout bad">${ic('x')}<span><b>${nBad} ${nBad===1?'fila tiene errores':'filas tienen errores'}. No se importará nada</b> hasta que todas las filas estén correctas. Corrige la planilla y súbela de nuevo.</span></div>`:`<span class="flag ok">${ic('check')} Las ${nOk} filas están correctas</span>`}
+      <div class="ptable-wrap"><table class="ptable"><thead><tr><th>Fila</th>${def.cols.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>
+        ${rows.map((x,i)=>`<tr class="${x.err?'bad':'ok'}"><td class="st">${i+2} ${x.err?'✕':'✓'}</td>${x.r.map((c,j)=>`<td>${esc(c)||'<span class="muted">—</span>'}${j===x.r.length-1&&x.err?'':''}</td>`).join('')}</tr>${x.err?`<tr class="bad"><td></td><td colspan="${def.cols.length}"><span class="msg">${esc(x.err)}</span></td></tr>`:''}`).join('')}
+      </tbody></table></div>
+      <div class="row"><button class="btn btn-primary" data-act="imp-run" ${nBad||!nOk?'disabled':''}>Importar ${rows.length} ${rows.length===1?'fila':'filas'}</button><button class="btn btn-ghost" data-act="imp-reset">Subir otra planilla</button></div>
+    </section>`:''}
+    ${hist}`;
+  },
+  respaldo(){
+    if(!isAdmin())return `<div class="page-head"><div><h1>Respaldo</h1></div></div><div class="lock">${ic('lock')}<span>Solo la administración puede descargar los datos de la fundación.</span></div>`;
+    const reqs=S.adoptReqs.length+S.memberReqs.length,rets=S.animals.reduce((n,a)=>n+a.returns.length,0);
+    const sheets=[['Animales',S.animals.length,'Incluye adoptados y su estado'],['Devoluciones',rets,'Historial interno de cada animal'],['Personas',S.people.length,'Equipo, voluntarios, casas de acogida y socios'],['Solicitudes',reqs,'Adopción, socios y voluntarios'],['Restricciones',S.restrictions.length,'RUT, motivo y a qué especie aplica'],['Avisos',S.reports.length,'Avisos de animales en la calle']];
+    return `
+    <div class="page-head"><div><h1>Respaldos</h1><p class="muted">Descarga una copia de todos los datos de la fundación en un archivo que se abre con Excel. Sirve para guardarla en otro lugar, no para trabajar en ella: los cambios que hagas en el archivo no vuelven a la plataforma.</p></div></div>
+    <div class="split">
+      <section class="panel">
+        <div class="panel-head"><div><h2>Qué incluye el archivo</h2><p>Una hoja por tipo de dato</p></div></div>
+        <div class="list">${sheets.map(([n,c,d])=>`<div class="arow" style="grid-template-columns:52px 1fr auto"><span class="person-bub">${ic('sheet')}</span><div class="arow-main"><strong>${n}</strong><span class="small muted">${d}</span></div><span class="rut">${c} ${c===1?'fila':'filas'}</span></div>`).join('')}</div>
+        <div class="callout warm">${ic('shield')}<span>El archivo contiene RUT y la lista de restricciones. Guárdalo en un lugar seguro y no lo compartas por WhatsApp ni por correo.</span></div>
+        <button class="btn btn-primary" data-act="export">${ic('download')} Descargar respaldo en Excel</button>
+        ${S.exportNote?`<p class="note">${ic('info')} En este mockup no se descargan archivos. En la plataforma real, este botón descarga <b>petscue-respaldo-2026-09-30.xlsx</b> y registra quién lo descargó.</p>`:''}
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>Respaldos automáticos</h2><p>Cada noche a las 03:00 se guarda una copia completa (datos y fotos) que se puede restaurar.</p></div></div>
+        <span class="flag ok">${ic('check')} Último respaldo: hoy a las 03:00 · correcto</span>
+        <form class="form" data-form="retention" novalidate>
+          <label class="field"><span>¿Cuántos días guardar los respaldos?</span><select class="input" id="ret-days" name="days">${[7,14,30,60,90,180,365].map(d=>`<option value="${d}" ${S.org.retention===d?'selected':''}>${d} días${d===30?' (recomendado)':''}</option>`).join('')}</select><small>Los respaldos más antiguos se borran solos. Guardar más días usa más espacio en el servidor.</small></label>
+          <button class="btn btn-primary btn-sm" type="submit" style="align-self:flex-start">Guardar</button>
+        </form>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><div><h2>Descargas anteriores</h2><p>Queda registro de cada descarga</p></div></div>
+        <div class="list">
+          <div class="bl-row"><div><b>Marta González</b><br><span class="small muted">1 de septiembre de 2026 · 10:14</span></div></div>
+          <div class="bl-row"><div><b>Marta González</b><br><span class="small muted">1 de agosto de 2026 · 09:52</span></div></div>
+        </div>
+      </section>
+    </div>`;
+  },
+  mas(){
+    return `<div class="page-head"><div><h1>Más</h1></div></div><div class="menu-list">
+      <button class="way" data-go="importar"><span class="bub">${ic('upload')}</span><span><b>Importar desde Excel</b><small>Trae animales, adopciones, personas y restricciones</small></span><span class="arr">${ic('arrow')}</span></button>
+      <button class="way" data-go="respaldo"><span class="bub">${ic('download')}</span><span><b>Respaldo en Excel</b><small>Descarga una copia de todos los datos</small></span><span class="arr">${ic('arrow')}</span></button>
+      <button class="way" data-go="personas"><span class="bub">${ic('users')}</span><span><b>Personas</b><small>Equipo, voluntarios, socios y accesos</small></span><span class="arr">${ic('arrow')}</span></button>
+      <button class="way" data-go="avisos"><span class="bub">${ic('alert')}</span><span><b>Avisos de la calle</b><small>${newReports()} sin atender</small></span><span class="arr">${ic('arrow')}</span></button>
+      <button class="way" data-go="apariencia"><span class="bub">${ic('palette')}</span><span><b>Apariencia y datos</b><small>Logo, colores, tipografía y aportes</small></span><span class="arr">${ic('arrow')}</span></button>
+      <button class="way" data-act="to-public"><span class="bub">${ic('eye')}</span><span><b>Ver la web pública</b><small>Cómo la ven las personas</small></span><span class="arr">${ic('arrow')}</span></button></div>`;
+  }
+};
+
+/* ---------- Render ---------- */
+function render(toTop){
+  const app=$('#app'),pub=S.view==='public';
+  const page=pub?PUB[S.pub.p]:ADM[S.adm.p];
+  app.innerHTML=topbar()+(pub
+    ?`<main class="main" id="main">${page()}</main>${footer()}${tabbar()}`
+    :`<div class="admin-body">${sideNav()}<main class="main" id="main">${page()}</main></div>${tabbar()}`);
+  document.querySelectorAll('.mk [data-mk]').forEach(b=>{const k=b.dataset.mk;b.setAttribute('aria-pressed',String((k==='view'&&S.view===b.dataset.v)||(k==='role'&&S.role===b.dataset.v)||(k==='theme'&&S.theme===b.dataset.v)||(k==='device'&&S.device===b.dataset.v)))});
+  if(toTop){app.scrollTop=0;window.scrollTo(0,0)}
+}
+let tt;
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;t.style.animation='none';t.offsetHeight;t.style.animation='';clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2800)}
+function drawUnderline(root){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;root.querySelectorAll('.u path').forEach(p=>{p.style.transition='none';p.style.strokeDashoffset='260';p.getBoundingClientRect();p.style.transition='';p.style.strokeDashoffset='0'})}
+function readFile(file,cb){const rd=new FileReader();rd.onload=()=>cb(rd.result);rd.readAsDataURL(file)}
+
+/* ---------- Events ---------- */
+document.addEventListener('click',e=>{
+  const mk=e.target.closest('[data-mk]');
+  if(mk){const k=mk.dataset.mk,v=mk.dataset.v;
+    if(k==='view'){S.view=v;render(true)}
+    if(k==='role'){S.role=v;S.rAdd=false;if(S.view!=='admin'){S.view='admin'}render()}
+    if(k==='theme'){S.theme=v;applyTheme();render()}
+    if(k==='device'){S.device=v;$('#stage').classList.toggle('phone',v==='phone');render()}
+    return}
+  const g=e.target.closest('[data-go]');
+  if(g){e.preventDefault();const p=g.dataset.go,id=g.dataset.id;S.returnOpen=false;S.exitOpen=false;S.draftPhoto=null;go(p,id?{id:id==='new'?'new':+id}:{});return}
+  const t=e.target.closest('[data-act]');if(!t)return;
+  const act=t.dataset.act,id=t.dataset.id,v=t.dataset.v;
+  switch(act){
+    case 'back':S.returnOpen=false;S.draftPhoto=null;back();break;
+    case 'big':S.big=!S.big;applyTheme();render();break;
+    case 'to-public':S.view='public';S.pub={p:'inicio'};render(true);break;
+    case 'f-species':S.filter.species=v;render();break;
+    case 'f-reset':S.filter={species:'todos',size:'todos',age:'todos'};render();break;
+    case 'help':{const ty=t.dataset.type;S.help={socio:ty!=='voluntario',voluntario:ty==='voluntario',mode:ty==='padrino'?'padrino':'aporte',amount:S.org.cuotas[1]||S.org.cuotas[0],animalId:id?+id:null};go('ayudar');break}
+    case 'req-notify':{const r=S.adoptReqs.find(x=>x.id===+id),fp=fosterOf(animal(r.animalId));r.fosterNotified='hoy por correo';render();toast(`Se envió un correo a ${fp.name} con los datos de la solicitud`);break}
+    case 'export':S.exportNote=true;render();break;
+    case 'sp-toggle':{const s=spec(v);s.active=!s.active;if(!s.active&&S.filter.species===s.id)S.filter.species='todos';render();toast(s.active?`${s.plural} vuelven a mostrarse en la web`:`${s.plural} ya no aparecen en la web`);break}
+    case 'imp-sample':S.imp.loaded=true;S.imp.sample=v;S.imp.fileNote=false;S.imp.file={ok:'planilla-correcta.xlsx',errors:'planilla-con-errores.xlsx',wrong:'contactos-2023.xlsx'}[v];S.imp.done=null;render();break;
+    case 'imp-reset':S.imp.loaded=false;S.imp.done=null;render();break;
+    case 'imp-template':S.imp.tplNote=true;render();break;
+    case 'imp-run':runImport();break;
+    case 'p-filter':S.pFilter=v;S.pConfirm=null;render();break;
+    case 'p-revoke':S.pConfirm=+id;render();break;
+    case 'p-revoke-no':S.pConfirm=null;render();break;
+    case 'p-revoke-yes':{const p=person(id);p.access=null;S.pConfirm=null;render();toast(`${p.name} ya no puede entrar al panel`);break}
+    case 'p-grant':{const p=person(id);p.access='trabajador';render();toast(`${p.name} puede entrar al panel como trabajador`);break}
+    case 'p-foster':{const p=person(id);p.acogida=!p.acogida;render();toast(p.acogida?`${p.name} ahora es casa de acogida`:`${p.name} ya no es casa de acogida`);break}
+    case 'share':{const a=animal(id),url=`https://fundacionpatitas.cl/animales/${a.name.toLowerCase()}`;
+      try{navigator.clipboard.writeText(url).then(()=>toast('Enlace copiado. Pégalo en WhatsApp o redes sociales.'),()=>toast(url))}catch(_){toast(url)}break}
+    case 'report-photo-rm':S.report.photo=null;render();break;
+    case 'chart':S.chartMode=v;render();break;
+    case 'feature':{S.animals.forEach(a=>a.featured=false);const a=animal(id);a.featured=true;render();toast(`${a.name} ahora es el protagonista de la portada`);break}
+    case 'adm-filter':S.admFilter=v;render();break;
+    case 'exit-toggle':S.exitOpen=!S.exitOpen;render();break;
+    case 'return-toggle':S.returnOpen=!S.returnOpen;render();break;
+    case 'req-tab':S.reqTab=v;render();break;
+    case 'req-interview':{const r=S.adoptReqs.find(x=>x.id===+id);r.status='entrevista';render();toast(`${r.name}: entrevista agendada`);break}
+    case 'req-reject':{const r=S.adoptReqs.find(x=>x.id===+id);r.status='rechazada';render();break}
+    case 'req-sign':{const r=S.adoptReqs.find(x=>x.id===+id),a=animal(r.animalId);r.status='firmada';a.status='adoptado';a.featured=false;a.foster=null;S.org.adoptions2026++;render();toast(`${a.name} fue adoptado. Ya no aparece en la web.`);break}
+    case 'mem-ok':{const m=S.memberReqs.find(x=>x.id===+id);m.status='aprobada';if(m.socio)S.org.members++;
+      S.people.push({id:Math.max(...S.people.map(p=>p.id))+1,name:m.name,body:m.body,since:'2026-09-29',staff:null,access:null,socio:m.socio,voluntario:m.voluntario,acogida:false});
+      render();toast(`${m.name} ya aparece en Personas`);break}
+    case 'mem-no':{const m=S.memberReqs.find(x=>x.id===+id);m.status='rechazada';render();break}
+    case 'rut-try':S.rutQ=v;runRut(v);break;
+    case 'r-toggle':S.rAdd=!S.rAdd;render();break;
+    case 'r-rm':S.rConfirm=v;render();break;
+    case 'r-rm-no':S.rConfirm=null;render();break;
+    case 'r-rm-yes':S.restrictions=S.restrictions.filter(b=>b.body!==v);S.rConfirm=null;if(S.rutRes&&S.rutRes.body===v)S.rutRes=null;render();toast('Persona quitada de la lista');break;
+    case 'report-done':{const r=S.reports.find(x=>x.id===+id);r.status='atendido';render();break}
+    case 'preset':{const p=PRESETS.find(x=>x.name===v);S.org.brand=p.brand;S.org.accent=p.accent;applyTheme();render();break}
+    case 'logo-rm':S.org.logo=null;render();break;
+    case 'font-rm':S.org.font=null;S.org.fontName='';applyTheme();render();break;
+  }
+});
+function runRut(q){const c=parseRut(q);S.rutRes=c.ok?{body:c.body,fmt:c.fmt,hit:restrictionFor(c.body)}:{invalid:c.msg};render()}
+document.addEventListener('mouseover',e=>{const f=e.target.closest('.feature,.pv');if(f&&!f.dataset.drawn){f.dataset.drawn='1';drawUnderline(f)}});
+document.addEventListener('mouseout',e=>{const f=e.target.closest('.feature,.pv');if(f&&!f.contains(e.relatedTarget))delete f.dataset.drawn});
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.org){S.org[el.dataset.org]=el.value;document.querySelectorAll('.top .org b').forEach(n=>n.textContent=el.value||'Tu fundación');return}
+  if(el.dataset.color){const k=el.dataset.color;S.org[k]=el.value;applyTheme();$(`#c-${k}-hex`).value=el.value.toUpperCase();$(`#cr-${k}`).innerHTML=crInfo(el.value);return}
+  if(el.dataset.hex){const k=el.dataset.hex;let v=el.value.trim();if(!v.startsWith('#'))v='#'+v;if(/^#[0-9a-f]{6}$/i.test(v)){S.org[k]=v;applyTheme();$(`#c-${k}`).value=v.toLowerCase();$(`#cr-${k}`).innerHTML=crInfo(v)}}
+});
+document.addEventListener('change',e=>{
+  const el=e.target,k=el.dataset.change;
+  if(k==='f-size'){S.filter.size=el.value;render();return}
+  if(k==='f-age'){S.filter.age=el.value;render();return}
+  if(k==='help-socio'){S.help.socio=el.checked;keepHelpInputs();return}
+  if(k==='help-vol'){S.help.voluntario=el.checked;keepHelpInputs();return}
+  if(k==='help-mode'){S.help.mode=el.value;keepHelpInputs();return}
+  if(k==='help-animal'){S.help.animalId=el.value?+el.value:null;keepHelpInputs();return}
+  if(k==='imp-kind'){S.imp={kind:el.value,loaded:false,done:null};render();return}
+  if(el.id==='imp-file'&&el.files&&el.files[0]){S.imp.loaded=true;S.imp.sample='errors';S.imp.file=el.files[0].name;S.imp.fileNote=true;S.imp.done=null;render();return}
+  if(k==='an-status'){$('#foster-field').hidden=el.value!=='acogida';return}
+  if(el.name==='amount'){S.help.amount=+el.value;return}
+  if(el.dataset.color||el.dataset.hex){render();return}
+  if(el.type==='file'&&el.files&&el.files[0]){
+    const f=el.files[0];
+    if(el.id==='org-font'){f.arrayBuffer().then(buf=>{const name='OrgFont'+Date.now();const ff=new FontFace(name,buf);return ff.load().then(l=>{document.fonts.add(l);S.org.font=name;S.org.fontName=f.name;applyTheme();render();toast('Tipografía aplicada a los títulos')})}).catch(()=>toast('No pudimos leer ese archivo de tipografía'));return}
+    if(!f.type.startsWith('image/')){toast('Elige una imagen');return}
+    readFile(f,url=>{
+      if(el.id==='org-logo'){S.org.logo=url;render();toast('Logo actualizado')}
+      else if(el.id==='an-photo'){S.draftPhoto=url;const keep=collectAnimalForm();render();restoreAnimalForm(keep)}
+      else if(el.id==='rp-photo'){const keep={a:$('#rp-address').value,n:$('#rp-note').value,p:$('#rp-phone').value};S.report.photo=url;render();$('#rp-address').value=keep.a;$('#rp-note').value=keep.n;$('#rp-phone').value=keep.p}
+    });
+  }
+});
+function keepHelpInputs(){const ids=['h-name','h-rut','h-phone','h-email'],vals=ids.map(i=>$('#'+i)?.value||''),ok=$('#h-ok')?.checked;
+  const av=[...document.querySelectorAll('input[name=avail]:checked')].map(x=>x.value);
+  render();ids.forEach((i,n)=>{if($('#'+i))$('#'+i).value=vals[n]});if($('#h-ok'))$('#h-ok').checked=ok;
+  document.querySelectorAll('input[name=avail]').forEach(x=>x.checked=av.includes(x.value))}
+function collectAnimalForm(){const f=document.querySelector('[data-form="animal"]');const o={};f.querySelectorAll('input:not([type=file]),select,textarea').forEach(x=>o[x.id]=x.type==='checkbox'?x.checked:x.value);return o}
+function restoreAnimalForm(o){Object.entries(o).forEach(([id,v])=>{const x=document.getElementById(id);if(!x)return;if(x.type==='checkbox')x.checked=v;else x.value=v});const s=$('#an-status');if(s)$('#foster-field').hidden=s.value!=='acogida'}
+document.addEventListener('submit',e=>{
+  e.preventDefault();
+  const f=e.target,type=f.dataset.form,fd=Object.fromEntries(new FormData(f));
+  const phoneOk=p=>(p||'').replace(/\D/g,'').length>=9;
+  const fail=(id,msg)=>{const el=$('#'+id);el.textContent=msg;el.scrollIntoView({block:'center',behavior:'smooth'})};
+  if(type==='rut'){S.rutQ=fd.q;runRut(fd.q);return}
+  if(type==='adopt'){
+    if(!fd.name.trim())return fail('ad-err','Escribe tu nombre y apellidos.');
+    const c=parseRut(fd.rut);if(!c.ok)return fail('ad-err','Revisa el RUT. '+c.msg);
+    if(!phoneOk(fd.phone))return fail('ad-err','Escribe un teléfono de al menos 9 números.');
+    if(!fd.comuna.trim())return fail('ad-err','Escribe tu comuna.');
+    const a=animal(f.dataset.id);
+    S.adoptReqs.unshift({id:S.nextReq++,animalId:a.id,name:fd.name.trim(),body:c.body,phone:fd.phone.trim(),comuna:fd.comuna.trim(),home:fd.home,pets:fd.pets,when:'Ahora mismo',status:'nueva'});
+    S.pubHist=[];S.pub={p:'gracias',kind:'adopt',name:a.name};render(true);return;
+  }
+  if(type==='help'){
+    const h=S.help;
+    if(!h.socio&&!h.voluntario)return fail('h-err','Elige si quieres ayudar como socio, como voluntario o ambos.');
+    if(h.socio&&h.mode==='padrino'&&!h.animalId)return fail('h-err','Elige a qué animal quieres apadrinar.');
+    if(!fd.name.trim())return fail('h-err','Escribe tu nombre y apellidos.');
+    const c=parseRut(fd.rut);if(!c.ok)return fail('h-err','Revisa el RUT. '+c.msg);
+    if(!phoneOk(fd.phone))return fail('h-err','Escribe un teléfono de al menos 9 números.');
+    if(!fd.ok)return fail('h-err','Marca la casilla para que podamos guardar tus datos.');
+    const socio=h.socio?(h.mode==='padrino'?{mode:'padrino',amount:animal(h.animalId).sponsor,animalId:h.animalId}:{mode:'aporte',amount:h.amount}):null;
+    S.memberReqs.unshift({id:S.nextReq++,name:fd.name.trim(),body:c.body,socio,voluntario:h.voluntario,avail:new FormData(f).getAll('avail').join(', '),when:'Ahora mismo',status:'pendiente'});
+    S.pubHist=[];S.pub={p:'gracias',kind:'help'};render(true);return;
+  }
+  if(type==='report'){
+    if(!fd.address.trim())return fail('rp-err','Escribe dónde está el animal.');
+    const code='AV-00'+(S.nextReport++);
+    S.reports.unshift({id:Date.now(),code,when:'Ahora mismo',address:fd.address.trim(),note:fd.note.trim(),contact:fd.phone.trim()||'Anónimo',status:'nuevo',tone:3,photo:S.report.photo});
+    S.report={photo:null};S.pubHist=[];S.pub={p:'gracias',kind:'report',code};render(true);return;
+  }
+  if(type==='restriction'){
+    const c=parseRut(fd.rut);if(!c.ok)return fail('rs-err','Revisa el RUT. '+c.msg);
+    if(restrictionFor(c.body))return fail('rs-err','Ese RUT ya está en la lista.');
+    if(!fd.name.trim())return fail('rs-err','Escribe el nombre de la persona.');
+    S.restrictions.unshift({body:c.body,name:fd.name.trim(),reason:fd.reason,species:fd.species,note:fd.note.trim()||'Sin notas.',date:'2026-09-28',by:'Marta González'});
+    S.rAdd=false;render();toast('Añadido a la lista de restricciones');return;
+  }
+  if(type==='exit'){
+    if(!fd.date)return fail('ex-err','Indica la fecha de la salida.');
+    const a=animal(f.dataset.id);a.exit={kind:fd.kind,date:fd.date,notes:fd.notes.trim()};a.status=fd.kind;a.foster=null;a.featured=false;S.exitOpen=false;render();toast(`${a.name} ya no aparece en la web`);return;
+  }
+  if(type==='return'){
+    if(!fd.reason.trim())return fail('ret-err','Cuéntanos brevemente por qué lo devolvieron.');
+    const a=animal(f.dataset.id);a.returns.push({date:'2026-09-28',reason:fd.reason.trim()});a.status='disponible';S.returnOpen=false;render();toast(`${a.name} vuelve a estar disponible en la web`);return;
+  }
+  if(type==='animal'){
+    if(!fd.name.trim())return fail('an-err','Ponle un nombre al animal.');
+    const isNew=S.adm.id==='new';
+    const a=isNew?{id:Math.max(...S.animals.map(x=>x.id))+1,tone:S.animals.length%TONES.length,visits:0,since:'2026-09-28',vacc:false,ster:false,chip:false,traits:['Recién llegado'],returns:[],ageGroup:'adulto'}:animal(S.adm.id);
+    Object.assign(a,{name:fd.name.trim(),status:fd.status||a.status,species:fd.species,sex:fd.sex,age:fd.age.trim()||'Por confirmar',size:fd.size,sponsor:+fd.sponsor||0,quote:fd.quote.trim()||'Pronto contaremos más sobre este animal.',story:fd.story.trim()||'Pronto contaremos su historia.'});
+    if(S.draftPhoto)a.photo=S.draftPhoto;
+    a.foster=a.status==='acogida'&&fd.foster?{personId:+fd.foster}:null;
+    if(fd.featured){S.animals.forEach(x=>x.featured=false);a.featured=true}else a.featured=false;
+    if(isNew)S.animals.unshift(a);
+    S.draftPhoto=null;S.admHist=[];S.adm={p:'animales'};render(true);toast(isNew?`${a.name} ya aparece en la web`:'Cambios guardados');return;
+  }
+  if(type==='species'){
+    const name=fd.name.trim(),plural=fd.plural.trim();
+    if(!name||!plural)return fail('sp-err','Escribe el nombre de la especie en singular y en plural.');
+    if(specByName(name))return fail('sp-err','Esa especie ya existe.');
+    S.species.push({id:name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\W+/g,'-'),name,plural,active:true});
+    render();toast(`${plural} ya aparecen en la web`);return;
+  }
+  if(type==='retention'){S.org.retention=+fd.days;render();toast(`Los respaldos se guardarán ${fd.days} días`);return}
+  if(type==='org'){
+    S.org.fee=Math.max(0,+fd.fee||0);S.org.cuotas=[fd.c0,fd.c1,fd.c2].map(x=>Math.max(0,+x||0));
+    S.org.address=fd.address.trim();S.org.phone=fd.phone.trim();S.org.email=fd.email.trim();
+    SOCIAL.forEach(([k])=>S.org.social[k]=(fd['s_'+k]||'').trim().replace(/^@/,''));
+    render();toast('Cambios guardados');
+  }
+});
+
+applyTheme();
+render();
+</script>
