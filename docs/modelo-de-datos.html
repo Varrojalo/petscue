@@ -198,7 +198,7 @@ const T=[
  {n:'availability_option',g:'per',d:'Opciones de disponibilidad que ofrece la fundación (días de semana, fines de semana, ferias, traslados). Editables.',f:[
   ['id','int','pk',''],['label','varchar','uk',''],['position','smallint','','']]},
  {n:'team_member_availability',g:'per',d:'Qué disponibilidad tiene cada persona del equipo, desde su postulación.',f:[
-  ['team_member_id','bigint','pk fk:team_member',''],['availability_option_id','int','pk fk:availability_option','']]},
+  ['id','bigint','pk',''],['team_member_id','bigint','fk:team_member','Único junto con availability_option_id'],['availability_option_id','int','fk:availability_option','']]},
  {n:'membership',g:'per',isNew:1,d:'Socio: aporta recursos. Nace como postulación (pending). Una persona puede tener varias (cuota a la fundación y padrinazgos). Activa = aprobada y sin ended_at.',f:[
   ['id','bigint','pk',''],['person_id','bigint','fk:person',''],['kind','enum','','donation (a la fundación) o sponsorship (padrinazgo)'],
   ['monthly_amount','int','','CLP acordado, solo informativo'],['animal_id','bigint','fk:animal null','Obligatorio si es padrinazgo'],['status','enum','','pending, approved o rejected'],
@@ -228,7 +228,7 @@ const T=[
  {n:'trait',g:'ani',d:'Rasgos reutilizables: “Sociable”, “Ideal para departamento”.',f:[
   ['id','int','pk',''],['label','varchar','uk','']]},
  {n:'animal_trait',g:'ani',d:'Qué rasgos tiene cada animal.',f:[
-  ['animal_id','bigint','pk fk:animal',''],['trait_id','int','pk fk:trait','']]},
+  ['id','bigint','pk',''],['animal_id','bigint','fk:animal','Único junto con trait_id'],['trait_id','int','fk:trait','']]},
  {n:'animal_photo',g:'ani',isNew:1,d:'Fotos de cada ficha. La foto principal es la de menor posición.',f:[
   ['id','bigint','pk',''],['animal_id','bigint','fk:animal',''],['image','varchar (ruta)','','Ruta relativa del archivo en el servidor; la app genera versiones livianas'],['position','smallint','','Orden en la galería. Único junto con animal_id; 0 = principal']]},
  {n:'animal_daily_views',g:'ani',d:'Visitas por animal y día, sin guardar datos de quien visita.',f:[

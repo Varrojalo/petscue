@@ -1,0 +1,5 @@
+# Fin de línea LF en el repositorio, para que los scripts funcionen dentro de Docker aunque se edite en Windows
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.woff2 binary
