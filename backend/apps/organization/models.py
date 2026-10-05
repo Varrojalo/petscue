@@ -80,6 +80,12 @@ class OrganizationSettings(TimeStampedModel):
 
     def save(self, *args, **kwargs):
         self.pk = 1
+        if self._state.adding:
+            # Saving a fresh instance over the existing row must keep that row's creation date.
+            existing = type(self).objects.filter(pk=1).values_list("created_at", flat=True).first()
+            if existing:
+                self.created_at = existing
+                self._state.adding = False
         super().save(*args, **kwargs)
 
     @classmethod
