@@ -22,6 +22,26 @@ class Species(TimeStampedModel):
         return self.name
 
 
+class LifeStage(TimeStampedModel):
+    """Age stages defined by the organization for each species (a cat is old later than a rabbit)."""
+
+    species = models.ForeignKey(Species, on_delete=models.CASCADE, related_name="life_stages", verbose_name="especie")
+    name = models.CharField("nombre", max_length=40)
+    from_months = models.PositiveSmallIntegerField("desde (meses)", help_text="La primera etapa de cada especie empieza en 0.")
+
+    class Meta:
+        verbose_name = "etapa de edad"
+        verbose_name_plural = "etapas de edad"
+        ordering = ["species", "from_months"]
+        constraints = [
+            models.UniqueConstraint(fields=["species", "from_months"], name="life_stage_unique_start"),
+            models.UniqueConstraint(fields=["species", "name"], name="life_stage_unique_name"),
+        ]
+
+    def __str__(self):
+        return f"{self.species} · {self.name}"
+
+
 class Trait(TimeStampedModel):
     label = models.CharField("rasgo", max_length=60, unique=True)
 
@@ -88,6 +108,20 @@ class Animal(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def age_months(self):
+        from datetime import date
+
+        today = date.today()
+        months = (today.year - self.birth_date_approx.year) * 12 + today.month - self.birth_date_approx.month
+        return max(0, months - (today.day < self.birth_date_approx.day))
+
+    @property
+    def life_stage(self):
+        """The species' stage whose start is the latest one not after the animal's age."""
+        stages = [s for s in self.species.life_stages.all() if s.from_months <= self.age_months]
+        return max(stages, key=lambda s: s.from_months, default=None)
 
     @property
     def status(self):

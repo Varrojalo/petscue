@@ -118,7 +118,7 @@ td:nth-child(2){font-family:var(--mono);font-size:.8rem;color:var(--ink-2);white
   <header>
     <p class="eyebrow">Petscue · Django + PostgreSQL · versión 4</p>
     <h1>Modelo de datos</h1>
-    <p>Veintitrés tablas en cinco grupos. Cada fundación instala su propia copia, así que ninguna tabla lleva un campo “organización”. Nombres en inglés, documentación en español, y todas las tablas terminan con <code>created_at</code> y <code>updated_at</code> (en gris en el diagrama).</p>
+    <p>Veinticuatro tablas en cinco grupos. Cada fundación instala su propia copia, así que ninguna tabla lleva un campo “organización”. Nombres en inglés, documentación en español, y todas las tablas terminan con <code>created_at</code> y <code>updated_at</code> (en gris en el diagrama).</p>
   </header>
 
   <section>
@@ -172,7 +172,7 @@ const T=[
   ['brand_color','char(7)','','Color principal en hexadecimal'],['accent_color','char(7)','','Color de acento'],['title_font','varchar (ruta)','null','Ruta relativa de la tipografía propia, solo para títulos'],
   ['adoption_fee','int','','Aporte de adopción en CLP; 0 = sin costo'],['featured_animal_id','bigint','fk:animal null','Protagonista de la portada'],
   ['backup_retention_days','smallint','','Días que se guardan los respaldos (1–365, por defecto 30)'],
-  ['street_reports_enabled','bool','','Activa los avisos de animales en la calle'],['updated_by','bigint','fk:user null','Quién hizo el último cambio']]},
+  ['street_reports_enabled','bool','','Activa los avisos de animales en la calle'],['max_upload_mb','smallint','','Tamaño máximo por archivo en MB (por defecto 10)'],['updated_by','bigint','fk:user null','Quién hizo el último cambio']]},
  {n:'social_link',g:'conf',d:'Redes sociales de la fundación, una fila por red.',f:[
   ['id','int','pk',''],['network','enum','','instagram, facebook, tiktok, youtube, x u other'],['handle','varchar','','Nombre de usuario o dirección'],['position','smallint','','Orden en la web']]},
  {n:'membership_tier',g:'conf',d:'Cuotas de socio sugeridas que se muestran en el formulario.',f:[
@@ -222,6 +222,8 @@ const T=[
   ['in_treatment','bool','','En tratamiento veterinario'],['foster_home_id','bigint','fk:team_member null','Con valor = está en casa de acogida'],
   ['quote','varchar','','Frase destacada'],['story','text','',''],['vaccinated','bool','',''],['sterilized','bool','',''],['microchip_number','varchar','null','Vacío = sin chip'],
   ['intake_date','date','','Llegada a la fundación'],['sponsorship_amount','int','','Padrinazgo mensual en CLP']]},
+ {n:'life_stage',g:'ani',isNew:1,d:'Etapas de edad que define la fundación para cada especie. La etapa de un animal es la última cuyo inicio no supera su edad.',f:[
+  ['id','bigint','pk',''],['species_id','int','fk:species','Único junto con from_months y junto con name'],['name','varchar','','Por ejemplo “Cachorro”, “Gatito”, “Adulto”'],['from_months','smallint','','Edad de inicio en meses. La primera etapa empieza en 0']]},
  {n:'animal_exit',g:'ani',isNew:1,d:'Salida del animal que no es una adopción. La fila solo existe si el animal salió; como máximo una por animal.',f:[
   ['id','bigint','pk',''],['animal_id','bigint','fk:animal uk',''],['kind','enum','','deceased (falleció) o transferred (trasladado a otra organización)'],
   ['exit_date','date','',''],['notes','text','null','Por ejemplo, a qué organización se trasladó'],['recorded_by','bigint','fk:user','']]},
@@ -255,6 +257,8 @@ const CHANGES=[
  ['El estado del animal se calcula','animal.status (available, foster, treatment, adopted)','Adoptado = tiene una adopción en signed. En acogida = tiene foster_home_id. Queda in_treatment, que ahora puede convivir con la acogida.'],
  ['El destacado es de la fundación','animal.featured + índice único parcial','organization_settings.featured_animal_id.'],
  ['La foto principal sale del orden','animal_photo.is_cover','La de menor position. (animal_id, position) es único.'],
+ ['Etapas de edad por especie','—','Nueva tabla life_stage: cada especie define sus etapas y desde qué edad empieza cada una.'],
+ ['Tamaño máximo de archivo','—','organization_settings.max_upload_mb, configurable por la fundación.'],
  ['Salida del animal','—','Nueva tabla animal_exit para fallecimientos y traslados, sin contaminar las estadísticas de adopción.'],
  ['Número de aviso calculado','street_report.code','Se quita la columna: el número AV-0031 se arma desde el id al mostrarlo.'],
  ['Imágenes como rutas','Tipo “image” (parecía guardar la imagen en la base de datos)','varchar con la ruta relativa del archivo, guardado en el servidor de la fundación. Es lo que hace ImageField de Django.']

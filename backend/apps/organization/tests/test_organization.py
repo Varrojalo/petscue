@@ -1,7 +1,8 @@
+from django.db import models
 from django.test import TestCase
 
 from apps.core.testing import DatabaseRuleAssertions
-from apps.organization.models import OrganizationSettings, Region
+from apps.organization.models import Locality, OrganizationSettings, Region
 
 
 class OrganizationSettingsTests(DatabaseRuleAssertions, TestCase):
@@ -33,3 +34,9 @@ class RegionDataTests(TestCase):
     def test_sixteen_chilean_regions_are_loaded(self):
         self.assertEqual(Region.objects.count(), 16)
         self.assertTrue(Region.objects.filter(code="16", name="Ñuble").exists())
+
+    def test_346_communes_linked_to_their_region(self):
+        self.assertEqual(Locality.objects.count(), 346)
+        nunoa = Locality.objects.get(code="13120")
+        self.assertEqual((nunoa.name, nunoa.region.code), ("Ñuñoa", "13"))
+        self.assertFalse(Locality.objects.exclude(code__startswith=models.F("region__code")).exists())

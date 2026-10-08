@@ -56,6 +56,10 @@ class OrganizationSettings(TimeStampedModel):
         "días que se guardan los respaldos", default=30, validators=[MinValueValidator(1), MaxValueValidator(365)]
     )
     street_reports_enabled = models.BooleanField("avisos de la calle activos", default=False)
+    max_upload_mb = models.PositiveSmallIntegerField(
+        "tamaño máximo por archivo (MB)", default=10, validators=[MinValueValidator(1)],
+        help_text="Archivos más grandes ocupan más espacio en el servidor y hacen más pesados los respaldos.",
+    )
     updated_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name="+", verbose_name="actualizado por"
     )
@@ -69,6 +73,7 @@ class OrganizationSettings(TimeStampedModel):
                 condition=models.Q(backup_retention_days__gte=1, backup_retention_days__lte=365),
                 name="organization_settings_retention_range",
             ),
+            models.CheckConstraint(condition=models.Q(max_upload_mb__gte=1), name="organization_settings_max_upload_positive"),
             models.CheckConstraint(
                 condition=models.Q(brand_color__regex=r"^#[0-9A-Fa-f]{6}$", accent_color__regex=r"^#[0-9A-Fa-f]{6}$"),
                 name="organization_settings_hex_colors",
