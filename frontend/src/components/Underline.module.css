@@ -1,0 +1,29 @@
+.wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.wrap svg {
+  position: absolute;
+  left: -3%;
+  bottom: -0.14em;
+  width: 106%;
+  height: 0.3em;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.wrap path {
+  stroke: var(--accent);
+  stroke-width: 7;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 260;
+  animation: draw 1s cubic-bezier(0.3, 0.7, 0.2, 1) both;
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 260;
+  }
+}

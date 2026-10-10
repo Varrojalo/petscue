@@ -1,0 +1,50 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.photo {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.3, 1.4, 0.4, 1), box-shadow 0.35s;
+}
+
+.card:hover .photo {
+  transform: translateY(-4px) rotate(-1deg);
+  box-shadow: var(--shadow);
+}
+
+.tag {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.treatment {
+  background: var(--info-soft);
+  color: var(--info);
+}
+
+.name {
+  font: 900 1.45rem/1 var(--display);
+  letter-spacing: -0.03em;
+  padding-inline: 4px;
+}
+
+.meta {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  padding-inline: 4px;
+}

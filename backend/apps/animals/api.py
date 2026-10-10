@@ -47,6 +47,7 @@ class AnimalCard(Schema):
     life_stage: str | None
     in_foster_home: bool
     in_treatment: bool
+    sponsorship_amount: int
     cover: PhotoOut | None
 
 
@@ -57,7 +58,6 @@ class AnimalPublic(AnimalCard):
     vaccinated: bool
     sterilized: bool
     has_microchip: bool
-    sponsorship_amount: int
     photos: list[PhotoOut]
 
 
@@ -206,6 +206,7 @@ def card(animal):
         "life_stage": stage.name if stage else None,
         "in_foster_home": animal.foster_home_id is not None,
         "in_treatment": animal.in_treatment,
+        "sponsorship_amount": animal.sponsorship_amount,
         "cover": photo_out(photos[0]) if photos else None,
     }
 
@@ -219,7 +220,6 @@ def public_detail(animal):
         "vaccinated": animal.vaccinated,
         "sterilized": animal.sterilized,
         "has_microchip": bool(animal.microchip_number),
-        "sponsorship_amount": animal.sponsorship_amount,
         "photos": [photo_out(p) for p in animal.photos.all()],
     }
 

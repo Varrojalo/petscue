@@ -1,0 +1,133 @@
+/*
+  Design tokens of the A+B direction. --brand and --accent are overwritten at runtime with the organization's colors
+  (see OrganizationProvider). Components read colors only through these variables.
+*/
+:root {
+  --bg: #f5f8f4;
+  --surface: #ffffff;
+  --surface-2: #eaf1ea;
+  --line: #d6e0d8;
+  --ink: #22303f;
+  --ink-2: #4d5b6b;
+  --ink-3: #6b7a8a;
+  --brand: #2f7d5a;
+  --accent: #f2c94c;
+  --on-brand: #ffffff;
+  --on-accent: #22303f;
+  --brand-soft: color-mix(in oklab, var(--brand) 14%, var(--surface));
+  --brand-text: color-mix(in oklab, var(--brand) 88%, var(--ink));
+  --accent-soft: color-mix(in oklab, var(--accent) 32%, var(--surface));
+  --ok: #1c7a43;
+  --ok-soft: #e1f2e7;
+  --bad: #b0281f;
+  --bad-soft: #fbe4e1;
+  --info: #2f5f82;
+  --info-soft: #e2ecf5;
+  --shadow: 0 1px 2px rgb(34 48 63 / 0.06), 0 18px 36px -22px rgb(34 48 63 / 0.4);
+  --display: "Schibsted Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible Next", "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --radius: 18px;
+  --radius-lg: 24px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #111a22;
+    --surface: #18232e;
+    --surface-2: #20303c;
+    --line: #2c3c49;
+    --ink: #e4ebf0;
+    --ink-2: #aab8c4;
+    --ink-3: #8594a3;
+    --brand-soft: color-mix(in oklab, var(--brand) 24%, var(--surface));
+    --brand-text: color-mix(in oklab, var(--brand) 45%, #ffffff);
+    --accent-soft: color-mix(in oklab, var(--accent) 20%, var(--surface));
+    --ok: #6cd497;
+    --ok-soft: #15301f;
+    --bad: #ff8f85;
+    --bad-soft: #3a1917;
+    --info: #8cc0e6;
+    --info-soft: #15283a;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 18px 36px -22px rgb(0 0 0 / 0.8);
+  }
+}
+
+html {
+  font-size: 17px;
+}
+
+html.big-text {
+  font-size: 19.5px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+}
+
+a {
+  color: var(--brand-text);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

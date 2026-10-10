@@ -132,7 +132,8 @@ def stats(request):
 @public_router.get("/localities", response=list[LocalityOut])
 def localities(request, region: str | None = None):
     """Communes for the forms' dropdown. `region` filters by official region code (13 = Metropolitana)."""
-    qs = Locality.objects.select_related("region")
+    # Regions were loaded north to south, so their id gives the order Chileans expect.
+    qs = Locality.objects.select_related("region").order_by("region_id", "name")
     if region:
         qs = qs.filter(region__code=region)
     return [{"id": loc.id, "name": loc.name, "region": loc.region.name} for loc in qs]
