@@ -15,4 +15,8 @@ export default defineConfig({
       "/media": { target: backend, changeOrigin: false },
     },
   },
+  test: {
+    environment: "jsdom",
+    setupFiles: "./src/test/setup.js",
+  },
 });
