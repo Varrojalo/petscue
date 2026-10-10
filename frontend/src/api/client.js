@@ -5,6 +5,8 @@
  * - turns errors into an ApiError with the backend's Spanish message.
  */
 
+export const SESSION_EXPIRED = "petscue:session-expired";
+
 export class ApiError extends Error {
   constructor(status, detail, errors = []) {
     super(detail);
@@ -47,6 +49,10 @@ export async function request(path, { method = "GET", body, form, params } = {})
   }
   if (response.status === 204) return null;
   const data = await response.json().catch(() => ({}));
+  if (response.status === 401 && path.startsWith("/dashboard")) {
+    // The panel session ended (expired or access revoked): AuthProvider sends the person to the login page.
+    window.dispatchEvent(new CustomEvent(SESSION_EXPIRED));
+  }
   if (!response.ok) {
     throw new ApiError(response.status, data.detail || "Algo salió mal. Intenta de nuevo en unos minutos.", data.errors);
   }

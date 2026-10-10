@@ -1,0 +1,40 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  padding: 28px 24px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.card h1 {
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 800 1.05rem var(--display);
+}
+
+.notice {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
+.back {
+  text-align: center;
+  font-weight: 700;
+}

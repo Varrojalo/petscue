@@ -1,47 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
 
+import { BigTextButton, Logo } from "../components/Brand";
 import Icon from "../components/Icon";
 import { socialLink, whatsappLink } from "../lib/format";
 import { useOrganization } from "../organization/OrganizationProvider";
 import styles from "./PublicLayout.module.css";
 
-const BIG_TEXT_KEY = "petscue-big-text";
-
-function readBigText() {
-  try {
-    return localStorage.getItem(BIG_TEXT_KEY) === "1";
-  } catch {
-    return false;
-  }
-}
-
-/** Larger letters for people who need them. The choice is remembered on this device. */
-function useBigText() {
-  const [big, setBig] = useState(readBigText);
-  useEffect(() => {
-    document.documentElement.classList.toggle("big-text", big);
-    try {
-      localStorage.setItem(BIG_TEXT_KEY, big ? "1" : "0");
-    } catch {
-      /* private mode: the choice just isn't remembered */
-    }
-  }, [big]);
-  return [big, setBig];
-}
-
-function Logo({ organization }) {
-  const initial = (organization?.name || "P").replace(/^(Fundación|Asociación|Agrupación|ONG)\s+/i, "")[0]?.toUpperCase();
-  return (
-    <span className={styles.logo}>
-      {organization?.logo_url ? <img src={organization.logo_url} alt="" /> : initial}
-    </span>
-  );
-}
-
 export default function PublicLayout() {
   const { organization } = useOrganization();
-  const [big, setBig] = useBigText();
   const { pathname } = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -72,9 +39,7 @@ export default function PublicLayout() {
             </NavLink>
           ))}
         </nav>
-        <button type="button" className={styles.bigText} aria-pressed={big} onClick={() => setBig(!big)} title="Letra más grande">
-          Aa<span className="sr-only"> · letra más grande</span>
-        </button>
+        <span className={styles.bigText}><BigTextButton /></span>
       </header>
 
       <main className={styles.main}>

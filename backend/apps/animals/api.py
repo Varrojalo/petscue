@@ -1,13 +1,16 @@
 from datetime import date
+from typing import Literal
 
 from django.core.files.storage import default_storage
 from django.db import IntegrityError, transaction
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from ninja import Field, File, Query, Router, Schema
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
+from apps.adoptions.models import Adoption
 from apps.core.api import Mapped, Page20, admin_only, bad_request, check_image, conflict, team_auth
 from apps.organization.models import OrganizationSettings
 from apps.people.models import ReviewStatus, TeamMember
@@ -65,6 +68,7 @@ class AdoptionHistoryItem(Schema):
     id: int
     person: str
     status: str
+    status_code: str
     contract_signed_at: date | None
     returned_at: date | None
     return_reason: str
@@ -78,6 +82,9 @@ class ExitOut(Schema):
 
 class AnimalDashboard(AnimalPublic):
     status: str
+    status_code: str
+    sex_code: str
+    size_code: str
     birth_date_approx: date
     intake_date: date
     days_in_organization: int
@@ -230,6 +237,9 @@ def dashboard_detail(animal):
     return {
         **public_detail(animal),
         "status": animal.Status(animal.status).label,
+        "status_code": animal.status,
+        "sex_code": animal.sex,
+        "size_code": animal.size,
         "birth_date_approx": animal.birth_date_approx,
         "intake_date": animal.intake_date,
         "days_in_organization": (date.today() - animal.intake_date).days,
@@ -240,7 +250,7 @@ def dashboard_detail(animal):
         "trait_ids": [t.id for t in animal.traits.all()],
         "adoptions": [
             {
-                "id": a.id, "person": a.person.full_name, "status": a.get_status_display(),
+                "id": a.id, "person": a.person.full_name, "status": a.get_status_display(), "status_code": a.status,
                 "contract_signed_at": a.contract_signed_at, "returned_at": a.returned_at, "return_reason": a.return_reason,
             }
             for a in animal.adoptions.select_related("person").order_by("-created_at")
@@ -312,9 +322,21 @@ def public_detail_view(request, slug: str, response: HttpResponse):
 # ---------- Dashboard: animals ----------
 
 class DashboardFilters(Schema):
-    status: Animal.Status | None = None
+    status: Animal.Status | Literal["exited"] | None = Field(None, description="Un estado, o exited para fallecidos y trasladados")
     species: int | None = None
     q: str = ""
+
+
+class AnimalRow(AnimalCard):
+    """A line in the panel's list of animals."""
+
+    status: str
+    status_code: str
+    days_in_organization: int
+    visits_last_30_days: int
+    returns_count: int
+    foster_home: str | None
+    featured: bool
 
 
 def _get(animal_id):
@@ -348,16 +370,52 @@ def _apply(animal, data):
         raise
 
 
-@dashboard_router.get("/animals", response=list[AnimalCard])
+class Rows:
+    """Serializes a page of animals with their visits and returns counted in two queries, not one per animal."""
+
+    def __init__(self, queryset):
+        self.queryset = queryset
+
+    def __len__(self):
+        return self.queryset.count()
+
+    def __getitem__(self, page):
+        animals = list(self.queryset[page])
+        ids = [a.id for a in animals]
+        visits = services.visits_last_30_days(ids)
+        returns = dict(
+            Adoption.objects.filter(animal_id__in=ids, status=Adoption.Status.RETURNED)
+            .values_list("animal_id").annotate(n=Count("id"))
+        )
+        featured_id = OrganizationSettings.load().featured_animal_id
+        today = date.today()
+        return [
+            {
+                **card(a),
+                "status": a.Status(a.status).label,
+                "status_code": a.status,
+                "days_in_organization": (today - a.intake_date).days,
+                "visits_last_30_days": visits.get(a.id, 0),
+                "returns_count": returns.get(a.id, 0),
+                "foster_home": a.foster_home.person.full_name if a.foster_home_id else None,
+                "featured": a.id == featured_id,
+            }
+            for a in animals
+        ]
+
+
+@dashboard_router.get("/animals", response=list[AnimalRow])
 @paginate(Page20)
 def dashboard_list(request, filters: Query[DashboardFilters]):
     """Every animal, including adopted ones and exits, which the website does not show."""
-    qs = services.searchable(with_relations(Animal.objects.all()), filters.q.strip())
+    qs = services.searchable(with_relations(Animal.objects.select_related("exit")), filters.q.strip())
     if filters.species:
         qs = qs.filter(species_id=filters.species)
-    if filters.status:
+    if filters.status == "exited":
+        qs = qs.filter(exit__isnull=False)
+    elif filters.status:
         qs = services.filter_by_status(qs, filters.status)
-    return Mapped(qs, card)
+    return Rows(qs)
 
 
 @dashboard_router.post("/animals", response={201: AnimalDashboard})

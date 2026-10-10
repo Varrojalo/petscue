@@ -151,3 +151,19 @@ class PhotoTests(TestCase):
         response = self.client.post(f"/api/dashboard/animals/{self.animal.id}/photos", {"image": big})
         self.assertIn("más de 1 MB", response.json()["detail"])
 
+
+
+class DashboardListTests(TestCase):
+    def test_rows_include_visits_returns_and_exits_filter(self):
+        client, user = signed_in("worker")
+        returned = make_animal(name="Rocco", intake_date=date(2025, 1, 1))
+        Adoption.objects.create(animal=returned, person=make_person(), source="import", status="returned",
+                                contract_signed_at=date(2025, 3, 1), fee_charged=0, returned_at=date(2025, 6, 1))
+        gone = make_animal(name="Maui")
+        AnimalExit.objects.create(animal=gone, kind="deceased", exit_date=date(2026, 1, 2), recorded_by=user)
+        AnimalDailyViews.objects.create(animal=returned, day=date.today(), views=7)
+        rows = {r["name"]: r for r in client.get("/api/dashboard/animals").json()["items"]}
+        self.assertEqual((rows["Rocco"]["returns_count"], rows["Rocco"]["visits_last_30_days"]), (1, 7))
+        self.assertEqual(rows["Rocco"]["status_code"], "available")
+        exited = client.get("/api/dashboard/animals", {"status": "exited"}).json()["items"]
+        self.assertEqual([(r["name"], r["status"]) for r in exited], [("Maui", "Falleció")])

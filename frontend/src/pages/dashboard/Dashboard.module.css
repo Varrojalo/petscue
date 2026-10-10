@@ -1,0 +1,135 @@
+/* Layout pieces shared by the panel's pages. */
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.head h1 {
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-weight: 900;
+}
+
+.head p {
+  max-width: 60ch;
+}
+
+.eyebrow {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px;
+  border-radius: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+}
+
+.kpi b {
+  font: 900 2.4rem/1 var(--display);
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi span {
+  font-weight: 700;
+}
+
+.kpi small {
+  font-size: 0.82rem;
+  color: var(--ink-3);
+}
+
+.alert {
+  background: var(--bad-soft);
+  border-color: color-mix(in oklab, var(--bad) 40%, var(--line));
+}
+
+.alert b,
+.alert small {
+  color: var(--bad);
+}
+
+.split {
+  display: grid;
+  gap: 18px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.panelHead h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.panelHead p {
+  font-size: 0.88rem;
+  color: var(--ink-3);
+  margin-top: 4px;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.list li {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.list li:last-child {
+  border-bottom: 0;
+}
+
+.list span {
+  font-size: 0.88rem;
+  color: var(--ink-3);
+}
+
+@media (min-width: 1000px) {
+  .kpis {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 1120px) {
+  .split {
+    grid-template-columns: 1.35fr 1fr;
+    align-items: start;
+  }
+}
